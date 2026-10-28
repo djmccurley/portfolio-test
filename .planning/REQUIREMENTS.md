@@ -98,11 +98,47 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (filled by roadmap) | | |
+| A11Y-01 | Phase 2 | Pending |
+| A11Y-02 | Phase 4 | Pending |
+| A11Y-03 | Phase 2 | Pending |
+| A11Y-04 | Phase 2 | Pending |
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Pending |
+| AUTH-04 | Phase 2 | Pending |
+| AUTH-05 | Phase 4 | Pending |
+| BLOCK-01 | Phase 2 | Pending |
+| BLOCK-02 | Phase 2 | Pending |
+| BLOCK-03 | Phase 2 | Pending |
+| BLOCK-04 | Phase 2 | Pending |
+| BLOCK-05 | Phase 2 | Pending |
+| BLOCK-06 | Phase 2 | Pending |
+| IMG-01 | Phase 1 | Pending |
+| IMG-02 | Phase 1 | Pending |
+| IMG-03 | Phase 1 | Pending |
+| IMG-04 | Phase 1 | Pending |
+| IMG-05 | Phase 3 | Pending |
+| MEDIA-01 | Phase 2 | Pending |
+| MEDIA-02 | Phase 2 | Pending |
+| MEDIA-03 | Phase 2 | Pending |
+| PUB-01 | Phase 1 | Pending |
+| PUB-02 | Phase 1 | Pending |
+| PUB-03 | Phase 1 | Pending |
+| PUB-04 | Phase 1 | Pending |
+| PUB-05 | Phase 4 | Pending |
+| PUB-06 | Phase 1 | Pending |
+| SITE-01 | Phase 3 | Pending |
+| SITE-02 | Phase 3 | Pending |
+| SITE-03 | Phase 3 | Pending |
+| SITE-04 | Phase 3 | Pending |
+| SITE-05 | Phase 3 | Pending |
+| SITE-06 | Phase 4 | Pending |
+| SITE-07 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 36 total
-- Mapped to phases: 0 (pending roadmap)
+- Mapped to phases: 36
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-10-28*
