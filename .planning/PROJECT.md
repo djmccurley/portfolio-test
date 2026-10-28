@@ -72,7 +72,10 @@ Writing a new project page should be as fast as typing markdown: headers, paragr
 | One tagged feed + curated homepage | Multidisciplinary work in one place; owner controls featured order | — Pending |
 | No Squarespace importer | Owner will rebuild by hand | — Pending |
 | v1 = working system (POC), not content migration | Prove authoring flow first | — Pending |
-| SSG choice deferred to research | Owner open to Eleventy/Jekyll/Hugo/Astro | — Pending |
+| Eleventy 3 + eleventy-img + markdown-it-container (Node 22) | Research: best fit for `:::` block shorthand + plain-markdown image transform; owner knows it | — Pending |
+| Site URL undecided; base path is one config value | Owner hasn't chosen domain vs github.io vs subpath | — Pending |
+| Paste full-size; commit step shrinks >~3000px, converts PNG/JPEG→WebP, rewrites .md links | Owner doesn't want to resize by hand; keeps repo small without LFS | — Pending |
+| Extras in v1: next/prev, OG + sitemap, draft flag | Owner selected; side-by-side block deferred to v2 | — Pending |
 
 ## Evolution
 
