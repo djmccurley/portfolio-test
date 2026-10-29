@@ -19,7 +19,12 @@ export function pruneImages(siteDir = "_site") {
   for (const file of walkHtml(siteDir)) {
     const html = fs.readFileSync(file, "utf8");
     for (const m of html.matchAll(/\/img\/([^"'\s,?#]+)/g)) {
-      referenced.add(decodeURIComponent(m[1]));
+      referenced.add(m[1]);
+      try {
+        referenced.add(decodeURIComponent(m[1]));
+      } catch {
+        // malformed percent sequence: keep the raw name only
+      }
     }
   }
   let kept = 0;

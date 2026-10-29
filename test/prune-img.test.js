@@ -26,3 +26,12 @@ test("pruneImages skips when _site/img is missing", () => {
   const site = fs.mkdtempSync(path.join(os.tmpdir(), "prune-"));
   assert.deepEqual(pruneImages(site), { kept: 0, removed: [] });
 });
+
+test("pruneImages tolerates malformed percent sequences", () => {
+  const site = fs.mkdtempSync(path.join(os.tmpdir(), "prune-"));
+  fs.mkdirSync(path.join(site, "img"));
+  fs.writeFileSync(path.join(site, "img", "a-480.webp"), "x");
+  fs.writeFileSync(path.join(site, "index.html"), `<p>see /img/50%off</p><img src="/img/a-480.webp">`);
+  const res = pruneImages(site);
+  assert.equal(res.kept, 1);
+});
