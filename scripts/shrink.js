@@ -10,6 +10,8 @@ import sharp from "sharp";
 const ASSETS = "assets";
 const MAX_EDGE = 3000;
 const GIF_WARN_BYTES = 5 * 1024 * 1024;
+const MAX_BYTES = 10 * 1024 * 1024; // matches the CI guard in check-assets.js
+const MANUAL_EXTS = new Set([".gif", ".avif"]); // shrink cannot resize these
 const CONVERT_EXTS = new Set([".png", ".jpg", ".jpeg", ".heic", ".heif"]);
 const RASTER_RESIZE_EXTS = new Set([".webp"]);
 
@@ -223,6 +225,23 @@ export async function main(argv = process.argv.slice(2)) {
   const batch = new Set(names);
   const existing = new Set(onDisk.filter((n) => !batch.has(n)));
   let plan = planConversions(names, existing);
+
+  // GIF/AVIF are never re-encoded, so enforce CI's limits here instead of failing later in CI (WR-02).
+  const tooBig = [];
+  for (const n of names) {
+    if (!MANUAL_EXTS.has(path.extname(n).toLowerCase())) continue;
+    const full = path.join(ASSETS, n);
+    if (fs.statSync(full).size > MAX_BYTES) {
+      tooBig.push(`${n}: over 10 MB`);
+      continue;
+    }
+    const meta = await metaOf(full);
+    const edge = Math.max(meta?.width ?? 0, meta?.pageHeight ?? meta?.height ?? 0);
+    if (edge > MAX_EDGE) tooBig.push(`${n}: ${edge}px exceeds ${MAX_EDGE}px`);
+  }
+  if (tooBig.length > 0) {
+    fail(`GIF/AVIF cannot be resized automatically; reduce by hand:\n  ${tooBig.join("\n  ")}`);
+  }
 
   // Oversize WebP: re-encode in place (needs pixel dimensions, so not in the pure planner).
   for (const item of plan) {

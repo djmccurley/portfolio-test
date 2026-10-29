@@ -211,3 +211,12 @@ test("oversize animated WebP keeps all frames", async () => {
   assert.equal(meta.width, 3000);
   assert.equal(meta.pages, 3);
 });
+
+test("hook rejects GIF over 10 MB with a manual-fix message", () => {
+  const dir = makeRepo();
+  fs.writeFileSync(path.join(dir, "assets", "huge.gif"), crypto.randomBytes(11 * 1024 * 1024));
+  git(dir, "add", "-A");
+  const r = commit(dir);
+  assert.notEqual(r.status, 0);
+  assert.match(r.stdout + r.stderr, /reduce by hand/);
+});

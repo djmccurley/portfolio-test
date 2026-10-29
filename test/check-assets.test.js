@@ -47,6 +47,13 @@ test("over 10 MB", async () => {
   assert.ok(errs.some((e) => e.includes("10 MB")));
 });
 
+test("GIF over 10 MB says shrink cannot fix it", async () => {
+  const d = tmp();
+  fs.writeFileSync(path.join(d, "big.gif"), crypto.randomBytes(11 * 1024 * 1024));
+  const errs = await checkAssets(d);
+  assert.ok(errs.some((e) => e.includes("reduce it by hand")));
+});
+
 test("CLI exits 1 on a bad dir", () => {
   const d = tmp();
   fs.mkdirSync(path.join(d, "assets"));
