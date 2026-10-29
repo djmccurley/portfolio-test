@@ -11,6 +11,16 @@
   <main>
     <h1>{{ title }}</h1>
     {% if date %}<p><time datetime="{{ date }}">{{ date }}</time></p>{% endif %}
+    {% if summary %}<p>{{ summary }}</p>{% endif %}
+    {% if role or client or tools or year or link %}
+    <dl>
+      {% if role %}<dt>Role</dt><dd>{{ role }}</dd>{% endif %}
+      {% if client %}<dt>Client</dt><dd>{{ client }}</dd>{% endif %}
+      {% if tools %}<dt>Tools</dt><dd>{% if tools is string %}{{ tools }}{% else %}{{ tools | join(", ") }}{% endif %}</dd>{% endif %}
+      {% if year %}<dt>Year</dt><dd>{{ year }}</dd>{% endif %}
+      {% if link %}<dt>Link</dt><dd><a href="{{ link }}">{{ link }}</a></dd>{% endif %}
+    </dl>
+    {% endif %}
     {{ content | safe }}
   </main>
 </body>
