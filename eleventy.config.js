@@ -4,12 +4,21 @@ import { imageOptions } from "./lib/images.js";
 import { installAssetResolver } from "./lib/markdown.js";
 import { refreshAssets } from "./lib/assets.js";
 import { parseFrontMatter } from "./lib/frontmatter.js";
+import { addValidation } from "./lib/validate.js";
 
 // THE one base-path value. Use "/" for a custom domain or user site (PUB-02, D-20).
 const PATH_PREFIX = process.env.PATH_PREFIX ?? "/portfolio-test/";
 
+// Eleventy throws its own error on dates it cannot parse. Hide those so lib/validate.js
+// can report them with the file named (D-23). The raw value is re-read there.
+function lenientFrontMatter(str) {
+  const data = parseFrontMatter(str);
+  if (typeof data.date === "string" && !/^\d{4}(-\d{2}(-\d{2})?)?$/.test(data.date)) delete data.date;
+  return data;
+}
+
 export default async function (eleventyConfig) {
-  eleventyConfig.setFrontMatterParsingOptions({ engines: { yaml: { parse: parseFrontMatter } } });
+  eleventyConfig.setFrontMatterParsingOptions({ engines: { yaml: { parse: lenientFrontMatter } } });
 
   eleventyConfig.addPlugin(HtmlBasePlugin);
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, imageOptions);
@@ -26,6 +35,8 @@ export default async function (eleventyConfig) {
       .getFilteredByGlob("content/projects/*.md")
       .sort((a, b) => String(b.data.date).localeCompare(String(a.data.date)))
   );
+
+  addValidation(eleventyConfig);
 
   return {
     dir: { input: "content", includes: "../src/_includes", data: "../src/_data", output: "_site" },
