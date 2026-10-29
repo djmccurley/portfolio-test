@@ -10,7 +10,7 @@
 - [x] **PUB-01**: Owner can push a markdown change to the repo and the site rebuilds and deploys automatically (GitHub Actions → GitHub Pages)
 - [x] **PUB-02**: Owner can switch the site between root hosting (custom domain / username.github.io) and a repo subpath by changing one config value, with all links, images and CSS still working
 - [x] **PUB-03**: Owner can run the site locally with live reload while writing
-- [ ] **PUB-04**: Owner sees a failed build with a clear file-level message when an image is missing, a layout block is malformed, or a featured project doesn't exist
+- [x] **PUB-04**: Owner sees a failed build with a clear file-level message when an image is missing, a layout block is malformed, or a featured project doesn't exist
 - [ ] **PUB-05**: Owner can mark a page `draft: true` and it is excluded from the live site
 - [x] **PUB-06**: Visitor sees a plain 404 page for unknown URLs
 
@@ -18,7 +18,7 @@
 
 - [x] **AUTH-01**: Owner can create a project by adding one `.md` file with front matter (title, date, tags, summary, cover image + alt, role/client/tools)
 - [x] **AUTH-02**: Owner can paste an image in VS Code (saved to the shared `assets/` folder with a prefixed filename) and the resulting `![alt](path)` link renders correctly on the built site
-- [ ] **AUTH-03**: Owner can paste full-size images of any size; on commit, images over ~3000px are scaled down, PNG/JPEG are converted to WebP, and the `.md` links are rewritten automatically (GIFs and transparency handled safely)
+- [x] **AUTH-03**: Owner can paste full-size images of any size; on commit, images over ~3000px are scaled down, PNG/JPEG are converted to WebP, and the `.md` links are rewritten automatically (GIFs and transparency handled safely)
 - [ ] **AUTH-04**: Owner can write raw HTML inside markdown as a fallback for anything the block syntax doesn't cover
 - [ ] **AUTH-05**: Owner has a short authoring reference (README) listing every block and front matter field with examples
 
@@ -104,7 +104,7 @@
 | A11Y-04 | Phase 2 | Pending |
 | AUTH-01 | Phase 1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
-| AUTH-03 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Complete |
 | AUTH-04 | Phase 2 | Pending |
 | AUTH-05 | Phase 4 | Pending |
 | BLOCK-01 | Phase 2 | Pending |
@@ -124,7 +124,7 @@
 | PUB-01 | Phase 1 | Complete |
 | PUB-02 | Phase 1 | Complete |
 | PUB-03 | Phase 1 | Complete |
-| PUB-04 | Phase 1 | Pending |
+| PUB-04 | Phase 1 | Complete |
 | PUB-05 | Phase 4 | Pending |
 | PUB-06 | Phase 1 | Complete |
 | SITE-01 | Phase 3 | Pending |
