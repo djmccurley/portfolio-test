@@ -106,3 +106,28 @@ test("all images have dimensions, only first eager", async () => {
     site.cleanup();
   }
 });
+
+test("opaque pixels in an alpha channel keep webp + jpeg", async () => {
+  const buf = await sharp({
+    create: { width: 800, height: 600, channels: 4, background: { r: 0, g: 128, b: 255, alpha: 1 } },
+  })
+    .png()
+    .toBuffer();
+  assert.equal((await sharp(buf).metadata()).hasAlpha, true);
+  const site = await makeSite({
+    assets: { "shot.png": buf, "opaque.webp": { width: 1200, height: 800, format: "webp" } },
+    files: {
+      "content/projects/shot.md": `---\ntitle: Shot\ndate: "2024-01-01"\ntags: [games]\ncover: ../../assets/opaque.webp\ncover_alt: Cover\n---\n\n![Shot](../../assets/shot.png)\n`,
+    },
+  });
+  try {
+    const r = site.build();
+    assert.equal(r.code, 0, r.output);
+    const html = site.read("_site/shot/index.html");
+    const chunk = html.match(/<picture[\s\S]*?<\/picture>/)[0];
+    assert.doesNotMatch(chunk, /\.png/);
+    assert.match(chunk, /\.jpeg/);
+  } finally {
+    site.cleanup();
+  }
+});
