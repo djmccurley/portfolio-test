@@ -25,7 +25,13 @@ Markdown plus a shared `assets/` folder goes in; plain, fast, accessible HTML/CS
   4. Visitor receives responsive images (multiple widths, modern formats) with width/height set, first image eager and others lazy, and the originals from `assets/` are not published
   5. Committing a full-size pasted image scales it to ~3000px, converts PNG/JPEG to WebP and rewrites the `.md` links; a repeat CI build reuses cached images
   6. A missing image or malformed front matter fails the build with a file-level message, and unknown URLs show a plain 404 page
-**Plans**: TBD
+**Plans:** 5 plans
+Plans:
+- [ ] 01-01-PLAN.md — Walking skeleton: scaffold, asset resolver, image transform, base path, live reload, sample project (wave 1)
+- [ ] 01-02-PLAN.md — Strict content validation, standalone pages, metadata dl, plain 404 (wave 2)
+- [ ] 01-03-PLAN.md — Pre-commit shrink hook (WebP, <=3000px, slugify, link rewrite) and CI asset guard (wave 2)
+- [ ] 01-04-PLAN.md — Image edge cases: transparency PNG fallback, animated GIF, SVG (wave 2)
+- [ ] 01-05-PLAN.md — GitHub Actions deploy with image cache + prune, repo/Pages setup, live verification (wave 3)
 **UI hint**: yes
 
 ### Phase 2: Layout Blocks, Embeds and Design System
@@ -74,7 +80,7 @@ Markdown plus a shared `assets/` folder goes in; plain, fast, accessible HTML/CS
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Push-to-Live with Images | 0/? | Not started | - |
+| 1. Push-to-Live with Images | 0/5 | Not started | - |
 | 2. Layout Blocks, Embeds and Design System | 0/? | Not started | - |
 | 3. Browsing, Lightbox and Standalone Pages | 0/? | Not started | - |
 | 4. Hardening and Launch Readiness | 0/? | Not started | - |
