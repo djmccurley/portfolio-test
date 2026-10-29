@@ -7,12 +7,12 @@
 
 ### Publishing
 
-- [ ] **PUB-01**: Owner can push a markdown change to the repo and the site rebuilds and deploys automatically (GitHub Actions → GitHub Pages)
+- [x] **PUB-01**: Owner can push a markdown change to the repo and the site rebuilds and deploys automatically (GitHub Actions → GitHub Pages)
 - [x] **PUB-02**: Owner can switch the site between root hosting (custom domain / username.github.io) and a repo subpath by changing one config value, with all links, images and CSS still working
 - [x] **PUB-03**: Owner can run the site locally with live reload while writing
 - [ ] **PUB-04**: Owner sees a failed build with a clear file-level message when an image is missing, a layout block is malformed, or a featured project doesn't exist
 - [ ] **PUB-05**: Owner can mark a page `draft: true` and it is excluded from the live site
-- [ ] **PUB-06**: Visitor sees a plain 404 page for unknown URLs
+- [x] **PUB-06**: Visitor sees a plain 404 page for unknown URLs
 
 ### Authoring
 
@@ -36,7 +36,7 @@
 - [x] **IMG-01**: Visitor receives build-generated responsive images (multiple widths, modern formats) sized for each block layout
 - [x] **IMG-02**: Every image has width/height set so pages don't shift while loading; the first image loads eagerly, the rest lazily
 - [x] **IMG-03**: Only processed derivatives are published; the source files in `assets/` are never copied to the live site
-- [ ] **IMG-04**: Builds in CI reuse previously processed images instead of reprocessing all of them on every push
+- [x] **IMG-04**: Builds in CI reuse previously processed images instead of reprocessing all of them on every push
 - [ ] **IMG-05**: Visitor can open any content image full-size: a plain link to a large version that works without JS, enhanced to a native `<dialog>` viewer (keyboard-operable, Escape closes, focus returns)
 
 ### Media Embeds
@@ -116,17 +116,17 @@
 | IMG-01 | Phase 1 | Complete |
 | IMG-02 | Phase 1 | Complete |
 | IMG-03 | Phase 1 | Complete |
-| IMG-04 | Phase 1 | Pending |
+| IMG-04 | Phase 1 | Complete |
 | IMG-05 | Phase 3 | Pending |
 | MEDIA-01 | Phase 2 | Pending |
 | MEDIA-02 | Phase 2 | Pending |
 | MEDIA-03 | Phase 2 | Pending |
-| PUB-01 | Phase 1 | Pending |
+| PUB-01 | Phase 1 | Complete |
 | PUB-02 | Phase 1 | Complete |
 | PUB-03 | Phase 1 | Complete |
 | PUB-04 | Phase 1 | Pending |
 | PUB-05 | Phase 4 | Pending |
-| PUB-06 | Phase 1 | Pending |
+| PUB-06 | Phase 1 | Complete |
 | SITE-01 | Phase 3 | Pending |
 | SITE-02 | Phase 3 | Pending |
 | SITE-03 | Phase 3 | Pending |

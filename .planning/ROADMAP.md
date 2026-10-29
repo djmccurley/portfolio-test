@@ -28,7 +28,7 @@ Markdown plus a shared `assets/` folder goes in; plain, fast, accessible HTML/CS
   5. Committing a full-size pasted image scales it to ~3000px, converts PNG/JPEG to WebP and rewrites the `.md` links; a repeat CI build reuses cached images
   6. A missing image or malformed front matter fails the build with a file-level message, and unknown URLs show a plain 404 page
 
-**Plans:** 4/5 plans executed
+**Plans:** 5/5 plans complete
 Plans:
 **Wave 1**
 
@@ -42,7 +42,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-05-PLAN.md — GitHub Actions deploy with image cache + prune, repo/Pages setup, live verification (wave 3)
+- [x] 01-05-PLAN.md — GitHub Actions deploy with image cache + prune, repo/Pages setup, live verification (wave 3)
 
 **UI hint**: yes
 
@@ -101,7 +101,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Push-to-Live with Images | 4/5 | In Progress|  |
+| 1. Push-to-Live with Images | 5/5 | In Progress|  |
 | 2. Layout Blocks, Embeds and Design System | 0/? | Not started | - |
 | 3. Browsing, Lightbox and Standalone Pages | 0/? | Not started | - |
 | 4. Hardening and Launch Readiness | 0/? | Not started | - |
