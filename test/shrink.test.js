@@ -191,3 +191,23 @@ test("hook processes renamed PNG assets (no rename detection skip)", async () =>
   assert.ok(tree.includes("assets/new-name.webp"), tree);
   assert.ok(!/\.png/i.test(tree), tree);
 });
+
+test("oversize animated WebP keeps all frames", async () => {
+  const dir = makeRepo();
+  const frame = (c) =>
+    sharp({ create: { width: 3200, height: 40, channels: 3, background: c } }).png().toBuffer();
+  const anim = await sharp(
+    [await frame({ r: 255, g: 0, b: 0 }), await frame({ r: 0, g: 255, b: 0 }), await frame({ r: 0, g: 0, b: 255 })],
+    { join: { animated: true } }
+  )
+    .webp({ delay: [100, 100, 100], loop: 0 })
+    .toBuffer();
+  fs.writeFileSync(path.join(dir, "assets", "wide-anim.webp"), anim);
+  git(dir, "add", "-A");
+  const r = commit(dir);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const buf = execFileSync("git", ["show", "HEAD:assets/wide-anim.webp"], { cwd: dir, maxBuffer: 1 << 28 });
+  const meta = await sharp(buf).metadata();
+  assert.equal(meta.width, 3000);
+  assert.equal(meta.pages, 3);
+});

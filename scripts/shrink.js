@@ -100,14 +100,15 @@ function fail(msg) {
 
 async function metaOf(file) {
   try {
-    return await sharp(file, { failOn: "none" }).metadata();
+    return await sharp(file, { failOn: "none", animated: true }).metadata();
   } catch {
     return null;
   }
 }
 
 async function encode(inputPath, lossy, outPath) {
-  const pipeline = sharp(inputPath, { failOn: "none" })
+  // animated: true keeps every frame of animated WebP (WR-01).
+  const pipeline = sharp(inputPath, { failOn: "none", animated: true })
     .rotate()
     .resize({ width: MAX_EDGE, height: MAX_EDGE, fit: "inside", withoutEnlargement: true });
   // No withMetadata: sharp strips all metadata (EXIF/GPS) by default (D-16).
@@ -229,7 +230,7 @@ export async function main(argv = process.argv.slice(2)) {
     if (item.action !== "none" && item.action !== "rename") continue;
     if (!RASTER_RESIZE_EXTS.has(ext)) continue;
     const meta = await metaOf(path.join(ASSETS, item.from));
-    if (meta && Math.max(meta.width ?? 0, meta.height ?? 0) > MAX_EDGE) {
+    if (meta && Math.max(meta.width ?? 0, meta.pageHeight ?? meta.height ?? 0) > MAX_EDGE) {
       item.action = "webp-lossless";
     }
   }
