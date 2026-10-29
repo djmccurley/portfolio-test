@@ -28,11 +28,11 @@ Markdown plus a shared `assets/` folder goes in; plain, fast, accessible HTML/CS
   5. Committing a full-size pasted image scales it to ~3000px, converts PNG/JPEG to WebP and rewrites the `.md` links; a repeat CI build reuses cached images
   6. A missing image or malformed front matter fails the build with a file-level message, and unknown URLs show a plain 404 page
 
-**Plans:** 5 plans
+**Plans:** 1/5 plans executed
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Walking skeleton: scaffold, asset resolver, image transform, base path, live reload, sample project (wave 1)
+- [x] 01-01-PLAN.md — Walking skeleton: scaffold, asset resolver, image transform, base path, live reload, sample project (wave 1)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -101,7 +101,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Push-to-Live with Images | 0/5 | Not started | - |
+| 1. Push-to-Live with Images | 1/5 | In Progress|  |
 | 2. Layout Blocks, Embeds and Design System | 0/? | Not started | - |
 | 3. Browsing, Lightbox and Standalone Pages | 0/? | Not started | - |
 | 4. Hardening and Launch Readiness | 0/? | Not started | - |

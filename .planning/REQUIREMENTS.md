@@ -8,16 +8,16 @@
 ### Publishing
 
 - [ ] **PUB-01**: Owner can push a markdown change to the repo and the site rebuilds and deploys automatically (GitHub Actions → GitHub Pages)
-- [ ] **PUB-02**: Owner can switch the site between root hosting (custom domain / username.github.io) and a repo subpath by changing one config value, with all links, images and CSS still working
-- [ ] **PUB-03**: Owner can run the site locally with live reload while writing
+- [x] **PUB-02**: Owner can switch the site between root hosting (custom domain / username.github.io) and a repo subpath by changing one config value, with all links, images and CSS still working
+- [x] **PUB-03**: Owner can run the site locally with live reload while writing
 - [ ] **PUB-04**: Owner sees a failed build with a clear file-level message when an image is missing, a layout block is malformed, or a featured project doesn't exist
 - [ ] **PUB-05**: Owner can mark a page `draft: true` and it is excluded from the live site
 - [ ] **PUB-06**: Visitor sees a plain 404 page for unknown URLs
 
 ### Authoring
 
-- [ ] **AUTH-01**: Owner can create a project by adding one `.md` file with front matter (title, date, tags, summary, cover image + alt, role/client/tools)
-- [ ] **AUTH-02**: Owner can paste an image in VS Code (saved to the shared `assets/` folder with a prefixed filename) and the resulting `![alt](path)` link renders correctly on the built site
+- [x] **AUTH-01**: Owner can create a project by adding one `.md` file with front matter (title, date, tags, summary, cover image + alt, role/client/tools)
+- [x] **AUTH-02**: Owner can paste an image in VS Code (saved to the shared `assets/` folder with a prefixed filename) and the resulting `![alt](path)` link renders correctly on the built site
 - [ ] **AUTH-03**: Owner can paste full-size images of any size; on commit, images over ~3000px are scaled down, PNG/JPEG are converted to WebP, and the `.md` links are rewritten automatically (GIFs and transparency handled safely)
 - [ ] **AUTH-04**: Owner can write raw HTML inside markdown as a fallback for anything the block syntax doesn't cover
 - [ ] **AUTH-05**: Owner has a short authoring reference (README) listing every block and front matter field with examples
@@ -33,9 +33,9 @@
 
 ### Images
 
-- [ ] **IMG-01**: Visitor receives build-generated responsive images (multiple widths, modern formats) sized for each block layout
-- [ ] **IMG-02**: Every image has width/height set so pages don't shift while loading; the first image loads eagerly, the rest lazily
-- [ ] **IMG-03**: Only processed derivatives are published; the source files in `assets/` are never copied to the live site
+- [x] **IMG-01**: Visitor receives build-generated responsive images (multiple widths, modern formats) sized for each block layout
+- [x] **IMG-02**: Every image has width/height set so pages don't shift while loading; the first image loads eagerly, the rest lazily
+- [x] **IMG-03**: Only processed derivatives are published; the source files in `assets/` are never copied to the live site
 - [ ] **IMG-04**: Builds in CI reuse previously processed images instead of reprocessing all of them on every push
 - [ ] **IMG-05**: Visitor can open any content image full-size: a plain link to a large version that works without JS, enhanced to a native `<dialog>` viewer (keyboard-operable, Escape closes, focus returns)
 
@@ -102,8 +102,8 @@
 | A11Y-02 | Phase 4 | Pending |
 | A11Y-03 | Phase 2 | Pending |
 | A11Y-04 | Phase 2 | Pending |
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Pending |
 | AUTH-04 | Phase 2 | Pending |
 | AUTH-05 | Phase 4 | Pending |
@@ -113,17 +113,17 @@
 | BLOCK-04 | Phase 2 | Pending |
 | BLOCK-05 | Phase 2 | Pending |
 | BLOCK-06 | Phase 2 | Pending |
-| IMG-01 | Phase 1 | Pending |
-| IMG-02 | Phase 1 | Pending |
-| IMG-03 | Phase 1 | Pending |
+| IMG-01 | Phase 1 | Complete |
+| IMG-02 | Phase 1 | Complete |
+| IMG-03 | Phase 1 | Complete |
 | IMG-04 | Phase 1 | Pending |
 | IMG-05 | Phase 3 | Pending |
 | MEDIA-01 | Phase 2 | Pending |
 | MEDIA-02 | Phase 2 | Pending |
 | MEDIA-03 | Phase 2 | Pending |
 | PUB-01 | Phase 1 | Pending |
-| PUB-02 | Phase 1 | Pending |
-| PUB-03 | Phase 1 | Pending |
+| PUB-02 | Phase 1 | Complete |
+| PUB-03 | Phase 1 | Complete |
 | PUB-04 | Phase 1 | Pending |
 | PUB-05 | Phase 4 | Pending |
 | PUB-06 | Phase 1 | Pending |
@@ -136,6 +136,7 @@
 | SITE-07 | Phase 4 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 36 total
 - Mapped to phases: 36
 - Unmapped: 0
