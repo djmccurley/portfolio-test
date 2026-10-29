@@ -11,7 +11,8 @@
     "test": "node --test 'test/*.test.js'",
     "prepare": "git config core.hooksPath .githooks || true",
     "shrink": "node scripts/shrink.js",
-    "check:assets": "node scripts/check-assets.js"
+    "check:assets": "node scripts/check-assets.js",
+    "prune:img": "node scripts/prune-img.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.7",
