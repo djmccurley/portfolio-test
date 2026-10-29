@@ -10,7 +10,8 @@
     "start": "eleventy --serve",
     "test": "node --test 'test/*.test.js'",
     "prepare": "git config core.hooksPath .githooks || true",
-    "shrink": "node scripts/shrink.js"
+    "shrink": "node scripts/shrink.js",
+    "check:assets": "node scripts/check-assets.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.7",
