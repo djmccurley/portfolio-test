@@ -12,15 +12,14 @@ Writing a new project page should be as fast as typing markdown: headers, paragr
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Author projects and pages as `.md` files; push to git → site builds and deploys to static hosting (GitHub Pages or similar) — Validated in Phase 1: Push-to-Live with Images
+- [x] Images pasted in VS Code resolve correctly from the single shared `assets/` folder (plugin writes prefixed filenames there) — Validated in Phase 1: Push-to-Live with Images
+- [x] Images auto-resized at build time (responsive sizes, modern formats, width/height to prevent layout shift); full-res originals stay as source — Validated in Phase 1: Push-to-Live with Images
 
 ### Active
 
-- [ ] Author projects and pages as `.md` files; push to git → site builds and deploys to static hosting (GitHub Pages or similar)
 - [ ] Inline, modular layout blocks inside a page body (e.g. multi-column image grid, full-width image, text) typed with fast markdown-like shorthand, not raw HTML (HTML allowed as fallback)
 - [ ] Several layout options available per block; blocks can be mixed freely within one page
-- [ ] Images pasted in VS Code resolve correctly from the single shared `assets/` folder (plugin writes prefixed filenames there)
-- [ ] Images auto-resized at build time (responsive sizes, modern formats, width/height to prevent layout shift); full-res originals stay as source
 - [ ] Image lightbox for viewing full-size images, using native elements (e.g. `<dialog>` or plain link to file), no heavy JS
 - [ ] Video support in project pages (self-hosted and/or YouTube/Vimeo embeds)
 - [ ] Playable games embedded via itch.io embeds
@@ -95,4 +94,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-28 after initialization*
+*Last updated: 2026-10-28 after Phase 1 (live at https://djmccurley.github.io/portfolio-test/)*
