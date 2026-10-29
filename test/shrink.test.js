@@ -177,3 +177,17 @@ test("manual mode", async () => {
   assert.ok(fs.readFileSync(path.join(dir, "content/projects/p.md"), "utf8").includes("wide-pic.webp"));
   assert.equal(git(dir, "diff", "--cached", "--name-only").trim(), "");
 });
+
+test("hook processes renamed PNG assets (no rename detection skip)", async () => {
+  const dir = makeRepo();
+  fs.writeFileSync(path.join(dir, "assets", "old-name.png"), await png(100, 100));
+  git(dir, "add", "-A");
+  const first = spawnSync("git", ["commit", "--no-verify", "-m", "seed"], { cwd: dir, encoding: "utf8" });
+  assert.equal(first.status, 0, first.stdout + first.stderr);
+  git(dir, "mv", "assets/old-name.png", "assets/New Name.png");
+  const r = commit(dir);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const tree = git(dir, "ls-tree", "-r", "HEAD", "--name-only");
+  assert.ok(tree.includes("assets/new-name.webp"), tree);
+  assert.ok(!/\.png/i.test(tree), tree);
+});

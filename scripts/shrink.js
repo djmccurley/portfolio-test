@@ -199,7 +199,7 @@ function rewriteMarkdown(changes, staged) {
 
 async function candidates(staged) {
   if (staged) {
-    return git(["diff", "--cached", "--name-only", "--diff-filter=AM", "-z", "--", ASSETS])
+    return git(["diff", "--cached", "--name-only", "--no-renames", "--diff-filter=AM", "-z", "--", ASSETS])
       .split("\0")
       .filter(Boolean)
       .filter((p) => path.posix.dirname(p) === ASSETS)
