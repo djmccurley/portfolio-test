@@ -1,0 +1,4 @@
+#!/bin/sh
+# Shrinks/converts staged images in assets/ and rewrites .md links (D-13).
+# No-ops quickly when no assets are staged.
+exec node scripts/shrink.js --staged

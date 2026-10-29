@@ -96,7 +96,7 @@ test("JPEG lossy and no upscale", async () => {
   const dir = makeRepo();
   const jpg = await sharp({ create: { width: 800, height: 600, channels: 3, background: { r: 200, g: 20, b: 20 } } })
     .jpeg()
-    .withExif({ IFD0: { Orientation: "6" } })
+    .withMetadata({ orientation: 6 })
     .toBuffer();
   fs.writeFileSync(path.join(dir, "assets", "Photo One.JPG"), jpg);
   fs.writeFileSync(path.join(dir, "content/projects/p.md"), "![x](../../assets/Photo%20One.JPG)\n");
