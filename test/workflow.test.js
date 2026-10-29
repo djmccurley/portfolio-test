@@ -56,3 +56,8 @@ test("no pull_request_target or secrets", () => {
   const raw = fs.readFileSync(path.join(ROOT, ".github/workflows/deploy.yml"), "utf8");
   assert.ok(!/pull_request_target|secrets\./.test(raw));
 });
+
+test("pages concurrency group does not cancel in-progress deploys", () => {
+  assert.equal(wf.concurrency.group, "pages");
+  assert.equal(wf.concurrency["cancel-in-progress"], false);
+});
