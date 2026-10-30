@@ -205,8 +205,16 @@ test("full build: a poster is published as a processed WebP no wider than 1600px
   const r = site.build();
   assert.equal(r.code, 0, r.output);
   const html = site.read("_site/movie/index.html");
-  const m = html.match(new RegExp(`<video[^>]*poster="${prefix}video/(crab-[0-9a-f]{8}\\.webp)"`));
+  // G-02-4: a poster block must carry a plain src (no #t= media fragment), or the browser seeks
+  // on load and shows the video frame instead of the poster.
+  const m = html.match(
+    new RegExp(
+      `<video controls="" preload="metadata" src="${prefix}video/clip\\.mp4" poster="${prefix}video/(crab-[0-9a-f]{8}\\.webp)" aria-label="Crab walk loop">`
+    )
+  );
   assert.ok(m, html);
+  assert.doesNotMatch(html.match(/<video[^>]*>/)[0], /#t=/);
+  assert.ok(html.includes(`<a href="${prefix}video/clip.mp4">`), html);
   const file = path.join(site.dir, "_site/video", m[1]);
   assert.ok(fs.existsSync(file), file);
   const meta = await sharp(file).metadata();
