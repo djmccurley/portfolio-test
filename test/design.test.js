@@ -79,10 +79,17 @@ test("head loads Chivo from Google Fonts before the stylesheet", () => {
   }
 });
 
-test("no page contains a script or a referrer meta tag", () => {
+test("only the deferred first-party lightbox script, and only on pages with zoom links", () => {
   for (const p of site.walk("_site").filter((f) => f.endsWith(".html"))) {
     const html = fs.readFileSync(p, "utf8");
-    assert.ok(!html.includes("<script"), `${p} contains <script`);
+    const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)];
+    assert.equal(scripts.length, (html.match(/<script/g) ?? []).length, `${p}: unclosed script tag`);
+    for (const [, attrs, inline] of scripts) {
+      assert.match(attrs, /\ssrc="[^"]*\/lightbox\.js"/, `${p}: script is not lightbox.js`);
+      assert.match(attrs, /\bdefer\b/, `${p}: script is not deferred`);
+      assert.equal(inline.trim(), "", `${p}: inline script body`);
+    }
+    if (!html.includes('class="zoom"')) assert.ok(!html.includes("<script"), `${p} has a script but no zoom link`);
     assert.ok(!html.includes('name="referrer"'), `${p} contains a referrer meta`);
   }
 });
