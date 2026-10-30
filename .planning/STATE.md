@@ -4,16 +4,16 @@ milestone: v1.0
 current_phase: 02
 current_phase_name: Layout Blocks, Embeds and Design System
 status: verifying
-stopped_at: Completed 02-05-PLAN.md
-last_updated: "2026-10-30T04:30:05.995Z"
-last_activity: 2026-10-29
+stopped_at: Completed 02-06-PLAN.md
+last_updated: "2026-10-30T13:44:09.820Z"
+last_activity: 2026-10-30
 last_activity_desc: Phase 02 execution started
-state_head: 752cd2104265852241f57e9949fc268aa53339b9
+state_head: d821b483221559e5c45790963ae7964ad33b7391
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 10
-  completed_plans: 10
+  total_plans: 11
+  completed_plans: 11
 milestone_name: milestone
 ---
 
@@ -29,9 +29,9 @@ See: .planning/PROJECT.md (updated 2026-10-28)
 ## Current Position
 
 Phase: 02 (Layout Blocks, Embeds and Design System) — EXECUTING
-Plan: 5 of 5
+Plan: 6 of 6
 Status: Phase complete — ready for verification
-Last activity: 2026-10-29 — Phase 02 execution started
+Last activity: 2026-10-30 — Phase 02 execution started
 
 Progress: [██████████] 100%
 
@@ -57,6 +57,7 @@ Progress: [██████████] 100%
 | Phase 02 P03 | 15min | 2 tasks | 7 files |
 | Phase 02 P04 | 15min | 2 tasks | 4 files |
 | Phase 02 P05 | 3 min | 3 tasks | 11 files |
+| Phase 02 P06 | 11 min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,8 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 02]: Raw img without alt: eleventy-img defaultAttributes alt empty so the lint warns instead of aborting the build
 - [Phase 02]: Embed iframe src is rebuilt from a validated ID (YouTube nocookie, Vimeo dnt=1) with exact-host allow-lists; itch hosts itch.io, *.itch.io, *.itch.zone
 - [Phase 02]: Video posters processed to a single 1600px hashed WebP rather than copied; videos capped at 50 MB in renderer, CI guard and hook via lib/limits.js
+- [Phase 02]: 02-06: omit #t=0.001 from poster video src (keep preload=metadata) so the poster shows; no-poster blocks keep the iOS first-frame fragment
+- [Phase 02]: 02-06: CI originals check exempts only VIDEO_EXTS files directly in _site/video/
 
 ### Pending Todos
 
@@ -90,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-30T04:30:05.947Z
-Stopped at: Completed 02-05-PLAN.md
+Last session: 2026-10-30T13:44:09.723Z
+Stopped at: Completed 02-06-PLAN.md
 Resume file: None
