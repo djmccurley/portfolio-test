@@ -4,16 +4,16 @@ milestone: v1.0
 current_phase: 03
 current_phase_name: Browsing, Lightbox and Standalone Pages
 status: executing
-stopped_at: Phase 3 UI-SPEC approved
-last_updated: "2026-10-30T16:38:06.559Z"
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-10-30T16:45:51.448Z"
 last_activity: 2026-10-30
-last_activity_desc: Phase 02 complete, transitioned to Phase 3
-state_head: e1f8161ffee292f48f4c582fb43b4d3d4796379e
+last_activity_desc: Phase 03 execution started
+state_head: 3017a104e12ec6716fbf29a1be7c1b0139b4ba91
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 16
-  completed_plans: 11
+  completed_plans: 12
 milestone_name: milestone
 ---
 
@@ -24,14 +24,14 @@ milestone_name: milestone
 See: .planning/PROJECT.md (updated 2026-10-30)
 
 **Core value:** Writing a new project page should be as fast as typing markdown, then push, and it's live, with no CMS, template fights or upload caps.
-**Current focus:** Phase 3 — Browsing, Lightbox and Standalone Pages
+**Current focus:** Phase 03 — Browsing, Lightbox and Standalone Pages
 
 ## Current Position
 
-Phase: 03 (Browsing, Lightbox and Standalone Pages) — READY TO EXECUTE
-Plan: Not started
+Phase: 03 (Browsing, Lightbox and Standalone Pages) — EXECUTING
+Plan: 2 of 5
 Status: Ready to execute
-Last activity: 2026-10-30 — Phase 02 complete, transitioned to Phase 3
+Last activity: 2026-10-30 — Phase 03 execution started
 
 Progress: [█████░░░░░] 50%
 
@@ -59,6 +59,7 @@ Progress: [█████░░░░░] 50%
 | Phase 02 P04 | 15min | 2 tasks | 4 files |
 | Phase 02 P05 | 3 min | 3 tasks | 11 files |
 | Phase 02 P06 | 11 min | 2 tasks | 3 files |
+| Phase 03 P01 | 15 min | 3 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,8 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 02]: Video posters processed to a single 1600px hashed WebP rather than copied; videos capped at 50 MB in renderer, CI guard and hook via lib/limits.js
 - [Phase 02]: 02-06: omit #t=0.001 from poster video src (keep preload=metadata) so the poster shows; no-poster blocks keep the iOS first-frame fragment
 - [Phase 02]: 02-06: CI originals check exempts only VIDEO_EXTS files directly in _site/video/
+- [Phase 03]: Plan 03-01: card covers are the only cropped images (4:3, CSS only); first cover eager, rest lazy — UI-SPEC owner decision; enforced by narrowed design test
+- [Phase 03]: Plan 03-01: projects sort ties break on input path; work and pdf reserved slugs, cv/teaching not — Deterministic builds; cv/teaching clashes already fail with 'already used by'
 
 ### Pending Todos
 
@@ -93,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-30T15:07:30.553Z
-Stopped at: Phase 3 UI-SPEC approved
-Resume file: .planning/phases/03-browsing-lightbox-and-standalone-pages/03-UI-SPEC.md
+Last session: 2026-10-30T16:45:51.346Z
+Stopped at: Completed 03-01-PLAN.md
+Resume file: None

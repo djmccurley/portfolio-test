@@ -47,7 +47,7 @@
 
 ### Site Structure
 
-- [ ] **SITE-01**: Visitor can browse all projects in one feed, newest first
+- [x] **SITE-01**: Visitor can browse all projects in one feed, newest first
 - [ ] **SITE-02**: Visitor can browse projects by tag (graphic, UX, art, games, etc.) on tag pages
 - [ ] **SITE-03**: Owner can choose which projects appear on the homepage and in what order
 - [ ] **SITE-04**: Owner can add standalone pages (About / CV) as markdown files
@@ -127,7 +127,7 @@
 | PUB-04 | Phase 1 | Complete |
 | PUB-05 | Phase 4 | Pending |
 | PUB-06 | Phase 1 | Complete |
-| SITE-01 | Phase 3 | Pending |
+| SITE-01 | Phase 3 | Complete |
 | SITE-02 | Phase 3 | Pending |
 | SITE-03 | Phase 3 | Pending |
 | SITE-04 | Phase 3 | Pending |
