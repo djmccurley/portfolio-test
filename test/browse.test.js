@@ -1,5 +1,7 @@
 import test, { after } from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import siteData from "../src/_data/site.js";
 import { makeSite, defaultPrefix } from "./helpers/site.js";
 
 const sites = [];
@@ -148,4 +150,94 @@ test("a project whose cover file is missing still fails the build naming the fil
   });
   assert.notEqual(r.code, 0);
   assert.ok(r.output.includes("content/projects/broken.md"), r.output);
+});
+
+// ---------------------------------------------------------------------------
+// Site header and navigation
+// ---------------------------------------------------------------------------
+
+const fixtureNav = {
+  ...fixtureA,
+  "content/pages/cv.md": "---\ntitle: CV\n---\n\nExperience.\n",
+};
+
+const headerOf = (html) => html.match(/<header>[\s\S]*?<\/header>/)[0];
+// Every <a> in the header as { href, label, current } in order.
+const headerLinks = (html) =>
+  [...headerOf(html).matchAll(/<a ([^>]*)>([^<]*)<\/a>/g)].map((m) => ({
+    href: m[1].match(/href="([^"]+)"/)[1],
+    label: m[2],
+    current: (m[1].match(/aria-current="([^"]+)"/) ?? [])[1],
+  }));
+
+test("every page has the header row, the owner name and the Main nav in order", async () => {
+  const prefix = defaultPrefix();
+  const { site: s, r } = await build(fixtureNav);
+  assert.equal(r.code, 0, r.output);
+  const html = s.read("_site/work/index.html");
+  assert.match(
+    html,
+    new RegExp(
+      `<header><div class="header-row"><a class="site-name" href="${prefix}">${siteData.name}</a><nav aria-label="Main"><ul>\\s*<li>`
+    )
+  );
+  assert.deepEqual(
+    headerLinks(html).map((l) => [l.href, l.label]),
+    [
+      [prefix, siteData.name],
+      [`${prefix}work/`, "Work"],
+      [`${prefix}cv/`, "CV"],
+      [`${prefix}teaching/`, "Teaching"],
+    ]
+  );
+});
+
+test("aria-current marks the current page, and Work on project pages", async () => {
+  const { site: s, r } = await build(fixtureNav);
+  assert.equal(r.code, 0, r.output);
+  const cur = (file) => Object.fromEntries(headerLinks(s.read(file)).map((l) => [l.label, l.current]));
+
+  assert.deepEqual(cur("_site/work/index.html"), { [siteData.name]: undefined, Work: "page", CV: undefined, Teaching: undefined });
+  assert.deepEqual(cur("_site/newer/index.html"), { [siteData.name]: undefined, Work: "true", CV: undefined, Teaching: undefined });
+  assert.deepEqual(cur("_site/index.html"), { [siteData.name]: "page", Work: undefined, CV: undefined, Teaching: undefined });
+  assert.deepEqual(cur("_site/cv/index.html"), { [siteData.name]: undefined, Work: undefined, CV: "page", Teaching: undefined });
+  assert.deepEqual(cur("_site/teaching/index.html"), { [siteData.name]: undefined, Work: undefined, CV: undefined, Teaching: "page" });
+  assert.ok(!s.read("_site/404.html").includes("aria-current"), "404 has no current item");
+  assert.ok(headerLinks(s.read("_site/404.html")).length === 4, "404 carries the header");
+});
+
+test("every built page has exactly one Main nav", async () => {
+  const { site: s } = await build(fixtureNav);
+  const pages = s.walk("_site").filter((f) => f.endsWith(".html"));
+  assert.ok(pages.length >= 6);
+  for (const p of pages) {
+    const html = fs.readFileSync(p, "utf8");
+    assert.equal((html.match(/<nav aria-label="Main">/g) || []).length, 1, p);
+  }
+});
+
+test("the header nav is identical under PATH_PREFIX=/", async () => {
+  const { site: s } = await build(fixtureNav, { prefix: "/" });
+  assert.deepEqual(
+    headerLinks(s.read("_site/cv/index.html")).map((l) => l.href),
+    ["/", "/work/", "/cv/", "/teaching/"]
+  );
+});
+
+test("project slugs work and pdf are reserved; cv and teaching are not", async () => {
+  for (const slug of ["work", "pdf"]) {
+    const { r } = await build({
+      "content/projects/clash.md": proj({ title: "Clash", date: '"2024"', extra: `slug: ${slug}\n` }),
+    });
+    assert.notEqual(r.code, 0, slug);
+    assert.ok(r.output.includes("content/projects/clash.md"), r.output);
+    assert.ok(r.output.includes(`slug "${slug}" is reserved`), r.output);
+  }
+  const { r } = await build({
+    "content/projects/cv.md": proj({ title: "CV project", date: '"2024"' }),
+    "content/pages/cv.md": "---\ntitle: CV\n---\n",
+  });
+  assert.notEqual(r.code, 0);
+  assert.ok(r.output.includes('slug "cv" already used by'), r.output);
+  assert.ok(!r.output.includes('slug "cv" is reserved'), r.output);
 });

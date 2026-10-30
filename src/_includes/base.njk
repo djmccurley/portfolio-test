@@ -11,7 +11,11 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
-  <header><a href="/">Portfolio</a></header>
+  <header><div class="header-row"><a class="site-name" href="/"{% if page.url == "/" %} aria-current="page"{% endif %}>{{ site.name }}</a><nav aria-label="Main"><ul>
+    <li><a href="/work/"{% if page.url == "/work/" %} aria-current="page"{% elif section == "work" %} aria-current="true"{% endif %}>Work</a></li>
+    <li><a href="/cv/"{% if page.url == "/cv/" %} aria-current="page"{% endif %}>CV</a></li>
+    <li><a href="/teaching/"{% if page.url == "/teaching/" %} aria-current="page"{% endif %}>Teaching</a></li>
+  </ul></nav></div></header>
   <main id="main" tabindex="-1">
     <h1>{{ title }}</h1>
     {% if date %}<p class="meta"><time datetime="{{ date }}">{{ date }}</time></p>{% endif %}

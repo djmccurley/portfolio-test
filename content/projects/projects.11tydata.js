@@ -1,5 +1,6 @@
 export default {
   layout: "base.njk",
+  section: "work", // Work is the current nav section on every project page
   eleventyComputed: {
     permalink: (data) => {
       const s = data.slug || data.page.fileSlug;
