@@ -1,9 +1,9 @@
 ---
-status: diagnosed
+status: complete
 phase: 02-layout-blocks-embeds-and-design-system
 source: [02-VERIFICATION.md]
 started: 2026-10-30T04:40:34Z
-updated: 2026-10-30T13:22:14Z
+updated: 2026-10-30T13:56:26.664Z
 ---
 
 ## Current Test
@@ -38,10 +38,14 @@ result: pass
 expected: Pasting an image without editing its alt gives one WARN line on build, and the warning clears after a real alt is written.
 result: pass
 
+### 7. Video poster re-check after 02-06 fix
+expected: On the deployed site (and on iPhone Safari if you can), a `::: video` block with `poster=` shows the poster image before you press play. A video block without a poster still shows a first frame on iOS.
+result: pass
+
 ## Summary
 
-total: 6
-passed: 5
+total: 7
+passed: 6
 issues: 1
 pending: 0
 skipped: 0
@@ -51,10 +55,12 @@ blocked: 0
 
 - gap_id: G-02-4
   truth: "Self-hosted video shows its poster image before playback when poster= is set"
-  status: failed
+  status: resolved
   reason: "User reported: I don't see the poster image but the video deploys with and without poster."
   severity: major
   test: 4
+  resolved_by: 02-06-PLAN.md
+  resolved_at: 2026-10-30
   root_cause: "renderFileVideo in lib/media.js always appends #t=0.001 to the video src, even when poster= is set. With preload=metadata the media fragment makes the browser seek on load, which exits poster mode and paints the video frame (black frame 0 for this clip) instead of the poster. The fragment trick was meant only for the no-poster case (02-CONTEXT.md line 93)."
   artifacts:
     - path: "lib/media.js"
