@@ -128,11 +128,11 @@ Plans:
   4. Owner can read a README listing every block and front matter field with examples
   5. Site is usable at 320px wide and 200% zoom without horizontal scrolling, verified under the real deployed prefix or domain
 
-**Plans:** 5 plans
+**Plans:** 1/5 plans executed
 Plans:
 **Wave 1**
 
-- [ ] 04-01-PLAN.md — Drafts: fail-closed run-mode preprocessor, media never published, Draft labels under `npm start`, boolean check, featured/nav draft warnings (wave 1)
+- [x] 04-01-PLAN.md — Drafts: fail-closed run-mode preprocessor, media never published, Draft labels under `npm start`, boolean check, featured/nav draft warnings (wave 1)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -156,4 +156,4 @@ Plans:
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
 | 2. Layout Blocks, Embeds and Design System | 6/6 | Complete    | 2026-10-30 |
 | 3. Browsing, Lightbox and Standalone Pages | 5/5 | Complete    | 2026-10-30 |
-| 4. Hardening and Launch Readiness | 0/? | Not started | - |
+| 4. Hardening and Launch Readiness | 1/5 | In Progress | - |

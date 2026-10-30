@@ -4,16 +4,16 @@ milestone: v1.0
 current_phase: 04
 current_phase_name: Hardening and Launch Readiness
 status: executing
-stopped_at: Phase 4 context gathered
-last_updated: "2026-10-30T21:38:37.259Z"
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-10-30T22:15:16.501Z"
 last_activity: 2026-10-30
-last_activity_desc: Phase 03 complete, transitioned to Phase 4
-state_head: c591832004da35a9820e58607538ac433043e680
+last_activity_desc: Phase 04 execution started
+state_head: dcab3464b3cc67280563628fa1c717a85182bf23
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 21
-  completed_plans: 16
+  completed_plans: 17
 milestone_name: milestone
 ---
 
@@ -24,14 +24,14 @@ milestone_name: milestone
 See: .planning/PROJECT.md (updated 2026-10-30)
 
 **Core value:** Writing a new project page should be as fast as typing markdown, then push, and it's live, with no CMS, template fights or upload caps.
-**Current focus:** Phase 4 — Hardening and Launch Readiness
+**Current focus:** Phase 04 — Hardening and Launch Readiness
 
 ## Current Position
 
-Phase: 04 (Hardening and Launch Readiness) — READY TO EXECUTE
-Plan: Not started
+Phase: 04 (Hardening and Launch Readiness) — EXECUTING
+Plan: 2 of 5
 Status: Ready to execute
-Last activity: 2026-10-30 — Phase 03 complete, transitioned to Phase 4
+Last activity: 2026-10-30 — Phase 04 execution started
 
 Progress: [████████░░] 75%
 
@@ -65,6 +65,7 @@ Progress: [████████░░] 75%
 | Phase 03 P03 | 25 min | 3 tasks | 15 files |
 | Phase 03 P04 | 15min | 2 tasks | 7 files |
 | Phase 03 P05 | 5 min | 3 tasks | 10 files |
+| Phase 04 P01 | 20min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -100,6 +101,7 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 03]: Zoom hrefs finished by a PostHTML plugin at priority -1.5 (after eleventy-img, before HtmlBasePlugin) so hashed names and path prefix are both right
 - [Phase 03]: Lightbox script URL is plain /lightbox.js (HtmlBasePlugin prefixes it); loaded with defer only on pages containing a zoom link
 - [Phase 03]: Design test no-script guard narrowed to deferred first-party lightbox.js with no inline body, only on pages with zoom links
+- [Phase 04]: 04-01: drafts dropped by a single fail-closed Eleventy preprocessor keyed on ELEVENTY_RUN_MODE serve/watch; drafted CV/Teaching pages warn and are hidden from the live nav
 
 ### Pending Todos
 
@@ -111,6 +113,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-30T18:59:34.538Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-hardening-and-launch-readiness/04-CONTEXT.md
+Last session: 2026-10-30T22:15:16.335Z
+Stopped at: Completed 04-01-PLAN.md
+Resume file: None
