@@ -62,6 +62,28 @@ test("a video over 50 MB names the video limit", async () => {
   assert.ok(errs.every((e) => !e.includes("10 MB")), errs.join("\n"));
 });
 
+test("a PDF up to 25 MB passes the guard (not the 10 MB image rule)", async () => {
+  const d = tmp();
+  fs.writeFileSync(path.join(d, "a.pdf"), crypto.randomBytes(12 * 1024 * 1024));
+  assert.deepEqual(await checkAssets(d), []);
+});
+
+test("a PDF over 25 MB names the PDF limit", async () => {
+  const d = tmp();
+  fs.writeFileSync(path.join(d, "big.pdf"), Buffer.alloc(26 * 1024 * 1024));
+  const errs = await checkAssets(d);
+  assert.ok(errs.some((e) => e === "assets/big.pdf: over 25 MB (PDF limit; compress it or split it)"), errs.join("\n"));
+  assert.ok(errs.every((e) => !e.includes("10 MB")), errs.join("\n"));
+});
+
+test("a PDF is never decoded as an image", async () => {
+  const d = tmp();
+  fs.writeFileSync(path.join(d, "junk.pdf"), crypto.randomBytes(1024));
+  const errs = await checkAssets(d);
+  assert.ok(errs.every((e) => !e.includes("unreadable image")), errs.join("\n"));
+  assert.deepEqual(errs, []);
+});
+
 test("a GIF over 10 MB keeps the 10 MB message", async () => {
   const d = tmp();
   fs.writeFileSync(path.join(d, "big.gif"), crypto.randomBytes(11 * 1024 * 1024));

@@ -262,3 +262,33 @@ test("hook rejects a video over 50 MB before the commit lands", () => {
   const head = spawnSync("git", ["rev-parse", "--verify", "HEAD"], { cwd: dir, encoding: "utf8" });
   assert.notEqual(head.status, 0, "nothing should be committed");
 });
+
+test("hook commits a PDF byte-identical under its slug and rewrites the link", () => {
+  const dir = makeRepo();
+  const bytes = crypto.randomBytes(2048);
+  fs.writeFileSync(path.join(dir, "assets", "Course-Syllabus.pdf"), bytes);
+  fs.writeFileSync(path.join(dir, "content/projects/p.md"), "[Syllabus](../../assets/Course-Syllabus.pdf)\n");
+  git(dir, "add", "-A");
+  const r = commit(dir);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const tree = git(dir, "ls-tree", "-r", "HEAD", "--name-only").split("\n");
+  assert.ok(tree.includes("assets/course-syllabus.pdf"), tree.join("\n"));
+  assert.ok(!tree.includes("assets/Course-Syllabus.pdf"), tree.join("\n"));
+  const committed = execFileSync("git", ["show", "HEAD:assets/course-syllabus.pdf"], { cwd: dir, maxBuffer: 1 << 28 });
+  const sha = (b) => crypto.createHash("sha256").update(b).digest("hex");
+  assert.equal(sha(committed), sha(bytes));
+  assert.ok(git(dir, "show", "HEAD:content/projects/p.md").includes("](../../assets/course-syllabus.pdf)"));
+});
+
+test("hook rejects a PDF over 25 MB before the commit lands", () => {
+  const dir = makeRepo();
+  fs.writeFileSync(path.join(dir, "assets", "huge.pdf"), Buffer.alloc(26 * 1024 * 1024));
+  git(dir, "add", "-A");
+  const r = commit(dir);
+  assert.notEqual(r.status, 0);
+  const out = r.stdout + r.stderr;
+  assert.match(out, /over 25 MB/);
+  assert.match(out, /never converted/);
+  const head = spawnSync("git", ["rev-parse", "--verify", "HEAD"], { cwd: dir, encoding: "utf8" });
+  assert.notEqual(head.status, 0, "nothing should be committed");
+});
