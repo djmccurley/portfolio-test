@@ -1,10 +1,11 @@
 ---
 phase: "02"
 slug: layout-blocks-embeds-and-design-system
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: "2026-10-29"
+reviewed_at: "2026-10-29"
 ---
 
 # Phase 02 — UI Design Contract
@@ -82,6 +83,7 @@ Rules:
 - `.full` blocks span `full-start` to `full-end` (true edge-to-edge, D-03).
 - `.full` captions are inset so text never touches the viewport edge: `figcaption` inside `.full` gets `padding-inline-start: max(var(--page-margin), calc((100% - var(--column-max)) / 2))` and `padding-inline-end: var(--page-margin)`.
 - No sidebar, no sticky elements, no multi-column page chrome.
+- Focal point: the project page's primary visual anchor is the `<h1>` title (Display size), followed by the first image or block in the content. Nothing else competes for first attention (no hero banner, no coloured chrome). The first image is the eager/high-priority one (see `sizes` section).
 
 ### Block rendering contract
 
@@ -196,6 +198,7 @@ Exceptions:
 - `--page-margin` is fluid (`clamp(1rem, 5vw, 4rem)`), not a fixed step. Its endpoints (16px, 64px) are on the scale.
 - Skip link padding is 12px 16px to give a target of at least 44px tall at body size (12 is a multiple of 4).
 - Intrinsic image and embed dimensions come from the content, not the scale.
+- Stroke and decoration values are not spacing and sit outside the scale: focus `outline` 3px and `outline-offset` 3px (visible ring, A11Y-03), `<hr>` / blockquote rule 2px, link underline thickness `0.08em` and offset `0.2em` (scale with text size).
 
 ---
 
@@ -212,7 +215,7 @@ Font: Chivo. Declared sizes: exactly 4. Declared weights: exactly 2 (400 regular
 
 Rules:
 - Headings are left-aligned, never centred, no letter-spacing, no uppercase transform, no text-shadow.
-- `<h1>` uses `font-size: clamp(1.75rem, 6vw, 2.5rem)` only if needed on phones; otherwise fixed 2.5rem. Keep wrap with `overflow-wrap: break-word` on headings and captions so long words never cause horizontal scroll.
+- `<h1>` is a fixed `2.5rem` at every width (no `clamp()`, so there is no fifth size). Keep wrap with `overflow-wrap: break-word` on headings and captions so long words never cause horizontal scroll.
 - `<dt>` in the project meta block: 14px, 700. `<dd>`: 18px, 400. Present them as a two-column grid at `>= 40em` (`dt` column auto, `dd` column 1fr) and stacked below that. No box, no border, no background.
 - Links: colour `--accent`, always underlined (`text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.2em`). Visited links keep the same colour (single accent, D-11). Hover/focus changes nothing except the focus ring (no transitions, D-15).
 - Strong = 700, emphasis = 400 italic. No other weights are used anywhere (the variable font is loaded for flexibility but the stylesheet uses only 400 and 700).
@@ -321,25 +324,60 @@ Alt-text guidance for the future README (Phase 4) is out of scope here.
 
 ## UI Considerations
 
-Applicable state considerations resolved: 10 covered, 3 backstop, 2 unresolved.
+Probe run 2026-10-29 over 10 elements (E1-E10): 48 applicable considerations. Resolved: 33 explicit, 7 backstop, 6 dismissed, 2 unresolved. E7 (skip link) was unclassified by the probe; manually classified as an interactive control. Copy for error and fallback states lives in the Copywriting Contract and is referenced here, not restated.
 
-| Category | Element(s) | Status | Resolution / Reason |
-|----------|------------|--------|---------------------|
-| empty | grid / full block with zero images (list-collection) | ✅ covered | A grid or full block with no images fails the build with the "has no images" message; no empty `<div>` is ever published |
-| zero-one-many | grid-N with 1..N images (list-collection) | ✅ covered | One image in `grid-3` fills the first cell and leaves the others empty; two in `grid-3` fill cells 1 and 2; no stretching or re-centring |
-| overflow | grid-N with more images than columns (list-collection) | ✅ covered | Images wrap to a new row (across-then-down), top-aligned, 16px gap; no scrolling or truncation |
-| populated | `::: full` with several images (media) | ✅ covered | Images stack vertically edge to edge with a 16px gap; each caption is inset to the column's left edge |
-| long-text | figcaption in a narrow grid cell (static-content) | ✅ covered | Captions wrap with `overflow-wrap: break-word`; never truncated or ellipsised; the row grows and neighbouring cells stay top-aligned |
-| long-text | video / itch title, itch link text (interactive-control) | ✅ covered | Titles are accessible names only (not rendered) except the visually-hidden itch suffix; the itch link wraps normally |
-| error | embed whose iframe cannot load (media) | ✅ covered | The itch block always shows the "Play on itch.io" link beneath the frame; the YouTube/Vimeo title attribute stays; no JS fallback needed |
-| error | video file unsupported (media) | ✅ covered | `<video>` fallback paragraph with a download link |
-| error | image file missing / bad block syntax | ✅ covered | Build fails naming the file (Phase 1 D-23 / D-04); never published broken |
-| partial | project meta `<dl>` with only some fields (static-content) | ✅ covered | Existing `base.njk` conditionals omit absent `<dt>/<dd>` pairs; the grid layout of the `<dl>` collapses cleanly to fewer rows |
-| loading | images (media) | 🧪 backstop | `width`/`height` attributes from eleventy-img reserve space (no layout shift); lazy loading for all but the first image; verified visually on a throttled page load |
-| loading | embeds before they load (media) | 🧪 backstop | Reserved space comes from `aspect-ratio`; no spinner or placeholder text; verify no layout shift when iframes load |
-| empty | self-hosted video with no `poster=` (media) | 🧪 backstop | Falls back to `preload="metadata"` + `#t=0.001`; first-frame rendering on iOS Safari needs a manual device check |
-| overflow | very wide raw-HTML tables / pre (static-content) | ⚠ unresolved | Raw HTML is the owner's responsibility (AUTH-04); only `pre` is wrapped by default. Planner treats other raw HTML overflow as an assumption; formal check is Phase 4 (A11Y-02) |
-| long-text | very long project title in `<h1>` (static-content) | ⚠ unresolved | `overflow-wrap: break-word` is specified, but the exact `h1` size at 320px is verified in Phase 4 |
+Legend: ✅ resolved (verification: explicit) · 🧪 resolved (verification: backstop) · ✖ dismissed (reason given) · ⚠ unresolved — planner must treat as assumption
+
+| ID | Element | Category | Status | Resolution / Reason |
+|----|---------|----------|--------|---------------------|
+| E1 | `grid-2/3/4` block | empty | ✅ | A grid with zero images fails the build ("has no images"); no empty `<div>` is published |
+| E1 | `grid-2/3/4` block | loading | 🧪 | `{ statement: "width/height from eleventy-img reserve each cell; no layout shift as lazy images load", verification: backstop }` |
+| E1 | `grid-2/3/4` block | error | ✅ | Missing image path or non-image content fails the build naming file and line |
+| E1 | `grid-2/3/4` block | populated | ✅ | N columns at >= 60em, collapsing per the Grid behaviour table; images keep their own ratio, rows top-aligned |
+| E1 | `grid-2/3/4` block | partial | ✅ | Some images captioned, some not: uncaptioned ones are `<figure>` with no `<figcaption>`; captioned cells grow, neighbours stay top-aligned |
+| E1 | `grid-2/3/4` block | overflow | ✅ | More images than columns wrap to a new row across-then-down, 16px gap; no scroll, no truncation |
+| E1 | `grid-2/3/4` block | zero-one-many | ✅ | One image fills the first cell and leaves the rest empty (no stretching or centring); many images fill rows in order |
+| E2 | `::: full` block | empty | ✅ | Zero images fails the build ("has no images") |
+| E2 | `::: full` block | loading | 🧪 | `{ statement: "edge-to-edge images reserve height via width/height attributes; no shift on load", verification: backstop }` |
+| E2 | `::: full` block | error | ✅ | Missing image or non-image content fails the build |
+| E2 | `::: full` block | populated | ✅ | Images stack vertically edge to edge, 16px gap; captions inset to the column's left edge |
+| E2 | `::: full` block | partial | ✅ | Uncaptioned images render with no `<figcaption>`; no empty caption gap |
+| E2 | `::: full` block | overflow | ✅ | Spans `full-start` to `full-end` grid lines; never wider than the viewport, no horizontal scrollbar |
+| E2 | `::: full` block | zero-one-many | ✅ | One image renders edge to edge alone; many stack in source order |
+| E3 | Lone image | empty | ✅ | No title renders `<p><img></p>` with no `<figcaption>`; empty alt triggers the A11Y-04 warning unless `{decorative}` |
+| E3 | Lone image | loading | 🧪 | `{ statement: "first image eager + fetchpriority high, others lazy; reserved space prevents shift", verification: backstop }` |
+| E3 | Lone image | error | ✅ | Missing asset fails the build (Phase 1 D-23) |
+| E3 | Lone image | populated | ✅ | `<figure><img><figcaption>` in the wide column with the lone-image `sizes` value |
+| E4 | YouTube / Vimeo embed | empty | ✅ | Missing title or unrecognised URL fails the build (Copywriting: "Video missing title" / "Video URL not recognised") |
+| E4 | YouTube / Vimeo embed | loading | 🧪 | `{ statement: "aspect-ratio 16/9 reserves the frame before the lazy iframe loads; no spinner, no shift", verification: backstop }` |
+| E4 | YouTube / Vimeo embed | error | ✅ | If the provider fails, its own player error shows inside the reserved frame; the iframe `title` stays; no JS fallback |
+| E4 | YouTube / Vimeo embed | populated | ✅ | Privacy-domain iframe, full column width (or edge to edge with `full`), keyboard-focusable with focus ring |
+| E5 | Self-hosted video | empty | 🧪 | `{ statement: "with no poster, preload=metadata + #t=0.001 paints a first frame; verify on an iOS Safari device", verification: backstop }` |
+| E5 | Self-hosted video | loading | 🧪 | `{ statement: "black background holds the slot until metadata loads; check shift on a throttled load", verification: backstop }` |
+| E5 | Self-hosted video | error | ✅ | Unsupported browser sees the fallback paragraph with a download link (Copywriting: "Self-hosted video fallback"); missing or oversized file fails the build |
+| E5 | Self-hosted video | populated | ✅ | `<video controls preload="metadata">`, no autoplay, no loop, `aria-label` = title |
+| E5 | Self-hosted video | long-text | ✅ | Long titles live only in `aria-label` and the fallback link text, which wraps normally |
+| E6 | itch.io embed | loading | 🧪 | `{ statement: "aspect-ratio W/H and max-width W px reserve the frame before the lazy iframe loads", verification: backstop }` |
+| E6 | itch.io embed | error | ✅ | "Play on itch.io" link is always rendered under the frame, so the game stays reachable if the iframe fails |
+| E6 | itch.io embed | long-text | ✅ | Title appears only as the iframe `title` and visually-hidden link suffix; visible link text is fixed and short |
+| E7 | Skip link | focus (manual) | ✅ | Off-screen until focused; on focus shows top-left, black on white, accent outline; moves focus to `<main id="main">` |
+| E8 | Page header (h1 + meta `<dl>`) | empty | ✅ | Missing title fails the build (Phase 1 validation) |
+| E8 | Page header (h1 + meta `<dl>`) | loading | ✖ | Dismissed: static HTML built ahead of time, nothing loads after render |
+| E8 | Page header (h1 + meta `<dl>`) | error | ✅ | Invalid front-matter fields fail the build (Phase 1) |
+| E8 | Page header (h1 + meta `<dl>`) | populated | ✅ | h1 at Display size, `<dl>` two-column at >= 40em, stacked below |
+| E8 | Page header (h1 + meta `<dl>`) | partial | ✅ | Absent fields omit their `<dt>/<dd>` pair; the `<dl>` closes up to fewer rows |
+| E8 | Page header (h1 + meta `<dl>`) | overflow | ✅ | Long `<dd>` values wrap with `overflow-wrap: break-word`; no horizontal scroll |
+| E8 | Page header (h1 + meta `<dl>`) | zero-one-many | ✅ | With zero optional fields no empty `<dl>` is rendered; one or many fields list in order |
+| E8 | Page header (h1 + meta `<dl>`) | long-text | ⚠ unresolved — planner must treat as assumption | Very long h1 wraps via `overflow-wrap: break-word` at fixed 2.5rem; behaviour at 320px is verified in Phase 4 (A11Y-02) |
+| E9 | Raw HTML fallback | empty | ✖ | Dismissed: owner-authored content; empty HTML renders nothing, which is correct |
+| E9 | Raw HTML fallback | loading | ✖ | Dismissed: static content, nothing loads |
+| E9 | Raw HTML fallback | error | ✖ | Dismissed: passed through untouched by design (AUTH-04); correctness is the owner's responsibility |
+| E9 | Raw HTML fallback | populated | ✅ | Sits in the `content` column like any other child of `<main>`; prose elements inside get the measure cap |
+| E9 | Raw HTML fallback | partial | ✖ | Dismissed: no partial state for pass-through markup |
+| E9 | Raw HTML fallback | overflow | ⚠ unresolved — planner must treat as assumption | Only `pre` wraps by default; wide raw tables may overflow at narrow widths; formal check in Phase 4 (A11Y-02) |
+| E9 | Raw HTML fallback | zero-one-many | ✖ | Dismissed: no collection semantics |
+| E10 | Build console messages | overflow | ✅ | Each warning prints once per image on its own line; none are dropped or batched (Copywriting: Build warnings) |
+| E10 | Build console messages | long-text | ✅ | File paths and alt text print in full, never truncated |
 
 ---
 
@@ -356,12 +394,12 @@ Third-party code that enters the site in this phase (not UI registries, listed f
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
-- [ ] Dimension 7 Inventory Provenance: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS (FLAG resolved: focal point declared in Layout Contract)
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS (note resolved: fixed 2.5rem h1, no clamp)
+- [x] Dimension 5 Spacing: PASS (FLAG resolved: stroke/decoration exceptions listed)
+- [x] Dimension 6 Registry Safety: PASS
+- [x] Dimension 7 Inventory Provenance: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-10-29 (owner confirmed D-05/D-09 vs D-12 reading: lone images and embeds use the wide column; only prose is capped at `--measure`)
