@@ -8,7 +8,7 @@ Markdown plus a shared `assets/` folder goes in; plain, fast, accessible HTML/CS
 
 - [x] **Phase 1: Push-to-Live with Images** - Minimal deployed site: write a project .md with a pasted image, push, it's live (completed 2026-10-29)
 - [x] **Phase 2: Layout Blocks, Embeds and Design System** - Mix grids, full-width images, video, and itch.io games in a page with accessible brutalist CSS (completed 2026-10-30)
-- [ ] **Phase 3: Browsing, Lightbox and Standalone Pages** - Feed, tags, curated homepage, About/CV, student page, and full-size image viewing
+- [x] **Phase 3: Browsing, Lightbox and Standalone Pages** - Feed, tags, curated homepage, About/CV, student page, and full-size image viewing (completed 2026-10-30)
 - [ ] **Phase 4: Hardening and Launch Readiness** - Next/prev, share previews, sitemap, drafts, authoring README, and zoom/small-screen verification
 
 ## Phase Details
@@ -96,7 +96,7 @@ Plans:
   4. Student-work page lists links and PDF downloads and never shows in the feed or tag pages
   5. Visitor can open any content image full-size via a plain link without JS, enhanced to a keyboard-operable native dialog (Escape closes, focus returns)
 
-**Plans:** 5/5 plans executed
+**Plans:** 5/5 plans complete
 Plans:
 **Wave 1**
 
@@ -137,5 +137,5 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
 | 2. Layout Blocks, Embeds and Design System | 6/6 | Complete    | 2026-10-30 |
-| 3. Browsing, Lightbox and Standalone Pages | 5/5 | In Progress | - |
+| 3. Browsing, Lightbox and Standalone Pages | 5/5 | Complete    | 2026-10-30 |
 | 4. Hardening and Launch Readiness | 0/? | Not started | - |

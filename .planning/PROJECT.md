@@ -21,14 +21,14 @@ Writing a new project page should be as fast as typing markdown: headers, paragr
 - [x] Playable games embedded via itch.io embeds — Validated in Phase 2: Layout Blocks, Embeds and Design System
 - [x] Brutalist, accessible design: semantic HTML, native browser elements, minimal CSS, no smooth scroll / fades / animation flourish — Validated in Phase 2: Layout Blocks, Embeds and Design System
 - [x] Responsive at all widths through plain HTML/CSS (no layout JS) — Validated in Phase 2: Layout Blocks, Embeds and Design System
+- [x] Image lightbox for viewing full-size images, using native elements (e.g. `<dialog>` or plain link to file), no heavy JS — Validated in Phase 3: Browsing, Lightbox and Standalone Pages
+- [x] Single project feed with tags (graphic, UX, art, games, etc.); browse by tag — Validated in Phase 3: Browsing, Lightbox and Standalone Pages
+- [x] Homepage with hand-picked, hand-ordered featured projects — Validated in Phase 3: Browsing, Lightbox and Standalone Pages
+- [x] Standalone pages (About / CV) — Validated in Phase 3: Browsing, Lightbox and Standalone Pages
+- [x] Student work: a simple standalone page with links and PDF downloads, kept out of the main project feed — Validated in Phase 3: Browsing, Lightbox and Standalone Pages
 
 ### Active
 
-- [ ] Image lightbox for viewing full-size images, using native elements (e.g. `<dialog>` or plain link to file), no heavy JS
-- [ ] Single project feed with tags (graphic, UX, art, games, etc.); browse by tag
-- [ ] Homepage with hand-picked, hand-ordered featured projects
-- [ ] Standalone pages (About / CV)
-- [ ] Student work: a simple standalone page with links and PDF downloads, kept out of the main project feed
 
 ### Out of Scope
 
@@ -78,6 +78,10 @@ Writing a new project page should be as fast as typing markdown: headers, paragr
 | One catch-all `:::` container; unknown block names fail the build with the valid list | Typos surface at build time, not as broken pages | ✓ Phase 2 |
 | Embeds rebuilt from validated IDs with exact-host allow-lists (YouTube nocookie, Vimeo dnt=1, itch.io) | Privacy and no arbitrary iframes from markdown | ✓ Phase 2 |
 | Self-hosted video: 50 MB cap, poster processed to one hashed WebP, `#t=0.001` only when no poster | Stays under Pages limits; poster shows, iOS still gets a first frame | ✓ Phase 2 |
+| Tag list lives in `src/_data/tags.js` as `{slug,label}`; only used tags get pages; deep data merge off | One place to rename labels; no empty tag pages; projects never inherit every tag | ✓ Phase 3 |
+| Featured projects are an ordered slug list in `src/_data/featured.js`; unknown/duplicate slugs fail the build | Owner controls order; typos never silently drop work | ✓ Phase 3 |
+| PDFs: linked from plain markdown, only linked files published to `/pdf/`, 25 MB cap in build, CI and hook | No drafts leak; stays under Pages limits | ✓ Phase 3 |
+| Lightbox = plain link to largest variant, enhanced by one ~60-line first-party `<dialog>` script loaded only on pages with zoom links | Works without JS; the only JS on the site | ✓ Phase 3 |
 
 ## Evolution
 
@@ -97,4 +101,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-30 after Phase 2 (live at https://djmccurley.github.io/portfolio-test/)*
+*Last updated: 2026-10-30 after Phase 3 (live at https://djmccurley.github.io/portfolio-test/)*
