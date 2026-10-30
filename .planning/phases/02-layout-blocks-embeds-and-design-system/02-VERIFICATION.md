@@ -1,8 +1,8 @@
 ---
 phase: 02-layout-blocks-embeds-and-design-system
-verified: 2026-10-30T00:00:00Z
+verified: 2026-10-30T14:00:00Z
 status: human_needed
-score: 5/5 roadmap success criteria verified (all plan-level truths verified in code; 0 failed)
+score: 5/5 roadmap success criteria verified (G-02-4 fix verified in code and tests; 0 failed)
 covered_files:
   - .planning/phases/02-layout-blocks-embeds-and-design-system/02-01-PLAN.md
   - .planning/phases/02-layout-blocks-embeds-and-design-system/02-01-SUMMARY.md
@@ -14,70 +14,52 @@ covered_files:
   - .planning/phases/02-layout-blocks-embeds-and-design-system/02-04-SUMMARY.md
   - .planning/phases/02-layout-blocks-embeds-and-design-system/02-05-PLAN.md
   - .planning/phases/02-layout-blocks-embeds-and-design-system/02-05-SUMMARY.md
+  - .planning/phases/02-layout-blocks-embeds-and-design-system/02-06-PLAN.md
+  - .planning/phases/02-layout-blocks-embeds-and-design-system/02-06-SUMMARY.md
   - content/projects/tidepool-game.md
   - content/style.css
   - eleventy.config.js
-  - lib/alt-lint.js
   - lib/blocks.js
   - lib/embeds.js
-  - lib/frontmatter.js
-  - lib/images.js
   - lib/limits.js
-  - lib/locate.js
   - lib/markdown.js
   - lib/media.js
-  - lib/validate.js
-  - scripts/check-assets.js
-  - scripts/shrink.js
   - src/_includes/base.njk
-  - test/alt-lint.test.js
-  - test/block-errors.test.js
-  - test/blocks.test.js
-  - test/content-errors.test.js
-  - test/contrast.test.js
-  - test/design.test.js
-  - test/embeds.test.js
-  - test/shrink.test.js
+  - test/build.test.js
   - test/video.test.js
-covered_digest: "v4:sha256:5d7f3d9ee312667e06835558c84a011e0a158d77eef9381c81627fcbd66f67d0"
+covered_digest: "v4:sha256:4287952148c163ff5b1371445acaaa2605996fc8b536421eada364cb93e47a1b"
 behavior_unverified: 0
 overrides_applied: 0
 re_verification:
   previous_status: human_needed
   previous_score: 5/5
-  gaps_closed: []
+  gaps_closed:
+    - "G-02-4: self-hosted video shows its poster before playback (code and regression tests; browser display still needs the owner's recheck)"
   gaps_remaining: []
   regressions: []
 gaps: []
 deferred: []
 advisory:
-  - finding: "scripts/shrink.js:153 prints a false 'still over 10 MB' warning for renamed videos (review WR-01)"
+  - finding: "test/build.test.js:86-91 (02-06 review WR-01): 'originals not published' exempts every .mp4/.webm directly in _site/video/, not only videos a page references, and not only byte-identical ones as the 02-06 plan truth words it"
     category: other
-    reason: "Message-only regression; CI (check-assets) accepts videos up to 50 MB, nothing is blocked or mis-published"
-    evidence_status: "reproduced by reading code; not a must-have"
-  - finding: "lib/blocks.js:157-162 reports 'cannot hold linked images' for a plain text link inside a layout block (review WR-02)"
+    reason: "Weakens a regression guard only; the shipped publish logic (copyMedia) copies only block-named videos, confirmed by reading lib/media.js. Tighten to referenced videos (reviewer's suggested fix)."
+    evidence_status: "reproduced by reading code; not a roadmap must-have"
+  - finding: "lib/media.js:52 (02-06 review IN-01) src choice keys on poster, attribute on posterAttr"
     category: other
-    reason: "Wrong advice in an error message; the build still fails loudly on the correct line"
-    evidence_status: "reproduced in a scratch build (exit 1, message as described)"
+    reason: "Equal today (ctx.fail throws); latent coupling only"
+    evidence_status: "reading code"
+  - finding: "scripts/shrink.js:153 prints a false 'still over 10 MB' warning for renamed videos (review WR-01, carried forward)"
+    category: other
+    reason: "Message only; CI accepts videos up to 50 MB"
+    evidence_status: "reproduced by reading code"
+  - finding: "lib/blocks.js:157-162 says 'cannot hold linked images' for a plain text link in a layout block (review WR-02, carried forward)"
+    category: other
+    reason: "Wrong advice text; the build still fails loudly with file:line"
+    evidence_status: "reproduced in an earlier scratch build"
 human_verification:
-  - test: "Open the built Tidepool page (npm start) at 1280px, 960px, 640px and 600px wide"
-    expected: "grid-2 is two columns at 1280px and one column at 600px; grid-3/4 drop to two columns below 60em; images keep their own ratios; the full block reaches both viewport edges with no horizontal scrollbar; the full-block caption lines up with the text column"
-    why_human: "CSS layout is not measurable without a browser. The rules and media queries exist and read correctly; no rendering was observed."
-  - test: "Keyboard walk-through: Tab from the top of a page, press Enter on the skip link, keep tabbing through links, video controls and iframes"
-    expected: "Skip link appears top-left (black on white); Enter moves focus to main with NO page-wide ring (WR-01 fix, main[tabindex=-1] now outranks the ring rule); every other focusable element shows a 3px accent ring; the ring on the skip link is visible against its black background"
-    why_human: "Focus rendering and :focus-visible behaviour on programmatic focus are browser behaviours."
-  - test: "Add one real YouTube, one real Vimeo and one real itch.io embed block to a scratch page"
-    expected: "All three players load and play; the real itch.io embed URL shape is accepted by the allow-list in lib/embeds.js; the visible 'Play on itch.io' link works"
-    why_human: "Third-party players and the real itch.io embed URL format need network access. Only synthetic URLs were exercised."
-  - test: "Play a real .mp4 via ::: video (with and without poster=) on desktop and iPhone Safari, on the deployed GitHub Pages site"
-    expected: "Controls show, no autoplay, poster shows when given, a first frame paints without a poster (iOS), seeking works, no layout jump while metadata loads"
-    why_human: "Real media playback and iOS behaviour. Builds used a dummy byte file, so markup and publish path are verified, not playback."
-  - test: "Layout-shift check of grid, full and lone images and embeds on a throttled connection"
-    expected: "No shift as images and embeds load (width/height and aspect-ratio are present in the output, which is the mechanism)"
-    why_human: "Plan truths tagged verification: backstop. Mechanism verified, user-perceived result unobserved."
-  - test: "VS Code paste of an image under npm start with the real paste plugin"
-    expected: "Exactly one WARN naming the file and image path while the alt is 'alt text', clearing after a real description is written"
-    why_human: "Requires the real plugin and live rebuilds. WARN text, dedup and exit 0 were verified with a synthetic page."
+  - test: "Re-run UAT test 4: open the built Tidepool page (npm start) and the deployed site; play the 'Tidepool trailer' block (has poster=) and the 'PM trailer' block (no poster) on desktop and iPhone Safari"
+    expected: "The poster block shows poster-<hash>.webp before play (not a black frame), then plays and seeks; the no-poster block shows a first frame on iOS and plays and seeks; no layout jump while metadata loads"
+    why_human: "Poster rendering in a real browser and iOS first-frame behaviour cannot be observed here. The built markup is verified (plain src plus poster attribute; no-poster keeps #t=0.001) and the mechanism is documented in .planning/debug/video-poster-not-shown.md, but the plan tags this truth verification: backstop."
 ---
 
 # Phase 2: Layout Blocks, Embeds and Design System Verification Report
@@ -85,135 +67,103 @@ human_verification:
 **Phase Goal:** Owner composes a rich project page by typing short block shorthand, mixing grids, full-width images, text, video and playable games, on an accessible brutalist page
 **Verified:** 2026-10-30
 **Status:** human_needed
-**Re-verification:** Yes, after code-review fixes 396e4c7 (WR-01 focus ring), 3212c85 (WR-02 hard breaks / linked images), e2d14ac (WR-03 dates) and ea1f318 (WR-04 shrink WebP cap). The prior report's covered-input fingerprint was stale; everything was re-checked against current code.
+**Re-verification:** Yes, after gap-closure plan 02-06 (G-02-4, commits ab36515 and 69759bf). Prior results (5/5 roadmap truths, 13 requirements) were carried forward with regression checks; the 02-06 must-haves received full verification.
 
-The goal is achieved in the code. A fresh build of the real Tidepool page and an independent scratch page mixing every block type both work, the full suite passes (`npm test`, run once: 170 tests, 170 pass, 0 fail), and nothing FAILED. Status is `human_needed` only because browser layout, focus rendering, real third-party players, real media playback and the real VS Code paste plugin cannot be observed here (they are the 6 items in `02-UAT.md`, all still `[pending]`).
+The goal is achieved in code. The one failing UAT item (poster video not showing its poster) now has a correct fix and regression tests, and `npm test` passes 174/174 on the current tree (run once). Status stays `human_needed` solely because the poster display and iOS first-frame behaviour need a real-browser recheck by the owner (UAT test 4).
 
 ## Goal Achievement
 
-### Observable Truths (ROADMAP success criteria, the contract)
+### Observable Truths (ROADMAP success criteria, carried forward)
 
 | # | Truth | Status | Evidence |
 |---|-------|--------|----------|
-| 1 | Owner types `::: grid-2/3/4` and a full-width block inline, mixes them freely with text, images keep their aspect ratios in grids | VERIFIED | Scratch page (intro paragraph, raw HTML, grid-3, full, YouTube, Vimeo, itch, file video, decorative lone image) built with exit 0, all pieces emitted as flat siblings in `<main>` in source order. Grid images carry their own `width`/`height` (1600x900, 480x960, 800x800). `grep object-fit content/style.css` finds nothing; `.layout img` is `width:100%; height:auto`. |
-| 2 | Captioned images render as figure/figcaption; grids collapse on narrow screens with no layout JS | VERIFIED (visual collapse is human) | Real build of `content/projects/tidepool-game.md`: `<div class="layout grid-2">` and `<div class="layout full">`, three `<figcaption>` elements. Uncaptioned images render `<figure>` without figcaption. CSS has `@media (max-width: 59.99em)` (grid-3/4 to 2 cols) and `(max-width: 39.99em)` (all to 1 col). Built HTML contains 0 `<script>`. |
-| 3 | Raw HTML in markdown renders as a fallback | VERIFIED | Scratch build: `<div class="note"><p>Raw HTML</p></div>` appears unchanged. |
-| 4 | Visitor can play a self-hosted video (controls, poster, no autoplay), a YouTube/Vimeo embed (privacy domain, lazy, titled) and an itch.io game with a visible "play on itch.io" link | VERIFIED (markup and publish path; real playback is human) | Scratch output: `youtube-nocookie.com/embed/dQw4w9WgXcQ` and `player.vimeo.com/video/123456789?dnt=1`, both `title` + `loading="lazy"`; itch iframe titled and lazy with `<p class="embed-link"><a href="https://dmc.itch.io/tidepool">Play on itch.io<span class="visually-hidden">: Tidepool game</span>`; file video `<video controls preload="metadata" poster=... aria-label>` with a download fallback and no autoplay/loop/muted; `_site/video/clip.mp4` published, `_site/assets` absent. `youtube.com.evil.com` fails the build with exit 1 and file:line. |
-| 5 | Semantic HTML, minimal brutalist CSS with no animation; skip link, visible focus, AA contrast; build warns on empty or filename-like alt | VERIFIED (focus rendering is human) | `base.njk`: skip link first in body, `<main id="main" tabindex="-1">`, `<header>`, no script. `style.css`: 3px accent `:focus-visible` ring; `main[tabindex="-1"]` override is (0,2,1) vs the ring rule's (0,2,0), so the skip target no longer gets a page-wide ring (code-review WR-01 fix confirmed by specificity and by `test/design.test.js` passing). Only `transition/animation/scroll-behavior` occurrences are inside the `prefers-reduced-motion` guard. Accent `#0000ee` on white is about 8.6:1, `test/contrast.test.js` passes. Scratch build printed `WARN ./content/projects/mixed.md: image ../../assets/c.webp still has the paste placeholder alt "alt text"...` and exited 0; filename-like alt (`"a"`, `"b"`) also warned. Real repo content builds with no WARN. |
+| 1 | `::: grid-2/3/4` and full-width blocks mixed freely with text, images keep aspect ratios | VERIFIED | Prior scratch-page proof stands; `lib/blocks.js`, `lib/markdown.js`, `content/style.css` unchanged by 02-06 (`git show --stat` for 02-06 touches only `lib/media.js` and tests). Fresh build of the owner's current tidepool page succeeds (exit 0, 3 pages). UAT test 1 (layout at 1280/960/640/600) passed by the owner. |
+| 2 | Captioned images render figure/figcaption, grids collapse with no layout JS | VERIFIED | Unchanged; UAT test 1 pass; built tidepool page contains 0 `<script>`. |
+| 3 | Raw HTML in markdown renders as fallback | VERIFIED | Unchanged since prior scratch proof; covered by passing suite. |
+| 4 | Visitor can play self-hosted video (controls, poster, no autoplay), YouTube/Vimeo, itch.io with visible link | VERIFIED (poster display in browser is human) | Fresh build of the owner's working-tree page (which includes YouTube, itch.io, a no-poster video and a poster video) wrote `<video controls="" preload="metadata" src="/portfolio-test/video/tidepool-game-output.mp4" poster="/portfolio-test/video/poster-40c7f770.webp" aria-label="Tidepool trailer">` and `<video ... src="/portfolio-test/video/tidepool-game-output.mp4#t=0.001" aria-label="PM trailer">`. No autoplay/loop/muted. UAT tests 3 (real embeds) passed. |
+| 5 | Semantic HTML, brutalist CSS with no animation, skip link, focus, AA contrast, alt warnings | VERIFIED | Unchanged; UAT tests 2 and 6 passed by the owner; contrast and design tests in the passing suite. |
 
 **Score:** 5/5 roadmap truths verified, 0 behavior-unverified.
 
-### Plan-level must-haves (spot traces, re-run on current code)
+### 02-06 must-haves (full verification)
 
-| Plan truth | Status | Evidence |
-|-----------|--------|----------|
-| 02-01 first markdown image stays eager + fetchpriority high even inside a block | VERIFIED | Scratch grid: first `<img>` has `loading="eager" fetchpriority="high"`, the others `loading="lazy"`. |
-| 02-01 per-block `sizes` | VERIFIED | grid-3 images carry `(min-width: 90em) 416px, (min-width: 60em) 30vw, ...`; full carries `sizes="100vw"`. |
-| 02-01 `{decorative}` gives `alt=""`, marker never reaches HTML | VERIFIED | Lone image rendered `alt=""`, no `decorative` attribute, no WARN. |
-| 02-01 strict errors with file:line | VERIFIED | `test/block-errors.test.js` passes; scratch: bad video host exits 1 as `evil.md:9: video URL not recognised`. |
-| 02-01 hard-break tolerance (WR-02 fix) | VERIFIED | Scratch grid with two lines ending in two trailing spaces built exit 0 (previously exit 1). |
-| 02-02 token-driven CSS, one left-aligned column, no 100vw, no centred text | VERIFIED | `100vw` appears only in a comment; named-line grid used. |
-| 02-02 Chivo via Google Fonts link before `/style.css` | VERIFIED | Present in `base.njk` head. |
-| 02-03 alt lint warn-only; demo page builds with zero WARN | VERIFIED | WARN lines reproduced; `npx eleventy` on the real repo prints no WARN, exit 0. |
-| 02-04 embed escaping, src rebuilt from parsed ID, no-content rule | VERIFIED | `test/embeds.test.js` passes; output srcs are rebuilt, not copied. |
-| 02-05 video 50 MB cap, check:assets, hook, reserved slug `video` | VERIFIED | `test/video.test.js`, `test/check-assets.test.js`, `test/shrink.test.js` pass; slug `video` rejected in full build test. |
+| # | Must-have | Status | Evidence |
+|---|-----------|--------|----------|
+| 1 | Poster block: `src` has no `#t=` fragment, `poster=` hashed `.webp`, default prefix applied | VERIFIED | `lib/media.js:52` `const src = poster ? url : \`${url}#t=0.001\``; built output above shows plain src with prefix `/portfolio-test/` and `poster-40c7f770.webp`. The file `poster-40c7f770.webp` is a real WebP (`file` confirms RIFF WebP) at `_site/video/`. |
+| 2 | No-poster block keeps exact markup `src=".../video/clip.mp4#t=0.001"` | VERIFIED | Built "PM trailer" tag shows `#t=0.001`; `grep -c '#t=0.001' lib/media.js` outside comments is 1 (fragment moved into the branch, not duplicated). |
+| 3 | Both forms keep `controls=""` + `preload="metadata"`, no autoplay/loop/muted; fallback `href` has no fragment | VERIFIED | Both built tags show exactly `controls="" preload="metadata"`; `lib/media.js:58` fallback link uses bare `url`; test asserts `<a href="${prefix}video/clip.mp4">`. |
+| 4 | Regression tests pin src form for poster (+/- full, escaped title) and no-poster (+/- full) | VERIFIED | `test/video.test.js:194-236` four render-level tests with exact-string or regex matches, each also asserting `#t=` absent or `poster=` absent; full-build test at lines ~253-262 asserts exact attribute order including prefix and no `#t=`. Whole suite 174/174. |
+| 5 | Committing a page with a `::: video` block no longer fails CI `originals not published` | VERIFIED (with warning) | `test/build.test.js:86-91` exempts files directly in `_site/video/` with a `VIDEO_EXTS` extension (imports from `lib/limits.js`); any other original anywhere still fails. The test passes against the repo tree that contains the owner's uncommitted video-bearing page (suite 174/174). Weaker than the plan wording ("byte-identical") and than ideal (review WR-01); advisory. |
+| 6 | (backstop) Poster shows before play on desktop and iPhone Safari; no-poster still plays and seeks on deployed site | UNCERTAIN, routed to human | Mechanism is correct per the documented root cause; actual rendering is not observable here. See Human Verification. |
 
-### Prohibitions
-
-| Prohibition | Tier | Status | Evidence |
-|------------|------|--------|----------|
-| No analytics/trackers/client JS/third-party requests other than Google Fonts | test | RESOLVED | No `<script>` in built HTML; only third-party origin in the shell is Google Fonts. |
-| No auto-generated alt text | test | RESOLVED | Scratch output alt equals source alt verbatim; lint only warns. |
-| Video never autoplay/loop/muted | test | RESOLVED | Built `<video controls preload="metadata">` only. |
-| Never publish unreferenced assets / poster originals | test | RESOLVED | `_site` has `img/` and the referenced `video/clip.mp4` only; no `assets/`. |
-| YouTube/Vimeo never from non-privacy hosts | test | RESOLVED | nocookie / `dnt=1` outputs; look-alike host rejected. |
+Scoping checks on 02-06: `git show --stat` shows ab36515 touches only `lib/media.js` and `test/video.test.js`, 69759bf only `test/build.test.js` and `test/video.test.js`. `lib/embeds.js`, poster hashing and `copyMedia` untouched. The owner's `content/projects/tidepool-game.md` and `assets/*` remain unstaged/untracked as required (`git status` confirms ` M` / `??`).
 
 ### Required Artifacts
 
 | Artifact | Status | Details |
 |----------|--------|---------|
-| `lib/blocks.js`, `lib/locate.js`, `lib/embeds.js`, `lib/media.js`, `lib/alt-lint.js`, `lib/limits.js`, `lib/images.js`, `lib/markdown.js` | VERIFIED | Exist, substantive, wired (real build emits all block types). |
-| `lib/validate.js`, `lib/frontmatter.js`, `eleventy.config.js` | VERIFIED | Shared date validator and reserved `video` slug; `test/content-errors.test.js` and `test/video.test.js` pass. |
-| `src/_includes/base.njk`, `content/style.css` | VERIFIED | Substantive and linked (`/style.css` copied to `_site`). |
-| `content/projects/tidepool-game.md` | VERIFIED | Real demo page, builds clean. |
-| `scripts/check-assets.js`, `scripts/shrink.js` | VERIFIED | Tests pass (see WR-01 advisory on a false warning text). |
-| `test/*` | VERIFIED | 170/170 pass. |
+| `lib/media.js` | VERIFIED | Exists, substantive, one-branch src logic; wired from `lib/embeds.js` `renderVideo` and `eleventy.config.js` (`copyMedia` on `eleventy.after`). |
+| `test/video.test.js` | VERIFIED | Contains `poster=`; new matrix present. |
+| `test/build.test.js` | VERIFIED | Contains `VIDEO_EXTS`, imports from `lib/limits.js`. |
+| Phase 1-5 artifacts (blocks, embeds, alt-lint, CSS, base.njk, scripts) | VERIFIED (carried forward) | Unchanged by 02-06; suite passes. |
 
 ### Key Link Verification
 
 | From | To | Status | Details |
 |------|----|--------|---------|
-| eleventy.config.js | lib/blocks.js | WIRED | Real build emits block output. |
-| lib/blocks.js | markdown-it-container | WIRED | Catch-all block container; grid/full/video/itch all dispatch. |
-| lib/blocks.js | eleventy-img (`sizes`) | WIRED | `sizes` honoured in output. |
-| lib/blocks.js | lib/embeds.js, lib/media.js | WIRED | YouTube, Vimeo, itch and file video output in scratch build. |
-| lib/markdown.js | lib/alt-lint.js | WIRED | WARN printed in build. |
-| base.njk | style.css, `#main` | WIRED | `href="#main"` targets `main id="main"`. |
-| test/contrast.test.js | style.css tokens | WIRED | Passes against current tokens. |
+| lib/embeds.js | lib/media.js `renderFileVideo(` | WIRED | Real build routes the owner's poster path through to the poster-form tag. |
+| test/build.test.js | lib/limits.js | WIRED | `VIDEO_EXTS` import in use. |
+| eleventy.config.js | `copyMedia` | WIRED | Video and hashed poster appear in `_site/video/`; mp4 byte-identical to `assets/` source (by design, D-07). |
 
 ### Data-Flow Trace (Level 4)
 
-Static site, no runtime data. Markdown to HTML at build time was traced end to end with the repo page and the scratch page: image dimensions come from real files via eleventy-img, embed srcs are rebuilt from parsed IDs, video and poster are copied from `assets/` into `_site/video`. No hollow props or static fallbacks.
+Poster path: markdown `poster=../assets/poster.png` -> `resolveAsset` -> sha1 hash -> `poster-40c7f770.webp` in output markup -> `copyMedia` processes via eleventy-img into `_site/video/`. FLOWING. Note: running with the CLI `--output` flag, `copyMedia` still wrote into `_site/video` (it uses `dir.output` from config), which is harmless and unrelated to this phase's deliverables.
 
 ### Behavioral Spot-Checks
 
 | Behavior | Command | Result | Status |
 |----------|---------|--------|--------|
-| Full test suite | `npm test` (once) | 170 pass, 0 fail | PASS |
-| Real site build | `npx eleventy` | exit 0, 3 pages, no WARN, 0 `<script>` | PASS |
-| Mixed page (grid, full, raw HTML, YouTube, Vimeo, itch, file video, decorative) | scratch build via `test/helpers/site.js` | exit 0, markup as expected | PASS |
-| Paste-default / filename-like alt | same scratch build | WARN, exit 0 | PASS |
-| Look-alike video host | scratch build | exit 1 with file:line | PASS |
-| Hard break after image inside grid | scratch build | exit 0 | PASS |
-| Text link inside grid (WR-02 of the new review) | scratch build | exit 1 but message says "linked images" | PASS (fails loudly; wording is wrong, see below) |
+| Full test suite (once) | `npm test` | 174 pass, 0 fail | PASS |
+| Real-tree build including owner's video blocks | `npx eleventy --output=<scratch>` | exit 0, 3 pages, 0 `<script>`, expected two `<video>` tags | PASS |
+| Poster file is real processed WebP | `file _site/video/poster-40c7f770.webp` | RIFF WebP | PASS |
 
 ### Probe Execution
 
-SKIPPED: no `probe-*.sh` exist and none are declared in the plans.
+SKIPPED: no `probe-*.sh` declared or present.
 
 ### Requirements Coverage
 
-All 13 requirement IDs in the phase brief appear in PLAN frontmatter (02-01: BLOCK-01..05, AUTH-04; 02-02: A11Y-01, A11Y-03, BLOCK-06, BLOCK-05, BLOCK-02; 02-03: A11Y-04, BLOCK-03; 02-04: MEDIA-02, MEDIA-03; 02-05: MEDIA-01) and in REQUIREMENTS.md as `Phase 2 | Complete`. REQUIREMENTS.md maps no other Phase 2 IDs (A11Y-02 is Phase 4), so there are no orphans.
+All 13 IDs (BLOCK-01..06, AUTH-04, MEDIA-01..03, A11Y-01, A11Y-03, A11Y-04) appear in PLAN frontmatter across 02-01..02-06 (02-06 declares MEDIA-01) and are marked `[x]` / `Phase 2 | Complete` in REQUIREMENTS.md. No other Phase 2 IDs are mapped there (A11Y-02 is Phase 4), so there are no orphans.
 
-| Requirement | Source Plan | Description | Status | Evidence |
-|------------|-------------|-------------|--------|----------|
-| BLOCK-01 | 02-01 | grid-2/3/4 shorthand | SATISFIED | `<div class="layout grid-N">` output |
-| BLOCK-02 | 02-01, 02-02 | full-width block | SATISFIED | `<div class="layout full">`; `main > .full { grid-column: full }` |
-| BLOCK-03 | 02-01, 02-03 | free mixing | SATISFIED | Mixed scratch page; Tidepool demo |
-| BLOCK-04 | 02-01 | figure/figcaption captions | SATISFIED | Tidepool output |
-| BLOCK-05 | 02-01, 02-02 | aspect ratios kept | SATISFIED | width/height from source, no object-fit |
-| BLOCK-06 | 02-02 | collapse, no layout JS | SATISFIED (browser check human) | Media queries, no script |
-| AUTH-04 | 02-01 | raw HTML fallback | SATISFIED | Raw div preserved |
-| MEDIA-01 | 02-05 | self-hosted video | SATISFIED (playback human) | `<video controls preload=metadata>`, published file |
-| MEDIA-02 | 02-04 | YouTube/Vimeo | SATISFIED (real players human) | nocookie / dnt=1, lazy, titled |
-| MEDIA-03 | 02-04 | itch.io game | SATISFIED (real embed human) | titled lazy iframe + visible link |
-| A11Y-01 | 02-02 | semantic, brutalist, no animation | SATISFIED | CSS grep, no script |
-| A11Y-03 | 02-02 | skip link, focus, AA contrast | SATISFIED (focus rendering human) | Skip link, ring, WR-01 now fixed, contrast test |
-| A11Y-04 | 02-03 | alt-text warnings | SATISFIED | WARN output, decorative marker |
+| Requirement | Source Plan | Status | Evidence |
+|------------|-------------|--------|----------|
+| BLOCK-01..06, AUTH-04 | 02-01, 02-02, 02-03 | SATISFIED | Carried forward; UAT test 1 pass; suite green |
+| MEDIA-01 | 02-05, 02-06 | SATISFIED (poster browser recheck human) | Poster-form and no-poster-form markup verified in real build |
+| MEDIA-02, MEDIA-03 | 02-04 | SATISFIED | UAT test 3 pass (real YouTube/Vimeo/itch.io) |
+| A11Y-01, A11Y-03, A11Y-04 | 02-02, 02-03 | SATISFIED | UAT tests 2 and 6 pass |
+
+### Prohibitions
+
+| Prohibition | Tier | Status | Evidence |
+|------------|------|--------|----------|
+| Video never autoplay/loop/muted | test | RESOLVED | Neither built `<video>` tag carries them |
+| Never publish unreferenced assets/originals (images) | test | RESOLVED | `originals not published` passes; see WR-01 advisory on video-dir looseness |
+| No client JS / trackers | test | RESOLVED | 0 `<script>` in built page |
 
 ### Anti-Patterns Found
 
-`TBD|FIXME|XXX` scan across `lib`, `content`, `src`, `scripts` and `eleventy.config.js` returned nothing. No stubs or hollow implementations.
-
-### Open code-review warnings (02-REVIEW.md): effect on goal
-
-Neither open warning defeats a roadmap success criterion or any of the 13 requirements. Both are recorded as advisory.
-
-| ID | Defeats a must-have? | Assessment |
-|----|----------------------|------------|
-| WR-01 `scripts/shrink.js:153` false "still over 10 MB" warning for renamed `.mp4`/`.webm` | No | The warning is text only; `shrink` still renames correctly, CI (`check-assets`) accepts videos up to 50 MB, and nothing is blocked or mis-published. It tells the owner to do needless work for a large video, a small authoring friction. Worth a one-line fix (skip `VIDEO_EXTS`) plus a test. |
-| WR-02 `lib/blocks.js:157-162` text link in a layout block says "cannot hold linked images" | No | The build still fails loudly with the right file:line, and the block rule (grids hold images only) is enforced. Only the advice is slightly wrong. Worth tightening with the reviewer's `linkWrapsImage` check. |
-| UI-REVIEW fix 1 (cosmetic, carried over) | No | `style.css`: `main > * + :is(h2, h3)` (0,0,2) loses to `main > :is(.layout,...) + *` (0,1,1), so an h2 straight after a block gets 2rem rather than 3rem. Spacing only; not a success criterion. |
-
-Fixes for earlier warnings confirmed: skip-link target ring (focus), hard-break tolerance in grids, out-of-range dates rejected with the friendly error (tests pass), and the shrink WebP byte-cap re-encode (tests pass).
+`TBD|FIXME|XXX` scan across `lib`, `scripts`, `src`, `content/style.css`, `eleventy.config.js`: none. No stubs. The 02-REVIEW-DISPOSITION lists the open warnings as unresolved, all recorded as advisory above; none defeats a must-have.
 
 ### Human Verification Required
 
-Six items, all pending in `02-UAT.md` and listed in the frontmatter: browser layout at 1280/960/640/600px, keyboard skip-link and focus walk-through (including confirming WR-01 is fixed in a real browser), real YouTube/Vimeo/itch.io embeds, real .mp4 playback on desktop and iPhone Safari, layout shift under throttling, and the VS Code paste-alt WARN with the real plugin.
+1. **Poster and first-frame playback (UAT test 4 recheck)**
+   - Test: Load the Tidepool page locally and on the deployed site, desktop and iPhone Safari. Play the "Tidepool trailer" (poster) and "PM trailer" (no poster) blocks.
+   - Expected: Poster visible before play (not a black frame); no-poster block shows a first frame on iOS; both play and seek.
+   - Why human: Real media rendering and iOS behaviour.
 
 ### Gaps Summary
 
-No gaps. No truth FAILED and no requirement is blocked. The phase goal is realised in code and demonstrated by the repo's Tidepool page and an independent mixed-content build. The code-review fixes did not regress anything (170/170). Remaining work before closing the phase is the human checks above; the two small message regressions and the heading-spacing specificity can be fixed at the owner's convenience.
+No gaps. G-02-4 is closed in code and tests: the fragment is dropped when a poster is given and kept otherwise, the test matrix pins both forms, and CI no longer fails on a committed video page. The only remaining item is the owner's browser confirmation of the poster. Optionally tighten the build-test exemption (review WR-01) to videos referenced by built pages.
 
 ---
 
