@@ -24,6 +24,17 @@ function lenientFrontMatter(str) {
   return data;
 }
 
+// Tag definitions (src/_data/tags.js order) carried by at least one of `items`; their `tags` is a string or a list.
+function usedTagDefs(items) {
+  if (!Array.isArray(tagDefs)) return [];
+  const used = new Set();
+  for (const item of items) {
+    const t = item.data.tags;
+    for (const s of Array.isArray(t) ? t : [t]) used.add(s);
+  }
+  return tagDefs.filter((t) => t?.slug && used.has(t.slug));
+}
+
 export default async function (eleventyConfig) {
   // The global `tags` list (src/_data/tags.js) must not merge into each project's own `tags`.
   eleventyConfig.setDataDeepMerge(false);
@@ -104,14 +115,19 @@ export default async function (eleventyConfig) {
   );
 
   // Tag definitions with at least one project, in src/_data/tags.js order: one page and one filter link each.
-  eleventyConfig.addCollection("tagPages", (api) => {
-    if (!Array.isArray(tagDefs)) return [];
-    const used = new Set();
-    for (const item of api.getFilteredByGlob("content/projects/*.md")) {
-      const t = item.data.tags;
-      for (const s of Array.isArray(t) ? t : [t]) used.add(s);
+  eleventyConfig.addCollection("tagPages", (api) => usedTagDefs(api.getFilteredByGlob("content/projects/*.md")));
+
+  // Every public URL, sorted: pages, projects and their tag pages. `collections.all` holds only the first page of a
+  // paginated template, so the tag pages are added explicitly (RESEARCH Pitfall 3). The draft check keeps drafts out
+  // under `npm start` too (D-11).
+  eleventyConfig.addCollection("sitemap", (api) => {
+    const urls = new Set();
+    for (const item of api.getAll()) {
+      if (typeof item.url === "string" && item.data.draft !== true && !item.data.pagination) urls.add(item.url);
     }
-    return tagDefs.filter((t) => t?.slug && used.has(t.slug));
+    const live = api.getFilteredByGlob("content/projects/*.md").filter((item) => item.data.draft !== true);
+    for (const t of usedTagDefs(live)) urls.add(`/tags/${t.slug}/`);
+    return [...urls].sort();
   });
 
   addValidation(eleventyConfig);

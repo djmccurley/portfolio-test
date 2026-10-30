@@ -101,7 +101,7 @@ export async function makeSite({ files = {}, assets = {}, prefix, useRepoContent
     const base = rel.split(path.sep).join("/");
     const isBase =
       base.endsWith(".11tydata.js") ||
-      ["style.css", "404.md", "index.md", "work.njk", "tags.njk", "lightbox.js"].includes(base);
+      ["style.css", "404.md", "index.md", "work.njk", "tags.njk", "lightbox.js", "sitemap.njk", "robots.njk"].includes(base);
     if (useRepoContent || isBase) copyInto(f, path.join(dir, "content", rel));
   }
   fs.mkdirSync(path.join(dir, "assets"), { recursive: true });
