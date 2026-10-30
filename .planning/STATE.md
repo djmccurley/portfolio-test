@@ -4,16 +4,16 @@ milestone: v1.0
 current_phase: 03
 current_phase_name: Browsing, Lightbox and Standalone Pages
 status: executing
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-10-30T16:45:51.448Z"
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-10-30T16:50:41.918Z"
 last_activity: 2026-10-30
 last_activity_desc: Phase 03 execution started
-state_head: 3017a104e12ec6716fbf29a1be7c1b0139b4ba91
+state_head: 4cfa49a5672e87c656b535ccb01383a4cace1f0b
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 16
-  completed_plans: 12
+  completed_plans: 13
 milestone_name: milestone
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-10-30)
 ## Current Position
 
 Phase: 03 (Browsing, Lightbox and Standalone Pages) — EXECUTING
-Plan: 2 of 5
+Plan: 3 of 5
 Status: Ready to execute
 Last activity: 2026-10-30 — Phase 03 execution started
 
@@ -60,6 +60,7 @@ Progress: [█████░░░░░] 50%
 | Phase 02 P05 | 3 min | 3 tasks | 11 files |
 | Phase 02 P06 | 11 min | 2 tasks | 3 files |
 | Phase 03 P01 | 15 min | 3 tasks | 11 files |
+| Phase 03 P02 | 20min | 3 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,9 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 02]: 02-06: CI originals check exempts only VIDEO_EXTS files directly in _site/video/
 - [Phase 03]: Plan 03-01: card covers are the only cropped images (4:3, CSS only); first cover eager, rest lazy — UI-SPEC owner decision; enforced by narrowed design test
 - [Phase 03]: Plan 03-01: projects sort ties break on input path; work and pdf reserved slugs, cv/teaching not — Deterministic builds; cv/teaching clashes already fail with 'already used by'
+- [Phase 03]: PDF sizes use 1024-based units (whole KB, one-decimal MB); suffix is a text token inside the link
+- [Phase 03]: PDF cap is 25 MB via one constant PDF_MAX_MB read by renderer, CI guard and hook
+- [Phase 03]: Only PDFs a page links are published to _site/pdf/ (link-driven publishing)
 
 ### Pending Todos
 
@@ -96,6 +100,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-30T16:45:51.346Z
-Stopped at: Completed 03-01-PLAN.md
+Last session: 2026-10-30T16:50:41.780Z
+Stopped at: Completed 03-02-PLAN.md
 Resume file: None

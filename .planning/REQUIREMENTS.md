@@ -50,8 +50,8 @@
 - [x] **SITE-01**: Visitor can browse all projects in one feed, newest first
 - [ ] **SITE-02**: Visitor can browse projects by tag (graphic, UX, art, games, etc.) on tag pages
 - [ ] **SITE-03**: Owner can choose which projects appear on the homepage and in what order
-- [ ] **SITE-04**: Owner can add standalone pages (About / CV) as markdown files
-- [ ] **SITE-05**: Owner can maintain a student-work page with links and PDF downloads that never appears in the project feed or tag pages
+- [x] **SITE-04**: Owner can add standalone pages (About / CV) as markdown files
+- [x] **SITE-05**: Owner can maintain a student-work page with links and PDF downloads that never appears in the project feed or tag pages
 - [ ] **SITE-06**: Visitor can move to the next/previous project from a project page
 - [ ] **SITE-07**: Shared links show a preview (Open Graph title, description, image), and the site publishes a sitemap.xml
 
@@ -130,8 +130,8 @@
 | SITE-01 | Phase 3 | Complete |
 | SITE-02 | Phase 3 | Pending |
 | SITE-03 | Phase 3 | Pending |
-| SITE-04 | Phase 3 | Pending |
-| SITE-05 | Phase 3 | Pending |
+| SITE-04 | Phase 3 | Complete |
+| SITE-05 | Phase 3 | Complete |
 | SITE-06 | Phase 4 | Pending |
 | SITE-07 | Phase 4 | Pending |
 

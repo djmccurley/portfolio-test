@@ -96,12 +96,12 @@ Plans:
   4. Student-work page lists links and PDF downloads and never shows in the feed or tag pages
   5. Visitor can open any content image full-size via a plain link without JS, enhanced to a keyboard-operable native dialog (Escape closes, focus returns)
 
-**Plans:** 1/5 plans executed
+**Plans:** 2/5 plans executed
 Plans:
 **Wave 1**
 
 - [x] 03-01-PLAN.md — Work feed at /work/ (card partial, newest first, empty state), site header with name + Work/CV/Teaching nav and aria-current, card/header/rhythm CSS (wave 1)
-- [ ] 03-02-PLAN.md — CV and Teaching pages, PDF links (resolve, size suffix, publish only linked to /pdf/, 25 MB cap) plus CI guard and hook (wave 1)
+- [x] 03-02-PLAN.md — CV and Teaching pages, PDF links (resolve, size suffix, publish only linked to /pdf/, 25 MB cap) plus CI guard and hook (wave 1)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -137,5 +137,5 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
 | 2. Layout Blocks, Embeds and Design System | 6/6 | Complete    | 2026-10-30 |
-| 3. Browsing, Lightbox and Standalone Pages | 1/5 | In Progress | - |
+| 3. Browsing, Lightbox and Standalone Pages | 2/5 | In Progress | - |
 | 4. Hardening and Launch Readiness | 0/? | Not started | - |
