@@ -123,3 +123,102 @@ test("no motion outside the reduced-motion guard", () => {
   assert.ok(!/animation/.test(outside), "animation found");
   assert.ok(!/scroll-behavior:\s*smooth/.test(outside), "smooth scroll found");
 });
+
+// ---- Task 2: layout contract ----
+
+test("named-line column grid on main and the header", () => {
+  const cols = /grid-template-columns:\s*\[full-start\][^;]*\[content-start\][^;]*\[content-end\][^;]*\[full-end\]/;
+  for (const sel of ["main", "body > header", "body > header, main", "main, body > header"]) {
+    const body = rule(CSS, sel);
+    if (body && cols.test(body.replace(/\s+/g, " "))) {
+      assert.ok(body.includes("var(--page-margin)") && body.includes("var(--column-max)"));
+      return;
+    }
+  }
+  assert.fail("no rule gives main and body > header the named-line grid");
+});
+
+test("full blocks span full-start to full-end, children default to the content column", () => {
+  assert.match(CSS, /main\s*>\s*\.full\s*{[^}]*grid-column:\s*full/);
+  assert.match(CSS, /main\s*>\s*\*[^{]*{[^}]*grid-column:\s*content/);
+  assert.match(CSS, /min-width:\s*0/);
+});
+
+test("prose is capped at the measure and nothing is centred", () => {
+  assert.match(CSS, /max-width:\s*var\(--measure\)/);
+  assert.ok(!/text-align:\s*center/.test(CSS));
+  assert.ok(!/margin-inline:\s*auto/.test(CSS));
+  assert.ok(!/margin:\s*0 auto/.test(CSS));
+});
+
+test("grids: gap, top alignment, columns and collapse queries", () => {
+  const layout = rule(CSS, ".layout");
+  assert.ok(layout, ".layout rule missing");
+  assert.match(layout, /display:\s*grid/);
+  assert.match(layout, /gap:\s*var\(--grid-gap\)/);
+  assert.match(layout, /align-items:\s*start/);
+  for (const n of [2, 3, 4]) {
+    const body = rule(CSS, `.grid-${n}`);
+    assert.ok(body, `.grid-${n} missing`);
+    assert.ok(body.includes(`repeat(${n}, minmax(0, 1fr))`), `.grid-${n} columns`);
+  }
+  const tablet = /@media \(max-width: 59\.99em\)\s*{([\s\S]*?\n})/.exec(CSS);
+  assert.ok(tablet, "59.99em query missing");
+  assert.ok(/\.grid-3[\s\S]*\.grid-4[\s\S]*repeat\(2, minmax\(0, 1fr\)\)/.test(tablet[1]));
+  const phone = /@media \(max-width: 39\.99em\)\s*{([\s\S]*?\n})/.exec(CSS);
+  assert.ok(phone, "39.99em query missing");
+  assert.ok(/\.grid-2[\s\S]*\.grid-3[\s\S]*\.grid-4[\s\S]*grid-template-columns:\s*minmax\(0, 1fr\)/.test(phone[1]));
+});
+
+test("grid images are never cropped", () => {
+  const body = rule(CSS, ".layout img");
+  assert.ok(body, ".layout img rule missing");
+  assert.match(body, /width:\s*100%/);
+  assert.match(body, /height:\s*auto/);
+  assert.ok(!/object-fit/.test(CSS), "object-fit is forbidden");
+  assert.ok(!/img[^{]*{[^}]*aspect-ratio/.test(CSS), "aspect-ratio on img is forbidden");
+  assert.ok(!/overflow:\s*hidden/.test(CSS), "overflow clipping is forbidden");
+});
+
+test("only four font sizes and two weights", () => {
+  const sizes = new Set([...CSS.matchAll(/font-size:\s*([^;]+);/g)].map((m) => m[1].trim()));
+  for (const s of sizes) assert.ok(["1.125rem", "0.875rem", "1.5rem", "2.5rem"].includes(s), `font-size ${s}`);
+  const weights = new Set([...CSS.matchAll(/font-weight:\s*([^;]+);/g)].map((m) => m[1].trim()));
+  for (const w of weights) assert.ok(["400", "700"].includes(w), `font-weight ${w}`);
+});
+
+test("embed frames reserve their ratio", () => {
+  assert.match(rule(CSS, ".embed iframe") ?? "", /aspect-ratio:\s*16 \/ 9/);
+  assert.match(rule(CSS, ".embed.itch") ?? "", /calc\(var\(--w\) \* 1px\)/);
+  assert.match(rule(CSS, ".embed.itch iframe") ?? "", /aspect-ratio:\s*var\(--w\) \/ var\(--h\)/);
+  assert.match(rule(CSS, ".embed.itch.full") ?? "", /max-width:\s*none/);
+  assert.match(rule(CSS, ".embed video") ?? "", /height:\s*auto/);
+  assert.ok(rule(CSS, ".visually-hidden"), ".visually-hidden missing");
+});
+
+test("full captions are inset to the column left edge", () => {
+  assert.ok(
+    CSS.includes("max(var(--page-margin), calc((100% - var(--column-max)) / 2))"),
+    "figcaption inset expression missing"
+  );
+  assert.match(CSS, /\.full figcaption\s*{[^}]*padding-inline-start/);
+});
+
+test("raw HTML grid markup builds and is kept (class contract renders today)", async () => {
+  const s = await makeSite({
+    files: {
+      "content/pages/raw.md":
+        '---\ntitle: Raw\n---\n\n<div class="layout grid-3">\n<figure><img src="../../assets/a.webp" alt="A"></figure>\n<figure><img src="../../assets/a.webp" alt="B"></figure>\n<figure><img src="../../assets/a.webp" alt="C"></figure>\n</div>\n',
+    },
+    assets: { "a.webp": { width: 400, height: 300, format: "webp" } },
+  });
+  try {
+    const r = s.build();
+    assert.equal(r.code, 0, r.output);
+    const html = s.read("_site/raw/index.html");
+    assert.ok(html.includes('<div class="layout grid-3">'));
+    assert.equal((html.match(/<figure>/g) || []).length, 3);
+  } finally {
+    s.cleanup();
+  }
+});
