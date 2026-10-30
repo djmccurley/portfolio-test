@@ -96,14 +96,17 @@ Rules:
 - The cover keeps `cover_alt` as its `alt` (Phase 01 requires it). The link's accessible name is therefore "alt, title, date". That is verbose but complete and needs no extra markup (default; the planner may leave it).
 - Not a heading: cards are `<li>` in a `<ul>`, so the page keeps one `<h1>` plus, on the homepage only, one `<h2>`. Screen reader users get "list, N items".
 - The date is printed **exactly as written** in front matter (Phase 01 D-07): `datetime` and visible text are the same string. No reformatting.
-- **Covers are never cropped** (default). Same rule as Phase 02 grids and enforced by `test/design.test.js` (`object-fit` is forbidden anywhere in the CSS). Cards are top-aligned (`align-items: start`), so mixed aspect ratios give a ragged bottom edge; each title and date sits directly under its own cover. Do not add `aspect-ratio`, a fixed height, or `object-fit` to force a uniform thumbnail. If the owner later wants uniform crops, that is a deliberate change to that test and to this contract.
+- **Covers are cropped to one aspect ratio** (owner decision, 2026-10-30). Every cover shows at **4:3** (`aspect-ratio: 4 / 3; object-fit: cover; object-position: center`), so each row of cards has an even height and titles line up. The ratio is one CSS value on `.cards img`; changing it re-crops every card with no rebuild of images. The crop is CSS only: the pipeline still publishes the full image, and `cover_alt` still describes the whole image.
+  - This is the **only** place in the site where cropping is allowed. Grids, lone images, `::: full` and the lightbox stay uncropped. Narrow `test/design.test.js` so `object-fit` and `aspect-ratio` on `img` are allowed only in rules whose selector starts with `.cards`, and stay forbidden everywhere else. `overflow: hidden` stays forbidden everywhere.
+  - Because cropping is centred, a subject near the edge of a cover may be cut off. The owner picks or prepares covers with that in mind. A per-project crop position (for example a `cover_position` front matter field) is out of scope for this phase.
 - A card has a cover, a title and a date, all required by Phase 01 validation, so there is no "partial card".
 
 ```css
 .cards { list-style: none; margin: 0; padding: 0; display: grid;
          grid-template-columns: repeat(3, minmax(0, 1fr));
          gap: var(--block-gap) var(--grid-gap); align-items: start; }
-.cards img { display: block; width: 100%; height: auto; }
+.cards img { display: block; width: 100%; height: auto;
+             aspect-ratio: 4 / 3; object-fit: cover; object-position: center; }   /* the one allowed crop */
 a.card { display: block; color: inherit; text-decoration: none; }
 .card-title { display: block; margin-top: 0.5rem; font-weight: 700; color: var(--accent);
               text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.2em; }
@@ -264,7 +267,7 @@ dialog.lightbox[open] { display: grid; justify-items: center; align-content: sta
 - `display: grid` must be set on `dialog[open]` only, never on `dialog`, or the closed dialog would show.
 - The viewer centres the image (the one deliberate exception to the left-aligned site; a viewer reads as a stage). Caption text stays left-aligned under the image's left edge.
 - Images smaller than the viewport show at their own size (no upscaling blur). A very tall image shrinks via `max-height`; a long caption makes the dialog scroll (`overflow: auto`), the page behind does not.
-- `object-fit` and `overflow: hidden` are forbidden by `test/design.test.js` and are not used. Do not lock page scroll with `overflow: hidden`; the modal's `overscroll-behavior: contain` is enough.
+- `object-fit` (allowed only on `.cards img`) and `overflow: hidden` are not used in the lightbox. Do not lock page scroll with `overflow: hidden`; the modal's `overscroll-behavior: contain` is enough.
 - **Close button** (default): Body size 18px, weight 700, `background: var(--paper); color: var(--ink); border: 2px solid var(--paper); border-radius: 0; padding: 0.75rem 1rem;` (about 51px tall, same padding as the skip link). No icon, no "×" glyph; the visible text is the label.
 - **Focus ring inside the dialog is white.** The global ring is `--accent` (#0000ee), which is about 2.2:1 on black and fails the 3:1 focus requirement (the same weakness `02-UI-REVIEW.md` found on the skip link). Add `dialog.lightbox :focus-visible { outline-color: var(--paper); }` and extend `test/contrast.test.js` with a ring-versus-surface check (`--paper` on `--ink`, at least 3:1). Keep `outline: 3px solid`, `outline-offset: 3px` from the global rule; the existing regex test on the global `:focus-visible` rule still passes.
 
@@ -372,7 +375,7 @@ This is a content site. Visitor strings below are exact. Build messages follow t
 | Nav landmark labels | `Main` (header nav), `Filter work by tag` (filter row) |
 | Work page `<h1>` | `Work` |
 | Tag page `<h1>` | `Work: {label}` (for example `Work: Graphic design`) |
-| Filter row | `All`, then tag labels: `Graphic design`, `UX`, `Art`, `Games` (slug to label map in `src/_data/tags.js`; owner can edit) |
+| Filter row | `All`, then tag labels: `Graphic design`, `UX`, `Art`, `Games` (**placeholder list**, owner decision 2026-10-30: ship these for now; the owner will finalise the list later by editing `src/_data/tags.js` only. Nothing else may hard-code a tag slug or label: templates, tests and validation read the list from that file, and tests use fixture tags or the first entry rather than these names.) |
 | Homepage featured heading | `Selected work` |
 | Homepage link to the feed (primary CTA of the phase) | `All work` |
 | Meta row label | `Tags` |
@@ -413,7 +416,7 @@ Legend: ✅ resolved (verification: explicit) · 🧪 resolved (verification: ba
 | E1 | Card grid (`ul.cards`: feed, tag pages, homepage) | empty | ✅ | `/work/` with zero projects renders the "No projects yet." paragraph instead of an empty `<ul>`; tag pages never exist with zero projects (D-09); a homepage with an empty featured list omits the `h2` and grid |
 | E1 | Card grid | loading | 🧪 | `{ statement: "card covers carry width/height from the pipeline, so the grid reserves space and does not shift as lazy covers load", verification: backstop }` |
 | E1 | Card grid | error | ✅ | A missing cover file fails the build naming the .md file (Phase 01 D-23); a featured slug with no project fails the build naming `src/_data/featured.js` and the slug |
-| E1 | Card grid | populated | ✅ | 3 columns at `>= 60em`, 2 at `40em` to `59.99em`, 1 below; covers uncropped and top-aligned; title and date under each cover |
+| E1 | Card grid | populated | ✅ | 3 columns at `>= 60em`, 2 at `40em` to `59.99em`, 1 below; covers cropped to 4:3 (centred) so every row has the same cover height; title and date under each cover |
 | E1 | Card grid | partial | ✖ | Dismissed: cover, title and date are all required front matter, so no card can be missing a part |
 | E1 | Card grid | overflow | ✅ | More cards than columns wrap to new rows with a 32px row gap; no scroll, no pagination, no truncation |
 | E1 | Card grid | zero-one-many | ✅ | One card sits in the first cell and leaves the rest empty (no stretching, no centring); many fill rows in source order |
