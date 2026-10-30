@@ -25,11 +25,11 @@
 ### Layout Blocks
 
 - [x] **BLOCK-01**: Owner can type a multi-column image grid (2, 3 or 4 columns) inline with markdown shorthand (e.g. `::: grid-3` … `:::`)
-- [ ] **BLOCK-02**: Owner can type a full-width (full-bleed) image block inline
+- [x] **BLOCK-02**: Owner can type a full-width (full-bleed) image block inline
 - [ ] **BLOCK-03**: Owner can freely mix grids, full-width images and normal text within one page
 - [x] **BLOCK-04**: Owner can add captions to images that render as `<figure>`/`<figcaption>`
-- [ ] **BLOCK-05**: Images in grids keep their own aspect ratios (no forced cropping)
-- [ ] **BLOCK-06**: Grids collapse to fewer columns on narrow screens with no layout JS
+- [x] **BLOCK-05**: Images in grids keep their own aspect ratios (no forced cropping)
+- [x] **BLOCK-06**: Grids collapse to fewer columns on narrow screens with no layout JS
 
 ### Images
 
@@ -57,9 +57,9 @@
 
 ### Design & Accessibility
 
-- [ ] **A11Y-01**: Pages use semantic HTML and native elements with a brutalist, minimal CSS style: no smooth scrolling, fades or animation
+- [x] **A11Y-01**: Pages use semantic HTML and native elements with a brutalist, minimal CSS style: no smooth scrolling, fades or animation
 - [ ] **A11Y-02**: Site is usable at 320px wide and at 200% zoom without horizontal scrolling
-- [ ] **A11Y-03**: Keyboard users get a skip link and visible focus outlines; text meets WCAG AA contrast
+- [x] **A11Y-03**: Keyboard users get a skip link and visible focus outlines; text meets WCAG AA contrast
 - [ ] **A11Y-04**: Build warns when an image has empty or filename-like alt text (with a deliberate way to mark decorative images)
 
 ## v2 Requirements
@@ -98,9 +98,9 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| A11Y-01 | Phase 2 | Pending |
+| A11Y-01 | Phase 2 | Complete |
 | A11Y-02 | Phase 4 | Pending |
-| A11Y-03 | Phase 2 | Pending |
+| A11Y-03 | Phase 2 | Complete |
 | A11Y-04 | Phase 2 | Pending |
 | AUTH-01 | Phase 1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
@@ -108,11 +108,11 @@
 | AUTH-04 | Phase 2 | Complete |
 | AUTH-05 | Phase 4 | Pending |
 | BLOCK-01 | Phase 2 | Complete |
-| BLOCK-02 | Phase 2 | Pending |
+| BLOCK-02 | Phase 2 | Complete |
 | BLOCK-03 | Phase 2 | Pending |
 | BLOCK-04 | Phase 2 | Complete |
-| BLOCK-05 | Phase 2 | Pending |
-| BLOCK-06 | Phase 2 | Pending |
+| BLOCK-05 | Phase 2 | Complete |
+| BLOCK-06 | Phase 2 | Complete |
 | IMG-01 | Phase 1 | Complete |
 | IMG-02 | Phase 1 | Complete |
 | IMG-03 | Phase 1 | Complete |

@@ -60,12 +60,12 @@ Plans:
   4. Visitor can play a self-hosted video (controls, poster, no autoplay), a YouTube/Vimeo embed (privacy domain, lazy, titled) and an itch.io game with a visible "play on itch.io" fallback link
   5. Pages use semantic HTML and minimal brutalist CSS with no animation; keyboard users get a skip link, visible focus and AA contrast; the build warns on empty or filename-like alt text
 
-**Plans:** 1/5 plans executed
+**Plans:** 2/5 plans executed
 Plans:
 **Wave 1**
 
 - [x] 02-01-PLAN.md — Block engine: `::: grid-2/3/4` and `::: full`, figure captions, per-block sizes, raw HTML, strict file:line errors (wave 1)
-- [ ] 02-02-PLAN.md — Design system: Chivo, tokens, wide left-aligned column, skip link, focus, AA contrast test, grid collapse, full bleed, embed frames (wave 1)
+- [x] 02-02-PLAN.md — Design system: Chivo, tokens, wide left-aligned column, skip link, focus, AA contrast test, grid collapse, full bleed, embed frames (wave 1)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -117,6 +117,6 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
-| 2. Layout Blocks, Embeds and Design System | 1/5 | In Progress | - |
+| 2. Layout Blocks, Embeds and Design System | 2/5 | In Progress | - |
 | 3. Browsing, Lightbox and Standalone Pages | 0/? | Not started | - |
 | 4. Hardening and Launch Readiness | 0/? | Not started | - |
