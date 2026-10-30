@@ -3,6 +3,18 @@ phase: 02
 review: 02-REVIEW.md
 titles: json
 findings:
+  - id: 02-06/WR-01
+    severity: warning
+    disposition: open
+    title: "originals-not-published test exempts every video in _site/video/, not only referenced ones"
+  - id: 02-06/IN-01
+    severity: info
+    disposition: open
+    title: "src choice keys on poster while the attribute is emitted from posterAttr"
+  - id: 02-06/IN-02
+    severity: info
+    disposition: open
+    title: "new comment in lib/media.js is a single ~140-char line"
   - id: WR-01
     severity: warning
     disposition: open
@@ -35,23 +47,26 @@ findings:
     severity: info
     disposition: open
     title: "No aggregate cap on self-hosted video against the Pages size limit"
-open: 6
-total: 8
-recorded: 2026-10-30T11:59:50.021Z
+open: 9
+total: 11
+recorded: 2026-10-30T13:47:05.318Z
 ---
 
 # Phase 02: Code Review Disposition
 
 | Finding | Severity | Disposition | Source |
 |---------|----------|-------------|--------|
-| WR-01 | warning | open | - |
-| WR-02 | warning | open | - |
-| IN-01 | info | open | - |
-| IN-02 | info | open | - |
+| 02-06/WR-01 | warning | open | 02-REVIEW.md (incremental, plan 02-06) |
+| 02-06/IN-01 | info | open | 02-REVIEW.md (incremental, plan 02-06) |
+| 02-06/IN-02 | info | open | 02-REVIEW.md (incremental, plan 02-06) |
+| WR-01 | warning | open | prior full-phase review (068bff2) |
+| WR-02 | warning | open | prior full-phase review (068bff2) |
+| IN-01 | info | open | prior full-phase review (068bff2) |
+| IN-02 | info | open | prior full-phase review (068bff2) |
 | WR-03 | warning | fixed | 02-REVIEW-FIX.md (not in the current review) |
 | WR-04 | warning | fixed | 02-REVIEW-FIX.md (not in the current review) |
-| IN-03 | info | open | - (not in the current review) |
-| IN-04 | info | open | - (not in the current review) |
+| IN-03 | info | open | prior full-phase review (068bff2) |
+| IN-04 | info | open | prior full-phase review (068bff2) |
 
 Dispositions: `open` (recorded, not yet triaged), `fixed`, `skipped`, `deferred`.
 Set `deferred` by hand and put the reason in the Source cell; both are preserved. A `|` in the reason is kept as prose and escaped on the next run.
