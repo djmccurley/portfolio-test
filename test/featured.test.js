@@ -68,7 +68,7 @@ test("a site name with & and < is escaped exactly once in title, h1 and header",
   const { site, r } = await build({
     ...PROJECTS,
     ...featuredFile('["a"]'),
-    "src/_data/site.js": 'export default { name: "Ann & <Bo>" };\n',
+    "src/_data/site.js": `export default ${JSON.stringify({ ...siteData, name: "Ann & <Bo>" })};\n`,
   });
   assert.equal(r.code, 0, r.output);
   const html = site.read("_site/index.html");
