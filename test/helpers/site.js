@@ -7,6 +7,14 @@ import sharp from "sharp";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 
+// The tag list fixture sites build against, so tests do not depend on the owner's src/_data/tags.js.
+export const FIXTURE_TAGS = [
+  { slug: "graphic", label: "Graphic design" },
+  { slug: "ux", label: "UX" },
+  { slug: "art", label: "Art" },
+  { slug: "games", label: "Games" },
+];
+
 export function defaultPrefix() {
   const cfg = fs.readFileSync(path.join(ROOT, "eleventy.config.js"), "utf8");
   const m = cfg.match(/PATH_PREFIX \?\? "([^"]+)"/);
@@ -63,6 +71,13 @@ export async function makeSite({ files = {}, assets = {}, prefix, useRepoContent
   copyInto(path.join(ROOT, "package.json"), path.join(dir, "package.json"));
   fs.cpSync(path.join(ROOT, "lib"), path.join(dir, "lib"), { recursive: true });
   fs.cpSync(path.join(ROOT, "src"), path.join(dir, "src"), { recursive: true });
+  // Nor the owner's tag list; a test can still supply its own src/_data/tags.js through `files`.
+  if (!useRepoContent) {
+    fs.writeFileSync(
+      path.join(dir, "src", "_data", "tags.js"),
+      `export default ${JSON.stringify(FIXTURE_TAGS, null, 2)};\n`
+    );
+  }
   // Fixture sites never inherit the owner's featured list; a test can still supply its own file.
   if (!useRepoContent) fs.writeFileSync(path.join(dir, "src", "_data", "featured.js"), "export default [];\n");
   fs.symlinkSync(path.join(ROOT, "node_modules"), path.join(dir, "node_modules"), "dir");

@@ -168,7 +168,11 @@ function topLevel(fragment) {
 
 const mainInner = mixedHtml.match(/<main[^>]*>([\s\S]*)<\/main>/)[1];
 const topEls = topLevel(mainInner);
-const body = topEls.slice(2); // skip the Phase 1 h1 and date paragraph
+const body = topEls.slice(3); // skip the h1, the date paragraph and the meta dl
+
+test("every project page opens with h1, date paragraph and the meta dl before its body", () => {
+  assert.deepEqual(topEls.slice(0, 3).map((e) => e.tag), ["h1", "p", "dl"]);
+});
 
 const block = (cls) => body.find((e) => e.tag === "div" && e.cls === cls);
 const figuresOf = (el) => el.html.match(/<figure>[\s\S]*?<\/figure>/g) ?? [];

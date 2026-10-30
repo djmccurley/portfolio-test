@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { makeSite, defaultPrefix } from "./helpers/site.js";
+import { makeSite, defaultPrefix, FIXTURE_TAGS } from "./helpers/site.js";
 import { buildIndex } from "../lib/assets.js";
 
 const img = { width: 400, height: 300, format: "webp" };
@@ -35,7 +35,7 @@ test("missing field cover_alt", () =>
   fails({ [P + "a.md"]: fm({}, ["cover_alt"]) }, [P + "a.md", 'missing front matter field "cover_alt"']));
 
 test("unknown tag", () =>
-  fails({ [P + "a.md"]: fm({ tags: "[games, bogus]" }) }, [P + "a.md", 'unknown tag "bogus"', "allowed: graphic, ux, art, games"]));
+  fails({ [P + "a.md"]: fm({ tags: "[games, bogus]" }) }, [P + "a.md", 'unknown tag "bogus"', `allowed: ${FIXTURE_TAGS.map((t) => t.slug).join(", ")}`]));
 
 test("empty tags", () =>
   fails({ [P + "a.md"]: fm({ tags: "[]" }) }, [P + "a.md", '"tags" must list at least one tag']));
@@ -110,21 +110,49 @@ test("partial date shown as written", async () => {
   }
 });
 
-test("metadata dl only when present", async () => {
+test("project meta dl", async () => {
+  const label = (slug) => FIXTURE_TAGS.find((t) => t.slug === slug).label;
+  const prefix = defaultPrefix();
   const site = await makeSite({
     assets: { "fixture.webp": img },
     files: {
-      [P + "with.md"]: fm({ role: "Designer", client: "Acme" }),
+      [P + "with.md"]: fm({
+        role: "Designer",
+        client: "Acme",
+        year: '"2024"',
+        link: '"https://example.com"',
+        tags: "[games, art]",
+      }),
       [P + "without.md"]: fm(),
+      "content/pages/about.md": "---\ntitle: About\n---\nHi\n",
     },
   });
   try {
     const r = site.build();
     assert.equal(r.code, 0, r.output);
-    const w = site.read("_site/with/index.html");
-    assert.match(w, /<dl/);
+    const dl = (html) => html.match(/<dl>[\s\S]*?<\/dl>/)?.[0];
+    const labels = (d) => [...d.matchAll(/<dt>([^<]*)<\/dt>/g)].map((m) => m[1]);
+
+    const w = dl(site.read("_site/with/index.html"));
+    assert.deepEqual(labels(w), ["Role", "Client", "Year", "Tags", "Link"]);
     assert.match(w, /<dt>Role<\/dt>\s*<dd>Designer<\/dd>/);
-    assert.ok(!site.read("_site/without/index.html").includes("<dl"));
+    const tagsDd = w.match(/<dt>Tags<\/dt>\s*<dd>([\s\S]*?)<\/dd>/)[1];
+    assert.equal(
+      tagsDd,
+      `<a href="${prefix}tags/games/">${label("games")}</a>, <a href="${prefix}tags/art/">${label("art")}</a>`
+    );
+
+    const wo = dl(site.read("_site/without/index.html"));
+    assert.deepEqual(labels(wo), ["Tags"]);
+    assert.equal((wo.match(/<a /g) || []).length, 1);
+
+    assert.ok(!site.read("_site/about/index.html").includes("<dl"));
+
+    for (const f of ["with", "without"]) {
+      for (const m of site.read(`_site/${f}/index.html`).matchAll(/href="([^"]*\/tags\/[^"]+)"/g)) {
+        assert.ok(site.exists(`_site/${m[1].slice(prefix.length)}index.html`), m[1]);
+      }
+    }
   } finally {
     site.cleanup();
   }

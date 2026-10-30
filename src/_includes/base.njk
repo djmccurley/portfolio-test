@@ -20,12 +20,13 @@
     <h1>{{ title }}</h1>
     {% if date %}<p class="meta"><time datetime="{{ date }}">{{ date }}</time></p>{% endif %}
     {% if summary %}<p>{{ summary }}</p>{% endif %}
-    {% if role or client or tools or year or link %}
+    {% if role or client or tools or year or link or (projectTags | length) %}
     <dl>
       {% if role %}<dt>Role</dt><dd>{{ role }}</dd>{% endif %}
       {% if client %}<dt>Client</dt><dd>{{ client }}</dd>{% endif %}
       {% if tools %}<dt>Tools</dt><dd>{% if tools is string %}{{ tools }}{% else %}{{ tools | join(", ") }}{% endif %}</dd>{% endif %}
       {% if year %}<dt>Year</dt><dd>{{ year }}</dd>{% endif %}
+      {% if projectTags | length %}<dt>Tags</dt><dd>{% for t in projectTags %}<a href="/tags/{{ t.slug }}/">{{ t.label }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</dd>{% endif %}
       {% if link %}<dt>Link</dt><dd><a href="{{ link }}">{{ link }}</a></dd>{% endif %}
     </dl>
     {% endif %}
