@@ -96,7 +96,7 @@ Plans:
   4. Student-work page lists links and PDF downloads and never shows in the feed or tag pages
   5. Visitor can open any content image full-size via a plain link without JS, enhanced to a keyboard-operable native dialog (Escape closes, focus returns)
 
-**Plans:** 2/5 plans executed
+**Plans:** 3/5 plans executed
 Plans:
 **Wave 1**
 
@@ -105,7 +105,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 03-03-PLAN.md — Tag pages at /tags/<slug>/ from { slug, label } tags, filter row, project Tags row, data-cascade fix, fixture tags (wave 2)
+- [x] 03-03-PLAN.md — Tag pages at /tags/<slug>/ from { slug, label } tags, filter row, project Tags row, data-cascade fix, fixture tags (wave 2)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -137,5 +137,5 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
 | 2. Layout Blocks, Embeds and Design System | 6/6 | Complete    | 2026-10-30 |
-| 3. Browsing, Lightbox and Standalone Pages | 2/5 | In Progress | - |
+| 3. Browsing, Lightbox and Standalone Pages | 3/5 | In Progress | - |
 | 4. Hardening and Launch Readiness | 0/? | Not started | - |

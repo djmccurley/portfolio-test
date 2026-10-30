@@ -4,16 +4,16 @@ milestone: v1.0
 current_phase: 03
 current_phase_name: Browsing, Lightbox and Standalone Pages
 status: executing
-stopped_at: Completed 03-02-PLAN.md
-last_updated: "2026-10-30T16:50:41.918Z"
+stopped_at: Completed 03-03-PLAN.md
+last_updated: "2026-10-30T16:57:54.632Z"
 last_activity: 2026-10-30
 last_activity_desc: Phase 03 execution started
-state_head: 4cfa49a5672e87c656b535ccb01383a4cace1f0b
+state_head: 09b56193d11be281ad74367b545e6881ed702b6f
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 16
-  completed_plans: 13
+  completed_plans: 14
 milestone_name: milestone
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-10-30)
 ## Current Position
 
 Phase: 03 (Browsing, Lightbox and Standalone Pages) — EXECUTING
-Plan: 3 of 5
+Plan: 4 of 5
 Status: Ready to execute
 Last activity: 2026-10-30 — Phase 03 execution started
 
@@ -61,6 +61,7 @@ Progress: [█████░░░░░] 50%
 | Phase 02 P06 | 11 min | 2 tasks | 3 files |
 | Phase 03 P01 | 15 min | 3 tasks | 11 files |
 | Phase 03 P02 | 20min | 3 tasks | 12 files |
+| Phase 03 P03 | 25 min | 3 tasks | 15 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,8 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 03]: PDF sizes use 1024-based units (whole KB, one-decimal MB); suffix is a text token inside the link
 - [Phase 03]: PDF cap is 25 MB via one constant PDF_MAX_MB read by renderer, CI guard and hook
 - [Phase 03]: Only PDFs a page links are published to _site/pdf/ (link-driven publishing)
+- [Phase 03]: tags.js holds { slug, label } objects; tag pages paginate plain defs, setDataDeepMerge(false), templates read projectTags never tags
+- [Phase 03]: A non-list tags.js export is reported from the config function because Eleventy aborts on global tags without naming the file
 
 ### Pending Todos
 
@@ -100,6 +103,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-30T16:50:41.780Z
-Stopped at: Completed 03-02-PLAN.md
+Last session: 2026-10-30T16:57:54.520Z
+Stopped at: Completed 03-03-PLAN.md
 Resume file: None
