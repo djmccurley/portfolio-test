@@ -60,7 +60,7 @@ Plans:
   4. Visitor can play a self-hosted video (controls, poster, no autoplay), a YouTube/Vimeo embed (privacy domain, lazy, titled) and an itch.io game with a visible "play on itch.io" fallback link
   5. Pages use semantic HTML and minimal brutalist CSS with no animation; keyboard users get a skip link, visible focus and AA contrast; the build warns on empty or filename-like alt text
 
-**Plans:** 5/5 plans executed
+**Plans:** 5/6 plans executed
 Plans:
 **Wave 1**
 
@@ -75,6 +75,10 @@ Plans:
 **Wave 3** *(blocked on Wave 2 completion)*
 
 - [x] 02-05-PLAN.md — Self-hosted video: publish on reference, WebP posters, 50 MB cap in build, CI and hook (wave 3)
+
+**Wave 4** *(gap closure, blocked on Wave 3 completion)*
+
+- [ ] 02-06-PLAN.md — Gap G-02-4: poster videos drop the `#t=0.001` fragment so the poster shows; src-form regression tests; CI originals test allows published videos (wave 4)
 
 **UI hint**: yes
 
@@ -117,6 +121,6 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
-| 2. Layout Blocks, Embeds and Design System | 5/5 | In Progress | - |
+| 2. Layout Blocks, Embeds and Design System | 5/6 | In Progress | - |
 | 3. Browsing, Lightbox and Standalone Pages | 0/? | Not started | - |
 | 4. Hardening and Launch Readiness | 0/? | Not started | - |
