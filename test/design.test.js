@@ -110,7 +110,8 @@ test("style.css declares the design tokens", () => {
 test("focus ring, skip link and reduced-motion guard", () => {
   assert.match(CSS, /:focus-visible\s*{[^}]*outline:\s*3px solid var\(--accent\)/);
   assert.match(CSS, /:focus-visible\s*{[^}]*outline-offset:\s*3px/);
-  assert.match(CSS, /main:focus\s*{\s*outline:\s*none/);
+  // the skip target must out-specify the (0,2,0) ring rule: main[tabindex] adds an attribute and a type
+  assert.match(CSS, /main\[tabindex="-1"\]:focus-visible\s*{\s*outline:\s*none/);
   const skip = [...CSS.matchAll(/([^{}]*\.skip-link[^{}]*)\{([^{}]*)\}/g)].map((m) => m[2]).join("\n");
   assert.ok(skip.length > 0, ".skip-link rules missing");
   assert.ok(!/display:\s*none|visibility:\s*hidden/.test(skip), "skip link must stay in the tab order");

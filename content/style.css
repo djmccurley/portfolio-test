@@ -50,8 +50,10 @@ a:visited {
   outline-offset: 3px;
 }
 
-/* the programmatic skip target only; every other element keeps its ring */
-main:focus {
+/* the programmatic skip target only; every other element keeps its ring.
+   (0,2,1) beats the (0,2,0) ring rule above, so the whole content area gets no ring. */
+main[tabindex="-1"]:focus,
+main[tabindex="-1"]:focus-visible {
   outline: none;
 }
 
