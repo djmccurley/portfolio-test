@@ -6,6 +6,7 @@ import sharp from "sharp";
 import siteData from "../src/_data/site.js";
 import { pruneImages } from "../scripts/prune-img.js";
 import { makeSite, defaultPrefix } from "./helpers/site.js";
+import * as validate from "../lib/validate.js";
 
 const sites = [];
 after(() => sites.forEach((s) => s.cleanup()));
@@ -209,4 +210,81 @@ test("a fixture can supply its own default image file", async () => {
   });
   assert.equal(r.code, 0, r.output);
   assert.match(metaOf(site.read("_site/index.html"), "og:image"), /-600\.jpeg$/);
+});
+
+// ---------------------------------------------------------------------------
+// description front matter, escaping, site.js validation
+// ---------------------------------------------------------------------------
+
+test("description beats summary, summary beats the site description (D-06 chain)", async () => {
+  const { site, r } = await build({
+    "content/projects/jam.md": proj({ title: "Jam", summary: "Shown on the page.", description: "Made for the 2024 jam." }),
+    "content/projects/plain.md": proj({ title: "Plain", summary: "Only a summary." }),
+    "content/pages/about.md": page({ title: "About", description: "About the maker." }),
+    "content/pages/cv.md": page({ title: "CV" }),
+  });
+  assert.equal(r.code, 0, r.output);
+  const jam = site.read("_site/jam/index.html");
+  assert.equal(metaOf(jam, "description"), "Made for the 2024 jam.");
+  assert.equal(metaOf(jam, "og:description"), "Made for the 2024 jam.");
+  assert.ok(jam.includes("<p>Shown on the page.</p>"), "the on-page summary still shows the summary");
+  assert.equal(metaOf(site.read("_site/plain/index.html"), "description"), "Only a summary.");
+  assert.equal(metaOf(site.read("_site/about/index.html"), "description"), "About the maker.");
+  assert.equal(metaOf(site.read("_site/cv/index.html"), "description"), siteData.description);
+});
+
+test("quotes, angle brackets and ampersands in preview text are escaped exactly once", async () => {
+  const { site, r } = await build({
+    "content/projects/q.md": proj({
+      title: "'Tide & \"Pool\"'",
+      description: "'Say \"hi\" <b> & bye'",
+      alt: "'Alt \"x\" & <i>'",
+    }),
+  });
+  assert.equal(r.code, 0, r.output);
+  const html = site.read("_site/q/index.html");
+  const head = html.slice(0, html.indexOf("</head>"));
+  assert.equal(metaOf(html, "description"), "Say &quot;hi&quot; &lt;b&gt; &amp; bye");
+  assert.equal(metaOf(html, "og:description"), "Say &quot;hi&quot; &lt;b&gt; &amp; bye");
+  assert.equal(metaOf(html, "og:title"), "Tide &amp; &quot;Pool&quot;");
+  assert.equal(metaOf(html, "og:image:alt"), "Alt &quot;x&quot; &amp; &lt;i&gt;");
+  for (const f of allHtml(site)) assert.ok(!fs.readFileSync(f, "utf8").includes("&amp;amp;"), `${f} double-escapes`);
+  assert.ok(!head.includes("<b>"), "raw <b> in the head");
+});
+
+test("a description that is not text fails the build naming the file", async () => {
+  const { r } = await build({ "content/projects/x.md": proj({ title: "X", description: "42" }) });
+  assert.notEqual(r.code, 0);
+  assert.ok(r.output.includes('content/projects/x.md: "description" must be text'), r.output);
+});
+
+const SITE_ERR = {
+  url: 'src/_data/site.js: url must be the site origin only, like "https://djmccurley.github.io" (https, no path, no trailing slash)',
+  image: (n) => `src/_data/site.js: defaultImage "${n}" not found in assets/. Add the image to assets/ or change defaultImage.`,
+  alt: "src/_data/site.js: defaultImageAlt must describe the default share image.",
+  description: "src/_data/site.js: description must be a sentence for link previews of pages with no description or summary.",
+};
+
+const siteFile = (over) => ({ "src/_data/site.js": `export default ${JSON.stringify({ ...siteData, ...over })};\n` });
+
+for (const [label, over, msg] of [
+  ["a url with a path", { url: "https://example.org/portfolio-test" }, SITE_ERR.url],
+  ["an http url", { url: "http://example.org" }, SITE_ERR.url],
+  ["a url with a trailing slash", { url: "https://example.org/" }, SITE_ERR.url],
+  ["a missing url", { url: undefined }, SITE_ERR.url],
+  ["a default image that is not in assets/", { defaultImage: "nope.webp" }, SITE_ERR.image("nope.webp")],
+  ["an empty default image alt", { defaultImageAlt: "" }, SITE_ERR.alt],
+  ["an empty site description", { description: "" }, SITE_ERR.description],
+]) {
+  test(`${label} in site.js fails the build naming site.js`, async () => {
+    const { r } = await build({ ...P, ...siteFile(over) });
+    assert.notEqual(r.code, 0);
+    assert.ok(r.output.includes(msg), r.output);
+  });
+}
+
+test("validateSite accepts the repo settings and an origin with a port", () => {
+  const ok = { resolveAsset: () => "/x" };
+  assert.deepEqual(validate.validateSite({ ...siteData }, ok), []);
+  assert.deepEqual(validate.validateSite({ ...siteData, url: "https://example.org:8443" }, ok), []);
 });
