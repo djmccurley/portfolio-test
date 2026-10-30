@@ -60,7 +60,22 @@ Plans:
   4. Visitor can play a self-hosted video (controls, poster, no autoplay), a YouTube/Vimeo embed (privacy domain, lazy, titled) and an itch.io game with a visible "play on itch.io" fallback link
   5. Pages use semantic HTML and minimal brutalist CSS with no animation; keyboard users get a skip link, visible focus and AA contrast; the build warns on empty or filename-like alt text
 
-**Plans**: TBD
+**Plans:** 5 plans
+Plans:
+**Wave 1**
+
+- [ ] 02-01-PLAN.md — Block engine: `::: grid-2/3/4` and `::: full`, figure captions, per-block sizes, raw HTML, strict file:line errors (wave 1)
+- [ ] 02-02-PLAN.md — Design system: Chivo, tokens, wide left-aligned column, skip link, focus, AA contrast test, grid collapse, full bleed, embed frames (wave 1)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 02-03-PLAN.md — Alt-text lint with `{decorative}` marker; tidepool page as the live block demo (wave 2)
+- [ ] 02-04-PLAN.md — YouTube/Vimeo (privacy domains) and itch.io embeds, `full` keyword (wave 2)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 02-05-PLAN.md — Self-hosted video: publish on reference, WebP posters, 50 MB cap in build, CI and hook (wave 3)
+
 **UI hint**: yes
 
 ### Phase 3: Browsing, Lightbox and Standalone Pages
