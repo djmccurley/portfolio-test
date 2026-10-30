@@ -1,19 +1,20 @@
 ---
 gsd_state_version: "1.0"
 milestone: v1.0
-current_phase: 02
-current_phase_name: Layout Blocks, Embeds and Design System
-status: verifying
-stopped_at: Completed 02-06-PLAN.md
-last_updated: "2026-10-30T13:44:09.820Z"
+current_phase: 3
+current_phase_name: Browsing, Lightbox and Standalone Pages
+status: planning
+stopped_at: Phase 02 complete, ready to plan Phase 3
+last_updated: "2026-10-30T13:56:39.343Z"
 last_activity: 2026-10-30
-last_activity_desc: Phase 02 execution started
-state_head: d821b483221559e5c45790963ae7964ad33b7391
+last_activity_desc: Phase 02 complete, transitioned to Phase 3
+state_head: 5cf29b8271c355c23dd552dc83e9e8abd35458cc
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 11
   completed_plans: 11
+  percent: 50
 milestone_name: milestone
 ---
 
@@ -21,25 +22,25 @@ milestone_name: milestone
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-10-28)
+See: .planning/PROJECT.md (updated 2026-10-30)
 
 **Core value:** Writing a new project page should be as fast as typing markdown, then push, and it's live, with no CMS, template fights or upload caps.
-**Current focus:** Phase 02 — Layout Blocks, Embeds and Design System
+**Current focus:** Phase 3 — Browsing, Lightbox and Standalone Pages
 
 ## Current Position
 
-Phase: 02 (Layout Blocks, Embeds and Design System) — EXECUTING
-Plan: 6 of 6
-Status: Phase complete — ready for verification
-Last activity: 2026-10-30 — Phase 02 execution started
+Phase: 3 — Browsing, Lightbox and Standalone Pages
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-10-30 — Phase 02 complete, transitioned to Phase 3
 
-Progress: [██████████] 100%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 5
+- Total plans completed: 11
 - Average duration: -
 - Total execution time: 0 hours
 
@@ -48,6 +49,7 @@ Progress: [██████████] 100%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 5 | - | - |
+| 02 | 6 | - | - |
 **Per-Plan Metrics:**
 
 | Plan | Duration | Tasks | Files |
@@ -88,11 +90,10 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 1 spike: confirm eleventy-img resolves basenames against root `assets/`, CI cache restores outputs, and paste plugin link format.
-- Site URL undecided; base path must remain one config value.
+- [Phase 1] Site URL undecided; base path must remain one config value (currently PATH_PREFIX /portfolio-test/).
 
 ## Session Continuity
 
-Last session: 2026-10-30T13:44:09.723Z
-Stopped at: Completed 02-06-PLAN.md
+Last session: 2026-10-30T15:10:00Z
+Stopped at: Phase 02 complete, ready to plan Phase 3
 Resume file: None

@@ -7,7 +7,7 @@ Markdown plus a shared `assets/` folder goes in; plain, fast, accessible HTML/CS
 ## Phases
 
 - [x] **Phase 1: Push-to-Live with Images** - Minimal deployed site: write a project .md with a pasted image, push, it's live (completed 2026-10-29)
-- [ ] **Phase 2: Layout Blocks, Embeds and Design System** - Mix grids, full-width images, video, and itch.io games in a page with accessible brutalist CSS
+- [x] **Phase 2: Layout Blocks, Embeds and Design System** - Mix grids, full-width images, video, and itch.io games in a page with accessible brutalist CSS (completed 2026-10-30)
 - [ ] **Phase 3: Browsing, Lightbox and Standalone Pages** - Feed, tags, curated homepage, About/CV, student page, and full-size image viewing
 - [ ] **Phase 4: Hardening and Launch Readiness** - Next/prev, share previews, sitemap, drafts, authoring README, and zoom/small-screen verification
 
@@ -60,7 +60,7 @@ Plans:
   4. Visitor can play a self-hosted video (controls, poster, no autoplay), a YouTube/Vimeo embed (privacy domain, lazy, titled) and an itch.io game with a visible "play on itch.io" fallback link
   5. Pages use semantic HTML and minimal brutalist CSS with no animation; keyboard users get a skip link, visible focus and AA contrast; the build warns on empty or filename-like alt text
 
-**Plans:** 6/6 plans executed
+**Plans:** 6/6 plans complete
 Plans:
 **Wave 1**
 
@@ -121,6 +121,6 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
-| 2. Layout Blocks, Embeds and Design System | 6/6 | In Progress | - |
+| 2. Layout Blocks, Embeds and Design System | 6/6 | Complete    | 2026-10-30 |
 | 3. Browsing, Lightbox and Standalone Pages | 0/? | Not started | - |
 | 4. Hardening and Launch Readiness | 0/? | Not started | - |
