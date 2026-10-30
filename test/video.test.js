@@ -191,6 +191,51 @@ test("titles are escaped in aria-label and the fallback link", async () => {
   assert.ok(out.includes('Download "A &lt;b&gt; &amp; \'q\'"'), out);
 });
 
+// G-02-4 / D-07: a poster block gets a plain src; a no-poster block keeps the iOS first-frame fragment.
+const videoTag = (out) => out.match(/<video[^>]*>/)[0];
+
+test("poster block: plain src with the poster attribute and no #t= fragment", async () => {
+  const { html } = await render('::: video ../../assets/clip.mp4 "T" poster=../../assets/crab.webp\n:::\n');
+  const out = html();
+  assert.match(
+    out,
+    /<div class="embed"><video controls="" preload="metadata" src="\/video\/clip\.mp4" poster="\/video\/crab-[0-9a-f]{8}\.webp" aria-label="T">/
+  );
+  assert.doesNotMatch(videoTag(out), /#t=/);
+});
+
+test("poster + full + escaped title: plain src, full class, escaped label and link", async () => {
+  const { html } = await render(
+    '::: video full ../../assets/clip.mp4 "A <b> & \'q\'" poster=../../assets/crab.webp\n:::\n'
+  );
+  const out = html();
+  assert.match(
+    out,
+    /<div class="embed full"><video controls="" preload="metadata" src="\/video\/clip\.mp4" poster="\/video\/crab-[0-9a-f]{8}\.webp" aria-label="A &lt;b&gt; &amp; 'q'">/
+  );
+  assert.ok(out.includes('<a href="/video/clip.mp4">Download "A &lt;b&gt; &amp; \'q\'"</a>'), out);
+  assert.doesNotMatch(videoTag(out), /#t=/);
+});
+
+test("no-poster block keeps the #t=0.001 first-frame fragment and has no poster attribute", async () => {
+  const { html } = await render('::: video ../../assets/clip.mp4 "T"\n:::\n');
+  const out = html();
+  assert.ok(
+    out.includes('<div class="embed"><video controls="" preload="metadata" src="/video/clip.mp4#t=0.001" aria-label="T">'),
+    out
+  );
+  assert.doesNotMatch(videoTag(out), /poster=/);
+});
+
+test("no-poster full block keeps the #t=0.001 fragment", async () => {
+  const { html } = await render('::: video full ../../assets/clip.mp4 "T"\n:::\n');
+  assert.ok(
+    html().includes(
+      '<div class="embed full"><video controls="" preload="metadata" src="/video/clip.mp4#t=0.001" aria-label="T">'
+    )
+  );
+});
+
 test("full build: a poster is published as a processed WebP no wider than 1600px", async () => {
   const prefix = defaultPrefix();
   const site = await makeSite({

@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { makeSite, defaultPrefix } from "./helpers/site.js";
+import { VIDEO_EXTS } from "../lib/limits.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -82,7 +83,12 @@ test("originals not published", async () => {
     assert.equal(site.exists("_site/assets"), false);
     const originals = new Set(fs.readdirSync(path.join(site.dir, "assets")));
     assert.ok(originals.size > 0);
-    for (const f of site.walk("_site")) assert.ok(!originals.has(path.basename(f)), `${f} is an original`);
+    const videoDir = path.join(site.dir, "_site", "video");
+    for (const f of site.walk("_site")) {
+      // Videos are published as-is by design (D-07); posters are always hashed derivatives, never originals.
+      if (path.dirname(f) === videoDir && VIDEO_EXTS.has(path.extname(f).toLowerCase())) continue;
+      assert.ok(!originals.has(path.basename(f)), `${f} is an original`);
+    }
     assert.ok(site.walk("_site/img").some((f) => f.endsWith(".webp")));
   } finally {
     site.cleanup();
