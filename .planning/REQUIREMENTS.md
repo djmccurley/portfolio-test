@@ -42,8 +42,8 @@
 ### Media Embeds
 
 - [ ] **MEDIA-01**: Owner can embed a self-hosted video (controls, poster, no autoplay)
-- [ ] **MEDIA-02**: Owner can embed a YouTube or Vimeo video with a short block (privacy-friendly domain, lazy-loaded, titled iframe)
-- [ ] **MEDIA-03**: Owner can embed a playable itch.io game with a short block (titled, lazy-loaded, sized iframe with a visible "play on itch.io" fallback link)
+- [x] **MEDIA-02**: Owner can embed a YouTube or Vimeo video with a short block (privacy-friendly domain, lazy-loaded, titled iframe)
+- [x] **MEDIA-03**: Owner can embed a playable itch.io game with a short block (titled, lazy-loaded, sized iframe with a visible "play on itch.io" fallback link)
 
 ### Site Structure
 
@@ -119,8 +119,8 @@
 | IMG-04 | Phase 1 | Complete |
 | IMG-05 | Phase 3 | Pending |
 | MEDIA-01 | Phase 2 | Pending |
-| MEDIA-02 | Phase 2 | Pending |
-| MEDIA-03 | Phase 2 | Pending |
+| MEDIA-02 | Phase 2 | Complete |
+| MEDIA-03 | Phase 2 | Complete |
 | PUB-01 | Phase 1 | Complete |
 | PUB-02 | Phase 1 | Complete |
 | PUB-03 | Phase 1 | Complete |

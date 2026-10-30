@@ -60,7 +60,7 @@ Plans:
   4. Visitor can play a self-hosted video (controls, poster, no autoplay), a YouTube/Vimeo embed (privacy domain, lazy, titled) and an itch.io game with a visible "play on itch.io" fallback link
   5. Pages use semantic HTML and minimal brutalist CSS with no animation; keyboard users get a skip link, visible focus and AA contrast; the build warns on empty or filename-like alt text
 
-**Plans:** 3/5 plans executed
+**Plans:** 4/5 plans executed
 Plans:
 **Wave 1**
 
@@ -70,7 +70,7 @@ Plans:
 **Wave 2** *(blocked on Wave 1 completion)*
 
 - [x] 02-03-PLAN.md — Alt-text lint with `{decorative}` marker; tidepool page as the live block demo (wave 2)
-- [ ] 02-04-PLAN.md — YouTube/Vimeo (privacy domains) and itch.io embeds, `full` keyword (wave 2)
+- [x] 02-04-PLAN.md — YouTube/Vimeo (privacy domains) and itch.io embeds, `full` keyword (wave 2)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -117,6 +117,6 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
-| 2. Layout Blocks, Embeds and Design System | 3/5 | In Progress | - |
+| 2. Layout Blocks, Embeds and Design System | 4/5 | In Progress | - |
 | 3. Browsing, Lightbox and Standalone Pages | 0/? | Not started | - |
 | 4. Hardening and Launch Readiness | 0/? | Not started | - |
