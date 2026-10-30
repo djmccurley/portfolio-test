@@ -65,6 +65,18 @@ async function makeAsset(spec) {
   return img.toBuffer();
 }
 
+// The child env: the caller's shell never leaks an ELEVENTY_RUN_MODE into a fixture build, but a test may pass
+// one on purpose (to prove Eleventy overrides it).
+function childEnv(env, prefix) {
+  const e = { ...process.env };
+  delete e.ELEVENTY_RUN_MODE;
+  Object.assign(e, env);
+  delete e.PATH_PREFIX;
+  if (prefix !== undefined) e.PATH_PREFIX = prefix;
+  if (env.PATH_PREFIX !== undefined) e.PATH_PREFIX = env.PATH_PREFIX;
+  return e;
+}
+
 export async function makeSite({ files = {}, assets = {}, prefix, useRepoContent = false } = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "site-"));
   copyInto(path.join(ROOT, "eleventy.config.js"), path.join(dir, "eleventy.config.js"));
@@ -109,13 +121,27 @@ export async function makeSite({ files = {}, assets = {}, prefix, useRepoContent
   return {
     dir,
     build(env = {}) {
-      const e = { ...process.env, ...env };
-      delete e.PATH_PREFIX;
-      if (prefix !== undefined) e.PATH_PREFIX = prefix;
-      if (env.PATH_PREFIX !== undefined) e.PATH_PREFIX = env.PATH_PREFIX;
       const r = spawnSync(path.join(dir, "node_modules/.bin/eleventy"), [], {
         cwd: dir,
-        env: e,
+        env: childEnv(env, prefix),
+        encoding: "utf8",
+      });
+      return { code: r.status, stdout: r.stdout, stderr: r.stderr, output: `${r.stdout}\n${r.stderr}` };
+    },
+    // One build in Eleventy run mode `serve`, as `npm start` does, but without the server or watcher.
+    buildServe(env = {}) {
+      fs.writeFileSync(
+        path.join(dir, "run-serve.mjs"),
+        [
+          'import Eleventy from "@11ty/eleventy";',
+          'const elev = new Eleventy("content", "_site", { runMode: "serve" });',
+          "await elev.write();",
+          "",
+        ].join("\n")
+      );
+      const r = spawnSync(process.execPath, ["run-serve.mjs"], {
+        cwd: dir,
+        env: childEnv(env, prefix),
         encoding: "utf8",
       });
       return { code: r.status, stdout: r.stdout, stderr: r.stderr, output: `${r.stdout}\n${r.stderr}` };
