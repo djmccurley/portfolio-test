@@ -24,25 +24,25 @@ status: all_fixed
 
 ## Fixed Issues
 
-### WR-01: `main:focus { outline: none }` loses to the global focus-visible rule
+### WR-01: `main:focus { outline: none }` loses to the global focus-visible rule, so the skip link target gets a page-wide ring
 
 **Files modified:** `content/style.css`, `test/design.test.js`
 **Commit:** 396e4c7
 **Applied fix:** The skip target rule is now `main[tabindex="-1"]:focus, main[tabindex="-1"]:focus-visible { outline: none; }`. Its specificity is (0,2,1), which beats the (0,2,0) ring rule. The design test now asserts this selector instead of the old text. Whether the specificity actually wins is not measured by the test, which only matches the CSS text. Worth a quick check in a browser.
 
-### WR-02: Trailing hard break after an image inside a layout block gives a wrong error
+### WR-02: A trailing hard break after an image inside a layout block gives a wrong and misleading error
 
 **Files modified:** `lib/blocks.js`, `test/block-errors.test.js`
 **Commit:** 3212c85
 **Applied fix:** `isImageOnly` now accepts hard breaks via `isBreak`, so a paste with trailing spaces is no longer rejected. The failure path guards `firstNonImage() === -1` and falls back to the paragraph's first line. Linked images (`link_open`) now raise a specific message: "cannot hold linked images. Remove the link or move the image outside the block." The existing linked-image test was updated to expect the new message. New tests cover the hard-break case and the linked-image error line.
 
-### WR-03: Out-of-range date passes validation and crashes Eleventy
+### WR-03: An out-of-range date passes validation and crashes Eleventy without naming the field's error format
 
 **Files modified:** `lib/frontmatter.js`, `lib/validate.js`, `eleventy.config.js`, `test/content-errors.test.js`
 **Commit:** e2d14ac
 **Applied fix:** Added a shared `validDate()` helper in `lib/frontmatter.js` that checks real calendar months and days. `lenientFrontMatter` in `eleventy.config.js` and the validator in `lib/validate.js` both use it, and the duplicated `DATE_RE` is gone. `2024-13-45`, `2024-02-30` and `2024-00-10` now get the friendly "must be YYYY, YYYY-MM or YYYY-MM-DD" error with the file named. A new build-level test covers all three. Status is "fixed" rather than "requires human verification", because the logic was exercised by the build test.
 
-### WR-04: CI tells the owner to run `shrink` for an oversize WebP that `shrink` never touches
+### WR-04: CI error tells the owner to run `shrink` for an oversize WebP that `shrink` never touches
 
 **Files modified:** `scripts/shrink.js`, `test/shrink.test.js`
 **Commit:** ea1f318
