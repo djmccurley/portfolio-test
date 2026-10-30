@@ -4,16 +4,16 @@ milestone: v1.0
 current_phase: 04
 current_phase_name: Hardening and Launch Readiness
 status: executing
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-10-30T22:15:16.501Z"
+stopped_at: Completed 04-02-PLAN.md
+last_updated: "2026-10-30T22:20:04.793Z"
 last_activity: 2026-10-30
 last_activity_desc: Phase 04 execution started
-state_head: dcab3464b3cc67280563628fa1c717a85182bf23
+state_head: a116ef4fe2b843cc0bfcce7c82d90e7e707896cd
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 21
-  completed_plans: 17
+  completed_plans: 18
 milestone_name: milestone
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-10-30)
 ## Current Position
 
 Phase: 04 (Hardening and Launch Readiness) — EXECUTING
-Plan: 2 of 5
+Plan: 3 of 5
 Status: Ready to execute
 Last activity: 2026-10-30 — Phase 04 execution started
 
@@ -66,6 +66,7 @@ Progress: [████████░░] 75%
 | Phase 03 P04 | 15min | 2 tasks | 7 files |
 | Phase 03 P05 | 5 min | 3 tasks | 10 files |
 | Phase 04 P01 | 20min | 3 tasks | 9 files |
+| Phase 04 P02 | 4 min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -102,6 +103,8 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 03]: Lightbox script URL is plain /lightbox.js (HtmlBasePlugin prefixes it); loaded with defer only on pages containing a zoom link
 - [Phase 03]: Design test no-script guard narrowed to deferred first-party lightbox.js with no inline body, only on pages with zoom links
 - [Phase 04]: 04-01: drafts dropped by a single fail-closed Eleventy preprocessor keyed on ELEVENTY_RUN_MODE serve/watch; drafted CV/Teaching pages warn and are hidden from the live nav
+- [Phase 04]: og:image is always a processed eleventy-img derivative (1200px JPEG, PNG for alpha); originals in assets/ are never linked
+- [Phase 04]: site.url holds the https origin only (validated); the subpath stays in PATH_PREFIX; absolute URLs come only from htmlBaseUrl(site.url)
 
 ### Pending Todos
 
@@ -113,6 +116,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-30T22:15:16.335Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-10-30T22:20:04.627Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None

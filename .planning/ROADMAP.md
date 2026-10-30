@@ -128,7 +128,7 @@ Plans:
   4. Owner can read a README listing every block and front matter field with examples
   5. Site is usable at 320px wide and 200% zoom without horizontal scrolling, verified under the real deployed prefix or domain
 
-**Plans:** 1/5 plans executed
+**Plans:** 2/5 plans executed
 Plans:
 **Wave 1**
 
@@ -136,7 +136,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 04-02-PLAN.md — Link previews: og/twitter/canonical head, absolute URLs via `site.url`, processed 1200px share image, default share image, `description` field, site.js validation (wave 2)
+- [x] 04-02-PLAN.md — Link previews: og/twitter/canonical head, absolute URLs via `site.url`, processed 1200px share image, default share image, `description` field, site.js validation (wave 2)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -156,4 +156,4 @@ Plans:
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
 | 2. Layout Blocks, Embeds and Design System | 6/6 | Complete    | 2026-10-30 |
 | 3. Browsing, Lightbox and Standalone Pages | 5/5 | Complete    | 2026-10-30 |
-| 4. Hardening and Launch Readiness | 1/5 | In Progress | - |
+| 4. Hardening and Launch Readiness | 2/5 | In Progress | - |
