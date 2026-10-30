@@ -64,7 +64,11 @@ test("lists, headings, raw HTML and linked images inside a block fail", () => {
   fails("::: full\n![a](x.webp)\n\n- item\n:::\n", 4, `block "::: full" ${ONLY_IMAGES}`);
   fails("::: grid-2\n![a](x.webp)\n\n## Heading\n:::\n", 4, `block "::: grid-2" ${ONLY_IMAGES}`);
   fails("::: grid-2\n![a](x.webp)\n\n<div>raw</div>\n:::\n", 4, `block "::: grid-2" ${ONLY_IMAGES}`);
-  fails("::: grid-2\n[![a](x.webp)](https://example.com)\n:::\n", 2, `block "::: grid-2" ${ONLY_IMAGES}`);
+  fails(
+    "::: grid-2\n[![a](x.webp)](https://example.com)\n:::\n",
+    2,
+    'block "::: grid-2" cannot hold linked images. Remove the link or move the image outside the block.'
+  );
 });
 
 test("a block with no images fails at the opening fence", () => {
@@ -172,4 +176,17 @@ test("a missing image on the second line of a paste reports that line", async ()
   lines.splice(12, 0, "![B](../../assets/nope.webp)");
   const out = await buildFails(lines.join("\n"));
   assert.ok(out.includes("e.md:13: image not found in assets/: ../../assets/nope.webp"), out);
+});
+
+test("a trailing hard break after an image is tolerated inside a block", () => {
+  const { html } = render("::: grid-2\n![a](x.webp)  \n![b](y.webp)\n:::\n");
+  assert.doesNotThrow(html);
+});
+
+test("linked images in a block get a specific error on the right line", () => {
+  fails(
+    "::: grid-2\n[![a](x.webp)](https://example.com)\n![b](y.webp)\n:::\n",
+    2,
+    'block "::: grid-2" cannot hold linked images. Remove the link or move the image outside the block.'
+  );
 });
