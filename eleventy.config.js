@@ -4,6 +4,7 @@ import { imageOptions } from "./lib/images.js";
 import { installBlocks } from "./lib/blocks.js";
 import { installAssetResolver } from "./lib/markdown.js";
 import { refreshAssets } from "./lib/assets.js";
+import { copyMedia } from "./lib/media.js";
 import { resetAltWarnings } from "./lib/alt-lint.js";
 import { parseFrontMatter } from "./lib/frontmatter.js";
 import { addValidation } from "./lib/validate.js";
@@ -33,6 +34,10 @@ export default async function (eleventyConfig) {
   eleventyConfig.on("eleventy.before", () => {
     resetAltWarnings(); // each rebuild under `npm start` prints the current warnings again
     return refreshAssets();
+  });
+  // Publish only the videos (and processed posters) that a `::: video` block named.
+  eleventyConfig.on("eleventy.after", async ({ dir }) => {
+    await copyMedia(dir.output);
   });
 
   // assets/ is never copied (IMG-03); only the stylesheet is passed through.

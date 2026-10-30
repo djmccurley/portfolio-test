@@ -46,7 +46,10 @@ test("full build: a self-hosted video renders a native player under the default 
   assert.equal(r.code, 0, r.output);
   const html = site.read("_site/movie/index.html");
   assert.ok(html.includes(videoMarkup(prefix)), html);
-  assert.doesNotMatch(html, /autoplay|\bloop\b|muted/);
+  // Check the attributes of the <video> tag (the title "Crab walk loop" legitimately contains "loop").
+  const tag = html.match(/<video[^>]*>/)[0];
+  assert.doesNotMatch(tag, /\s(autoplay|loop|muted)(?==|\s|>)/);
+  assert.doesNotMatch(html, /autoplay|muted/);
   assert.doesNotMatch(html, /<p>\s*<div class="embed"/);
   assert.ok(site.exists("_site/video/clip.mp4"));
   assert.deepEqual(fs.readFileSync(`${site.dir}/_site/video/clip.mp4`), CLIP);
