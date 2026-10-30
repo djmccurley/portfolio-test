@@ -5,12 +5,20 @@ titles: json
 findings:
   - id: WR-01
     severity: warning
-    disposition: fixed
-    title: "`main:focus { outline: none }` loses to the global focus-visible rule, so the skip link target gets a page-wide ring"
+    disposition: open
+    title: "false \"still over 10 MB\" warning for renamed videos (regression from the WR-04 fix)"
   - id: WR-02
     severity: warning
-    disposition: fixed
-    title: "A trailing hard break after an image inside a layout block gives a wrong and misleading error"
+    disposition: open
+    title: "text-only links in a layout block get the \"linked images\" error"
+  - id: IN-01
+    severity: info
+    disposition: open
+    title: "shrink's lossy re-encode of an over-cap WebP can still end over 10 MB, or grow the file"
+  - id: IN-02
+    severity: info
+    disposition: open
+    title: "`validDate` rejects years 0000 to 0099"
   - id: WR-03
     severity: warning
     disposition: fixed
@@ -19,14 +27,6 @@ findings:
     severity: warning
     disposition: fixed
     title: "CI error tells the owner to run `shrink` for an oversize WebP that `shrink` never touches"
-  - id: IN-01
-    severity: info
-    disposition: open
-    title: "\"a title cannot break out of its attribute\" test is partly vacuous"
-  - id: IN-02
-    severity: info
-    disposition: open
-    title: "Fonts come from Google's CDN while the embeds are built to be privacy-preserving"
   - id: IN-03
     severity: info
     disposition: open
@@ -35,23 +35,23 @@ findings:
     severity: info
     disposition: open
     title: "No aggregate cap on self-hosted video against the Pages size limit"
-open: 4
+open: 6
 total: 8
-recorded: 2026-10-30T11:38:29.779Z
+recorded: 2026-10-30T11:59:50.021Z
 ---
 
 # Phase 02: Code Review Disposition
 
 | Finding | Severity | Disposition | Source |
 |---------|----------|-------------|--------|
-| WR-01 | warning | fixed | 02-REVIEW-FIX.md |
-| WR-02 | warning | fixed | 02-REVIEW-FIX.md |
-| WR-03 | warning | fixed | 02-REVIEW-FIX.md |
-| WR-04 | warning | fixed | 02-REVIEW-FIX.md |
+| WR-01 | warning | open | - |
+| WR-02 | warning | open | - |
 | IN-01 | info | open | - |
 | IN-02 | info | open | - |
-| IN-03 | info | open | - |
-| IN-04 | info | open | - |
+| WR-03 | warning | fixed | 02-REVIEW-FIX.md (not in the current review) |
+| WR-04 | warning | fixed | 02-REVIEW-FIX.md (not in the current review) |
+| IN-03 | info | open | - (not in the current review) |
+| IN-04 | info | open | - (not in the current review) |
 
 Dispositions: `open` (recorded, not yet triaged), `fixed`, `skipped`, `deferred`.
 Set `deferred` by hand and put the reason in the Source cell; both are preserved. A `|` in the reason is kept as prose and escaped on the next run.
