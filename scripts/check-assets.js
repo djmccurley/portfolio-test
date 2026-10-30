@@ -4,7 +4,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import sharp from "sharp";
 import { buildIndex } from "../lib/assets.js";
-import { VIDEO_EXTS, VIDEO_MAX_BYTES, VIDEO_MAX_MB } from "../lib/limits.js";
+import { VIDEO_EXTS, VIDEO_MAX_BYTES, VIDEO_MAX_MB, PDF_EXTS, PDF_MAX_BYTES, PDF_MAX_MB } from "../lib/limits.js";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 const MAX_EDGE = 3000;
@@ -31,11 +31,17 @@ export async function checkAssets(dir = "assets") {
     if (UNCONVERTED.has(ext)) {
       errors.push(`assets/${f}: unconverted ${ext} (run npm run shrink)`);
     }
-    // Size check runs before any decode. Videos get their own cap and are never decoded.
+    // Size check runs before any decode. Videos and PDFs get their own caps and are never decoded.
     const size = fs.statSync(full).size;
     if (VIDEO_EXTS.has(ext)) {
       if (size > VIDEO_MAX_BYTES) {
         errors.push(`assets/${f}: over ${VIDEO_MAX_MB} MB (video limit; compress it or host it on YouTube/Vimeo)`);
+      }
+      continue;
+    }
+    if (PDF_EXTS.has(ext)) {
+      if (size > PDF_MAX_BYTES) {
+        errors.push(`assets/${f}: over ${PDF_MAX_MB} MB (PDF limit; compress it or split it)`);
       }
       continue;
     }
@@ -65,8 +71,9 @@ if (invoked) {
   if (errors.length > 0) {
     for (const e of errors) console.error(e);
     console.error(
-    "Run `npm run shrink` locally for PNG/JPEG/HEIC/WebP; GIF and AVIF must be reduced by hand; compress videos below 50 MB. Then commit and push again."
-  );
+      "Run `npm run shrink` locally for PNG/JPEG/HEIC/WebP; GIF and AVIF must be reduced by hand; " +
+        `compress videos below ${VIDEO_MAX_MB} MB and PDFs below ${PDF_MAX_MB} MB. Then commit and push again.`
+    );
     process.exit(1);
   }
   console.log(`check-assets: OK (${fs.readdirSync("assets").filter((n) => !n.startsWith(".")).length} files)`);

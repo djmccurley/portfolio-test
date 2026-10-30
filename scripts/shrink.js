@@ -6,7 +6,7 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 import sharp from "sharp";
-import { VIDEO_EXTS, VIDEO_MAX_BYTES, VIDEO_MAX_MB } from "../lib/limits.js";
+import { VIDEO_EXTS, VIDEO_MAX_BYTES, VIDEO_MAX_MB, PDF_EXTS, PDF_MAX_BYTES, PDF_MAX_MB } from "../lib/limits.js";
 
 const ASSETS = "assets";
 const MAX_EDGE = 3000;
@@ -238,6 +238,17 @@ export async function main(argv = process.argv.slice(2)) {
     fail(
       `Videos are never re-encoded; compress these below ${VIDEO_MAX_MB} MB or host them on YouTube/Vimeo:\n  ` +
         bigVideos.map((n) => `${n}: over ${VIDEO_MAX_MB} MB`).join("\n  ")
+    );
+  }
+
+  // PDFs are never converted either (only renamed to a slug), so reject oversized ones the same way.
+  const bigPdfs = names.filter(
+    (n) => PDF_EXTS.has(path.extname(n).toLowerCase()) && fs.statSync(path.join(ASSETS, n)).size > PDF_MAX_BYTES
+  );
+  if (bigPdfs.length > 0) {
+    fail(
+      `PDFs are never converted; compress these below ${PDF_MAX_MB} MB or split them:\n  ` +
+        bigPdfs.map((n) => `${n}: over ${PDF_MAX_MB} MB`).join("\n  ")
     );
   }
 
