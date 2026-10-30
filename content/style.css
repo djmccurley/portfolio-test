@@ -88,6 +88,280 @@ main:focus {
 }
 
 /* ==========================================================================
+   Page column: one wide, left-aligned column on a named-line grid.
+   full-start..full-end is the viewport; content-start..content-end is the
+   column. Full-bleed blocks use the outer lines, so no 100vw tricks and no
+   horizontal scrollbar.
+   ========================================================================== */
+body > header,
+main {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--page-margin), 1fr)
+    [content-start] min(100% - 2 * var(--page-margin), var(--column-max))
+    [content-end] minmax(var(--page-margin), 1fr)
+    [full-end];
+}
+
+body > header > *,
+main > * {
+  grid-column: content;
+  margin: 0;
+  min-width: 0;
+}
+
+main > .full {
+  grid-column: full;
+}
+
+body > header {
+  padding-block: 1rem;
+}
+
+body > header > a {
+  justify-self: start;
+  font-weight: 700;
+}
+
+main {
+  padding-bottom: 4rem;
+}
+
+/* ==========================================================================
+   Prose: capped at the reading measure, always left-aligned
+   ========================================================================== */
+main > :is(p:not(.lone-image), h1, h2, h3, ul, ol, dl, blockquote, pre),
+main > :not(.layout, .embed, figure, .lone-image) :is(p, h1, h2, h3, ul, ol, dl, blockquote, pre) {
+  max-width: var(--measure);
+}
+
+h1,
+h2,
+h3,
+p,
+li,
+dd,
+figcaption,
+a {
+  overflow-wrap: break-word;
+}
+
+/* ==========================================================================
+   Type scale: four sizes (1.125, 0.875, 1.5, 2.5rem), two weights (400, 700)
+   ========================================================================== */
+h1,
+h2,
+h3 {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.125rem;
+}
+
+strong,
+b {
+  font-weight: 700;
+}
+
+em,
+i {
+  font-style: italic;
+}
+
+.meta,
+time,
+dt,
+figcaption {
+  font-size: 0.875rem;
+}
+
+dt {
+  font-weight: 700;
+}
+
+dd {
+  margin: 0 0 0.5rem;
+}
+
+figcaption {
+  font-style: italic;
+}
+
+code,
+pre {
+  font-family: ui-monospace, monospace;
+  font-size: 0.875rem;
+}
+
+pre {
+  white-space: pre-wrap;
+}
+
+hr {
+  border: 0;
+  border-top: 2px solid var(--ink);
+}
+
+blockquote {
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid var(--ink);
+}
+
+/* project meta list: two columns when there is room, stacked below */
+@media (min-width: 40em) {
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 1rem;
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+/* ==========================================================================
+   Vertical rhythm: margin-top only
+   ========================================================================== */
+main > * + * {
+  margin-top: var(--grid-gap);
+}
+
+main > h1 + *,
+main > dl + * {
+  margin-top: 1.5rem;
+}
+
+main > :is(.layout, .embed, figure, .lone-image),
+main > :is(.layout, .embed, figure, .lone-image) + * {
+  margin-top: var(--block-gap);
+}
+
+main > * + :is(h2, h3) {
+  margin-top: 3rem;
+}
+
+main > :is(h2, h3) + * {
+  margin-top: 1rem;
+}
+
+.embed + .embed-link {
+  margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+   Images, figures and layout blocks. Images keep their own aspect ratio:
+   never cropped, never forced, never clipped.
+   ========================================================================== */
+picture {
+  display: block;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+main figure,
+.layout > figure {
+  margin: 0;
+  min-width: 0;
+}
+
+figcaption {
+  margin-top: 0.5rem;
+}
+
+.layout {
+  display: grid;
+  gap: var(--grid-gap);
+  align-items: start;
+}
+
+.layout img {
+  width: 100%;
+  height: auto;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.layout.full {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* captions in a full-bleed block line up with the text column */
+.full figcaption {
+  padding-inline-start: max(var(--page-margin), calc((100% - var(--column-max)) / 2));
+  padding-inline-end: var(--page-margin);
+}
+
+/* collapse with CSS only; custom properties cannot be used in media queries */
+@media (max-width: 59.99em) {
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 39.99em) {
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ==========================================================================
+   Embeds: reserved ratios so nothing jumps while loading
+   ========================================================================== */
+.embed iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.embed video {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--ink);
+}
+
+.embed.itch {
+  max-width: calc(var(--w) * 1px);
+}
+
+.embed.itch iframe {
+  aspect-ratio: var(--w) / var(--h);
+}
+
+.embed.itch.full {
+  max-width: none;
+}
+
+/* ==========================================================================
    Reduced motion: nothing on this site moves, this guard keeps it that way
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
