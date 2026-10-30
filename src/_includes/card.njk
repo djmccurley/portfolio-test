@@ -5,6 +5,7 @@
     <a class="card" href="{{ project.url }}">
       <img src="{{ project.data.cover | assetSrc }}" alt="{{ project.data.cover_alt }}" sizes="(min-width: 90em) 416px, (min-width: 60em) 30vw, (min-width: 40em) 45vw, 90vw"{% if loop.first %} loading="eager" fetchpriority="high"{% endif %}>
       <span class="card-title">{{ project.data.title }}</span>
+      {% if project.data.draft %}<strong class="draft-label">Draft</strong>{% endif %}
       <time class="card-date" datetime="{{ project.data.date }}">{{ project.data.date }}</time>
     </a>
   </li>
