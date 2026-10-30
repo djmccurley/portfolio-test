@@ -149,3 +149,64 @@ test("link previews add no client script", async () => {
     }
   }
 });
+
+// ---------------------------------------------------------------------------
+// Default share image
+// ---------------------------------------------------------------------------
+
+test("every page without a cover previews with the default image and its alt", async () => {
+  const prefix = defaultPrefix();
+  const { site, r } = await build(P);
+  assert.equal(r.code, 0, r.output);
+  const re = new RegExp(`^${escRe(siteData.url + prefix)}img/[^/]+-1200\\.jpeg$`);
+  for (const rel of ["index.html", "work/index.html", "tags/games/index.html", "about/index.html", "404.html"]) {
+    const html = site.read(`_site/${rel}`);
+    const img = metaOf(html, "og:image");
+    assert.match(img, re, `${rel}: ${img}`);
+    assert.ok(site.exists(`_site/img/${img.split("/").pop()}`), `${rel}: ${img} not written`);
+    assert.equal(metaOf(html, "og:image:alt"), siteData.defaultImageAlt, rel);
+  }
+});
+
+test("the default image's original name never appears in the built HTML", async () => {
+  const { site, r } = await build(P);
+  assert.equal(r.code, 0, r.output);
+  for (const f of allHtml(site)) {
+    assert.ok(!fs.readFileSync(f, "utf8").includes(siteData.defaultImage), `${f} names ${siteData.defaultImage}`);
+  }
+});
+
+test("a transparent cover keeps PNG and a small cover is not upscaled", async () => {
+  const { site, r } = await build(
+    {
+      "content/projects/clear.md": proj({ title: "Clear", cover: "t.webp", alt: "Clear cover" }),
+      "content/projects/small.md": proj({ title: "Small", cover: "s.webp", alt: "Small cover" }),
+    },
+    {
+      assets: {
+        "t.webp": { width: 800, height: 600, format: "webp", alpha: true },
+        "s.webp": { width: 900, height: 600, format: "webp" },
+      },
+    }
+  );
+  assert.equal(r.code, 0, r.output);
+  assert.match(metaOf(site.read("_site/clear/index.html"), "og:image"), /-800\.png$/);
+  assert.match(metaOf(site.read("_site/small/index.html"), "og:image"), /-900\.jpeg$/);
+});
+
+test("the owner's real site builds with a default-image preview on the homepage", async () => {
+  const site = await makeSite({ useRepoContent: true });
+  sites.push(site);
+  const r = site.build();
+  assert.equal(r.code, 0, r.output);
+  const img = metaOf(site.read("_site/index.html"), "og:image");
+  assert.ok(img && site.exists(`_site/img/${img.split("/").pop()}`), img);
+});
+
+test("a fixture can supply its own default image file", async () => {
+  const { site, r } = await build(P, {
+    assets: { ...COVER, [siteData.defaultImage]: { width: 600, height: 315, format: "webp" } },
+  });
+  assert.equal(r.code, 0, r.output);
+  assert.match(metaOf(site.read("_site/index.html"), "og:image"), /-600\.jpeg$/);
+});
