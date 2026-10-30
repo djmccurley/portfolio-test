@@ -4,16 +4,16 @@ milestone: v1.0
 current_phase: 02
 current_phase_name: Layout Blocks, Embeds and Design System
 status: executing
-stopped_at: Phase 2 UI-SPEC approved
-last_updated: "2026-10-30T03:53:01.366Z"
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-10-30T04:13:44.230Z"
 last_activity: 2026-10-29
-last_activity_desc: Phase 02 planning complete
-state_head: 43324d14b603602203869099a326617b42f015a3
+last_activity_desc: Phase 02 execution started
+state_head: 5367c63ba2a8998447491f23d226f9032ea45e1a
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 10
-  completed_plans: 5
+  completed_plans: 6
 milestone_name: milestone
 ---
 
@@ -24,14 +24,14 @@ milestone_name: milestone
 See: .planning/PROJECT.md (updated 2026-10-28)
 
 **Core value:** Writing a new project page should be as fast as typing markdown, then push, and it's live, with no CMS, template fights or upload caps.
-**Current focus:** Phase 01 — push-to-live-with-images
+**Current focus:** Phase 02 — Layout Blocks, Embeds and Design System
 
 ## Current Position
 
-Phase: 02 (Layout Blocks, Embeds and Design System) — READY TO EXECUTE
-Plan: Not started
+Phase: 02 (Layout Blocks, Embeds and Design System) — EXECUTING
+Plan: 2 of 5
 Status: Ready to execute
-Last activity: 2026-10-29 — Phase 02 planning complete
+Last activity: 2026-10-29 — Phase 02 execution started
 
 Progress: [██████████] 100%
 
@@ -48,6 +48,11 @@ Progress: [██████████] 100%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 5 | - | - |
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 02 P01 | 25 min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -60,6 +65,10 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - Roadmap: 4 coarse phases; Phase 1 front-loads asset resolver, base path, image pipeline and CI cache.
 - [Phase 01]: Phase 01-01: js-yaml pinned ^4; packages approved by owner
 - [Phase ?]: 01-05: repo portfolio-test public, PATH_PREFIX /portfolio-test/, image cache key img-v1-hash(assets)
+- [Phase 02]: Single catch-all markdown-it-container named block so unknown fence names reach our own rule and fail with the valid-block list
+- [Phase 02]: Images outside blocks: titled image-only paragraph becomes one figure per image, untitled keeps p.lone-image (class instead of :has())
+- [Phase 02]: Captions are plain escaped text from the markdown title; title attribute removed from img
+- [Phase 02]: Per-image source line (meta.lineIndex) so block and missing-image errors point at the right line of a multi-line paste
 
 ### Pending Todos
 
@@ -72,6 +81,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-30T02:49:21.228Z
-Stopped at: Phase 2 UI-SPEC approved
-Resume file: .planning/phases/02-layout-blocks-embeds-and-design-system/02-UI-SPEC.md
+Last session: 2026-10-30T04:13:44.185Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: None

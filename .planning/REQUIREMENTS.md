@@ -19,15 +19,15 @@
 - [x] **AUTH-01**: Owner can create a project by adding one `.md` file with front matter (title, date, tags, summary, cover image + alt, role/client/tools)
 - [x] **AUTH-02**: Owner can paste an image in VS Code (saved to the shared `assets/` folder with a prefixed filename) and the resulting `![alt](path)` link renders correctly on the built site
 - [x] **AUTH-03**: Owner can paste full-size images of any size; on commit, images over ~3000px are scaled down, PNG/JPEG are converted to WebP, and the `.md` links are rewritten automatically (GIFs and transparency handled safely)
-- [ ] **AUTH-04**: Owner can write raw HTML inside markdown as a fallback for anything the block syntax doesn't cover
+- [x] **AUTH-04**: Owner can write raw HTML inside markdown as a fallback for anything the block syntax doesn't cover
 - [ ] **AUTH-05**: Owner has a short authoring reference (README) listing every block and front matter field with examples
 
 ### Layout Blocks
 
-- [ ] **BLOCK-01**: Owner can type a multi-column image grid (2, 3 or 4 columns) inline with markdown shorthand (e.g. `::: grid-3` … `:::`)
+- [x] **BLOCK-01**: Owner can type a multi-column image grid (2, 3 or 4 columns) inline with markdown shorthand (e.g. `::: grid-3` … `:::`)
 - [ ] **BLOCK-02**: Owner can type a full-width (full-bleed) image block inline
 - [ ] **BLOCK-03**: Owner can freely mix grids, full-width images and normal text within one page
-- [ ] **BLOCK-04**: Owner can add captions to images that render as `<figure>`/`<figcaption>`
+- [x] **BLOCK-04**: Owner can add captions to images that render as `<figure>`/`<figcaption>`
 - [ ] **BLOCK-05**: Images in grids keep their own aspect ratios (no forced cropping)
 - [ ] **BLOCK-06**: Grids collapse to fewer columns on narrow screens with no layout JS
 
@@ -105,12 +105,12 @@
 | AUTH-01 | Phase 1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Complete |
-| AUTH-04 | Phase 2 | Pending |
+| AUTH-04 | Phase 2 | Complete |
 | AUTH-05 | Phase 4 | Pending |
-| BLOCK-01 | Phase 2 | Pending |
+| BLOCK-01 | Phase 2 | Complete |
 | BLOCK-02 | Phase 2 | Pending |
 | BLOCK-03 | Phase 2 | Pending |
-| BLOCK-04 | Phase 2 | Pending |
+| BLOCK-04 | Phase 2 | Complete |
 | BLOCK-05 | Phase 2 | Pending |
 | BLOCK-06 | Phase 2 | Pending |
 | IMG-01 | Phase 1 | Complete |
