@@ -2,6 +2,7 @@ import test, { after } from "node:test";
 import assert from "node:assert/strict";
 import siteData from "../src/_data/site.js";
 import { makeSite, defaultPrefix } from "./helpers/site.js";
+import { resolveFeatured } from "../lib/validate.js";
 
 const sites = [];
 after(() => sites.forEach((s) => s.cleanup()));
@@ -128,3 +129,45 @@ test("unknown and duplicate entries are both reported in one build", async () =>
   assert.ok(r.output.includes(DUP("a")), r.output);
 });
 
+// ---------------------------------------------------------------------------
+// resolveFeatured (unit) and the shipped list
+// ---------------------------------------------------------------------------
+
+const NOT_LIST = 'src/_data/featured.js: must export a list of project slugs, e.g. export default ["tidepool-game"];';
+const pairs = [
+  { slug: "a", item: { id: "A" } },
+  { slug: "b", item: { id: "B" } },
+];
+
+test("resolveFeatured returns items in list order with no errors", () => {
+  const r = resolveFeatured(["b", "a"], pairs);
+  assert.deepEqual(r.errors, []);
+  assert.deepEqual(r.items.map((i) => i.id), ["B", "A"]);
+});
+
+test("resolveFeatured of an empty list returns nothing", () => {
+  assert.deepEqual(resolveFeatured([], pairs), { errors: [], items: [] });
+});
+
+test("resolveFeatured rejects a non-list export with one error", () => {
+  for (const bad of ["a", {}]) {
+    const r = resolveFeatured(bad, pairs);
+    assert.deepEqual(r.errors, [NOT_LIST]);
+    assert.deepEqual(r.items, []);
+  }
+});
+
+test("a non-list featured.js fails the build", async () => {
+  const { r } = await build({ ...PROJECTS, ...featuredFile('"a"') });
+  assert.notEqual(r.code, 0);
+  assert.ok(r.output.includes(NOT_LIST), r.output);
+});
+
+test("the repo build features tidepool-game on the homepage", async () => {
+  const prefix = defaultPrefix();
+  const { site, r } = await build({}, { useRepoContent: true });
+  assert.equal(r.code, 0, r.output);
+  const html = site.read("_site/index.html");
+  assert.ok(html.includes("<h2>Selected work</h2>"));
+  assert.ok(html.includes(`<a class="card" href="${prefix}tidepool-game/">`), html);
+});
