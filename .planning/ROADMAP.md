@@ -96,7 +96,7 @@ Plans:
   4. Student-work page lists links and PDF downloads and never shows in the feed or tag pages
   5. Visitor can open any content image full-size via a plain link without JS, enhanced to a keyboard-operable native dialog (Escape closes, focus returns)
 
-**Plans:** 3/5 plans executed
+**Plans:** 4/5 plans executed
 Plans:
 **Wave 1**
 
@@ -109,7 +109,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 03-04-PLAN.md — Curated homepage: ordered featured list, Selected work grid, All work link, build-failing bad slugs (wave 3)
+- [x] 03-04-PLAN.md — Curated homepage: ordered featured list, Selected work grid, All work link, build-failing bad slugs (wave 3)
 - [ ] 03-05-PLAN.md — Full-size images: zoom links to the largest variant (no JS), native dialog via deferred lightbox.js, dialog CSS (wave 3)
 
 **UI hint**: yes
@@ -137,5 +137,5 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
 | 2. Layout Blocks, Embeds and Design System | 6/6 | Complete    | 2026-10-30 |
-| 3. Browsing, Lightbox and Standalone Pages | 3/5 | In Progress | - |
+| 3. Browsing, Lightbox and Standalone Pages | 4/5 | In Progress | - |
 | 4. Hardening and Launch Readiness | 0/? | Not started | - |

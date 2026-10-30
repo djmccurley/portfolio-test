@@ -4,16 +4,16 @@ milestone: v1.0
 current_phase: 03
 current_phase_name: Browsing, Lightbox and Standalone Pages
 status: executing
-stopped_at: Completed 03-03-PLAN.md
-last_updated: "2026-10-30T16:57:54.632Z"
+stopped_at: Completed 03-04-PLAN.md
+last_updated: "2026-10-30T17:02:15.082Z"
 last_activity: 2026-10-30
 last_activity_desc: Phase 03 execution started
-state_head: 09b56193d11be281ad74367b545e6881ed702b6f
+state_head: b29719594c870a0dd0a1989057ef17cad7e8bdfa
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 16
-  completed_plans: 14
+  completed_plans: 15
 milestone_name: milestone
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-10-30)
 ## Current Position
 
 Phase: 03 (Browsing, Lightbox and Standalone Pages) — EXECUTING
-Plan: 4 of 5
+Plan: 5 of 5
 Status: Ready to execute
 Last activity: 2026-10-30 — Phase 03 execution started
 
@@ -62,6 +62,7 @@ Progress: [█████░░░░░] 50%
 | Phase 03 P01 | 15 min | 3 tasks | 11 files |
 | Phase 03 P02 | 20min | 3 tasks | 12 files |
 | Phase 03 P03 | 25 min | 3 tasks | 15 files |
+| Phase 03 P04 | 15min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -92,6 +93,7 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 03]: Only PDFs a page links are published to _site/pdf/ (link-driven publishing)
 - [Phase 03]: tags.js holds { slug, label } objects; tag pages paginate plain defs, setDataDeepMerge(false), templates read projectTags never tags
 - [Phase 03]: A non-list tags.js export is reported from the config function because Eleventy aborts on global tags without naming the file
+- [Phase 03]: Featured slugs are read from the data cascade in the featured collection and validated by resolveFeatured; missing list means no featured projects
 
 ### Pending Todos
 
@@ -103,6 +105,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-30T16:57:54.520Z
-Stopped at: Completed 03-03-PLAN.md
+Last session: 2026-10-30T17:02:14.974Z
+Stopped at: Completed 03-04-PLAN.md
 Resume file: None
