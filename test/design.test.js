@@ -171,14 +171,78 @@ test("grids: gap, top alignment, columns and collapse queries", () => {
   assert.ok(/\.grid-2[\s\S]*\.grid-3[\s\S]*\.grid-4[\s\S]*grid-template-columns:\s*minmax\(0, 1fr\)/.test(phone[1]));
 });
 
-test("grid images are never cropped", () => {
+// Every { selector, body } pair in the stylesheet, media-query contents included.
+function allRules(css) {
+  return [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ selector: m[1].replace(/\s+/g, " ").trim(), body: m[2] }));
+}
+
+test("grid images are never cropped; only card covers may be", () => {
   const body = rule(CSS, ".layout img");
   assert.ok(body, ".layout img rule missing");
   assert.match(body, /width:\s*100%/);
   assert.match(body, /height:\s*auto/);
-  assert.ok(!/object-fit/.test(CSS), "object-fit is forbidden");
-  assert.ok(!/img[^{]*{[^}]*aspect-ratio/.test(CSS), "aspect-ratio on img is forbidden");
+  for (const { selector, body: b } of allRules(CSS)) {
+    if (/object-fit/.test(b)) assert.ok(selector.startsWith(".cards"), `object-fit outside .cards: ${selector}`);
+    if (/img/.test(selector) && /aspect-ratio/.test(b)) {
+      assert.ok(selector.startsWith(".cards"), `aspect-ratio on img outside .cards: ${selector}`);
+    }
+  }
   assert.ok(!/overflow:\s*hidden/.test(CSS), "overflow clipping is forbidden");
+});
+
+test("card grid: 3 columns, 4:3 centred covers, collapse to 2 and 1", () => {
+  const cards = rule(CSS, ".cards");
+  assert.ok(cards, ".cards rule missing");
+  assert.match(cards, /display:\s*grid/);
+  assert.ok(cards.includes("repeat(3, minmax(0, 1fr))"));
+  assert.match(cards, /gap:\s*var\(--block-gap\) var\(--grid-gap\)/);
+  assert.match(cards, /align-items:\s*start/);
+  assert.match(cards, /list-style:\s*none/);
+  const img = rule(CSS, ".cards img");
+  assert.ok(img, ".cards img rule missing");
+  assert.match(img, /aspect-ratio:\s*4 \/ 3/);
+  assert.match(img, /object-fit:\s*cover/);
+  assert.match(img, /width:\s*100%/);
+  const tablet = /@media \(max-width: 59\.99em\)\s*{([\s\S]*?\n})/.exec(CSS);
+  assert.ok(/\.cards[\s\S]*repeat\(2, minmax\(0, 1fr\)\)/.test(tablet[1]), ".cards 2 columns");
+  const phone = /@media \(max-width: 39\.99em\)\s*{([\s\S]*?\n})/.exec(CSS);
+  assert.ok(/\.cards[\s\S]*grid-template-columns:\s*minmax\(0, 1fr\)/.test(phone[1]), ".cards 1 column");
+});
+
+test("site header wraps; current links are black and bold", () => {
+  const row = rule(CSS, ".header-row");
+  assert.ok(row, ".header-row missing");
+  assert.match(row, /display:\s*flex/);
+  assert.match(row, /flex-wrap:\s*wrap/);
+  assert.match(rule(CSS, ".site-name") ?? "", /font-weight:\s*700/);
+  assert.ok(!allRules(CSS).some((r) => r.selector === "body > header > a"), "old header link rule is gone");
+  const current = rule(CSS, "a[aria-current]");
+  assert.ok(current, "a[aria-current] missing");
+  assert.match(current, /color:\s*var\(--ink\)/);
+  assert.match(current, /font-weight:\s*700/);
+  const link = CSS.search(/a,\s*a:visited\s*{/);
+  assert.ok(link >= 0 && CSS.indexOf("a[aria-current]") > link, "a[aria-current] must follow the link rule");
+});
+
+test("card grids escape the prose cap and keep the heading rhythm", () => {
+  const caps = allRules(CSS).filter((r) => /max-width:\s*var\(--measure\)/.test(r.body));
+  const cap = caps.find((r) => r.selector.includes("p:not(.lone-image)"));
+  assert.ok(cap, "prose cap rule missing");
+  const parts = cap.selector.split(/, (?=main >)/);
+  assert.equal(parts.length, 2);
+  for (const sel of parts) {
+    assert.ok(sel.includes("ul:not(.cards)"), `prose cap selector ${sel.trim()}`);
+  }
+
+  const blocks = ".layout, .embed, figure, .lone-image, .cards";
+  const blockRule = `main > :is(${blocks}), main > :is(${blocks}) + *`;
+  assert.match(rule(CSS, blockRule) ?? "", /margin-top:\s*var\(--block-gap\)/);
+  const above = `main > * + :is(h2, h3), main > :is(${blocks}) + :is(h2, h3)`;
+  const below = `main > :is(h2, h3) + *, main > :is(h2, h3) + :is(${blocks})`;
+  assert.match(rule(CSS, above) ?? "", /margin-top:\s*3rem/);
+  assert.match(rule(CSS, below) ?? "", /margin-top:\s*1rem/);
+  const at = (sel) => CSS.replace(/\s+/g, " ").indexOf(sel.replace(/\s+/g, " "));
+  assert.ok(at(above) > at(blockRule) && at(below) > at(blockRule), "heading rules must follow the block rule");
 });
 
 test("only four font sizes and two weights", () => {
