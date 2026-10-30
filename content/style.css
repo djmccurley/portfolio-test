@@ -319,6 +319,13 @@ img {
   height: auto;
 }
 
+/* the link around a content image that opens it full-size (IMG-05); keeps the global focus ring */
+a.zoom {
+  display: block;
+  cursor: zoom-in;
+  text-decoration: none;
+}
+
 main figure,
 .layout > figure {
   margin: 0;

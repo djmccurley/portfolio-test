@@ -3,6 +3,7 @@ import { HtmlBasePlugin } from "@11ty/eleventy";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import { imageOptions } from "./lib/images.js";
 import { installBlocks } from "./lib/blocks.js";
+import { zoomPlugin } from "./lib/zoom.js";
 import { installAssetResolver } from "./lib/markdown.js";
 import { refreshAssets, resolveAsset } from "./lib/assets.js";
 import { copyMedia } from "./lib/media.js";
@@ -32,6 +33,9 @@ export default async function (eleventyConfig) {
 
   eleventyConfig.addPlugin(HtmlBasePlugin);
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, imageOptions);
+  // Priorities are descending: eleventy-img (-1) runs first and publishes the hashed variants, then the
+  // zoom links are finished from them, then HtmlBasePlugin (-2) adds the path prefix to their hrefs.
+  eleventyConfig.htmlTransformer.addPosthtmlPlugin("html", zoomPlugin, { priority: -1.5 });
 
   eleventyConfig.amendLibrary("md", (md) => {
     installBlocks(md);
