@@ -42,7 +42,9 @@ test("project page builds", async () => {
     assert.match(html, /<picture/);
     assert.match(html, /type="image\/webp"/);
     assert.match(html, /480w/);
-    const imgTag = html.match(/<img[^>]*>/g).find((t) => /width=/.test(t));
+    // The widest image carries the responsive attributes (a 308px source has no srcset to size).
+    const widthOf = (t) => Number(t.match(/ width="(\d+)"/)?.[1] ?? 0);
+    const imgTag = html.match(/<img[^>]*>/g).sort((a, b) => widthOf(b) - widthOf(a))[0];
     assert.ok(imgTag, "img with width");
     assert.match(imgTag, /height=/);
     assert.match(imgTag, /decoding="async"/);

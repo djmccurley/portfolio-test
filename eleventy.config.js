@@ -4,6 +4,7 @@ import { imageOptions } from "./lib/images.js";
 import { installBlocks } from "./lib/blocks.js";
 import { installAssetResolver } from "./lib/markdown.js";
 import { refreshAssets } from "./lib/assets.js";
+import { resetAltWarnings } from "./lib/alt-lint.js";
 import { parseFrontMatter } from "./lib/frontmatter.js";
 import { addValidation } from "./lib/validate.js";
 
@@ -29,7 +30,10 @@ export default async function (eleventyConfig) {
     installAssetResolver(md);
   });
   await refreshAssets();
-  eleventyConfig.on("eleventy.before", () => refreshAssets());
+  eleventyConfig.on("eleventy.before", () => {
+    resetAltWarnings(); // each rebuild under `npm start` prints the current warnings again
+    return refreshAssets();
+  });
 
   // assets/ is never copied (IMG-03); only the stylesheet is passed through.
   eleventyConfig.addPassthroughCopy({ "content/style.css": "style.css" });
