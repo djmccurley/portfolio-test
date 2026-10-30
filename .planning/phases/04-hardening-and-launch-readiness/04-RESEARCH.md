@@ -516,19 +516,26 @@ Fixture with three projects (dates 2022, 2023, 2024): newest page has only `Next
 | A4 | `ubuntu-latest` runners ship Google Chrome, so a reflow script could later run in CI | Pattern 7 | None now; the recommendation keeps it out of CI |
 | A5 | Hiding the CV/Teaching nav links when drafted (D-18 discretion) is wanted | Pattern 1 | Owner may prefer a visible warning only; either satisfies D-18 |
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+All five questions were resolved during planning. Each plan adopts the recommendation, as cited below.
 
 1. **Where does `url` live: `eleventy.config.js` next to `PATH_PREFIX`, or `src/_data/site.js`?**
    - D-09 says "next to `PATH_PREFIX`"; the CONTEXT code-context says to add `url` in `site.js`. Templates read `site.url`, so `site.js` is the practical home.
    - Recommendation: put `url` in `src/_data/site.js`, and have the README name both files as the pair to change together. Keep the `PATH_PREFIX ?? "..."` line format untouched, because `test/helpers/site.js` `defaultPrefix()` regex-parses it.
+   - **RESOLVED:** `url: "https://djmccurley.github.io"` goes in `src/_data/site.js` (04-02 Task 1) and is validated as an https origin by `validateSite` (04-02 Task 3). The `PATH_PREFIX` line is not touched. The README's "Moving to a custom domain" paragraph names `url` and `PATH_PREFIX` as the pair to change together (04-04 Task 2).
 
 2. **Default share image alt text.** D-07 names a default image but not its alt. Add `defaultImageAlt` to `site.js` so `og:image:alt` is never empty on default-image pages. Recommendation: add it, with a placeholder the README tells the owner to replace.
+   - **RESOLVED:** `defaultImageAlt` is added to `src/_data/site.js` (04-02 Task 2). It must be non-empty or the build fails naming `site.js` (04-02 Task 3), and the README Site settings table lists it (04-04 Task 2).
 
 3. **Which asset is the default share image?** Recommendation: add a new neutral 1200x630 `assets/site-share.webp` placeholder (generated once with sharp, under the 10 MB / 3000px asset caps) rather than reusing `tidepool-game-image.webp`, so the owner swaps one obvious file. The same file name feeds the `makeSite` fixture asset.
+   - **RESOLVED:** a new 1200x630 `assets/site-share.webp` placeholder is named by `defaultImage: "site-share.webp"`, and the `makeSite` fixture asset uses the same name (04-02 Task 2).
 
 4. **Hide the nav link for a drafted CV/Teaching page?** Recommendation: yes, via a global `draftNav` list consumed by `base.njk`, plus the warning. Hide only for known drafted pages (not for merely missing pages) so the nav-order assertions in `test/browse.test.js` keep passing.
+   - **RESOLVED:** yes. The global is named `hiddenNav` (from `hiddenNavSlugs()` in `lib/drafts.js`) instead of `draftNav`. It hides only drafted CV/Teaching items in the live build, alongside the D-18 warning, and a page that is just missing keeps its nav item (04-01 Task 3).
 
 5. **`og:type` article vs website.** Recommendation: `article` for projects (`isProject`), `website` elsewhere; costs nothing.
+   - **RESOLVED:** `og:type` is `article` when `isProject` (set in `projects.11tydata.js`) and `website` everywhere else (04-02 Task 1).
 
 ## Environment Availability
 
