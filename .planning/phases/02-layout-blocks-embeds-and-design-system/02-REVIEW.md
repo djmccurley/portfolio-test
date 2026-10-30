@@ -1,148 +1,93 @@
 ---
 phase: 02-layout-blocks-embeds-and-design-system
-reviewed: 2026-10-29T00:00:00Z
+reviewed: 2026-10-30T00:00:00Z
 depth: standard
-files_reviewed: 26
+files_reviewed: 10
 files_reviewed_list:
-  - content/projects/tidepool-game.md
   - content/style.css
   - eleventy.config.js
-  - lib/alt-lint.js
   - lib/blocks.js
-  - lib/embeds.js
-  - lib/images.js
-  - lib/limits.js
-  - lib/locate.js
-  - lib/markdown.js
-  - lib/media.js
+  - lib/frontmatter.js
   - lib/validate.js
-  - package.json
-  - scripts/check-assets.js
   - scripts/shrink.js
-  - src/_includes/base.njk
-  - test/alt-lint.test.js
   - test/block-errors.test.js
-  - test/blocks.test.js
-  - test/build.test.js
-  - test/check-assets.test.js
-  - test/contrast.test.js
+  - test/content-errors.test.js
   - test/design.test.js
-  - test/embeds.test.js
   - test/shrink.test.js
-  - test/video.test.js
 findings:
   critical: 0
-  warning: 4
-  info: 4
-  total: 8
+  warning: 2
+  info: 2
+  total: 4
 status: issues_found
 ---
 
-# Phase 02: Code Review Report
+# Phase 02: Code Review Report (incremental re-review, e4729ef..HEAD)
 
-**Reviewed:** 2026-10-29
+**Reviewed:** 2026-10-30
 **Depth:** standard
-**Files Reviewed:** 26
+**Files Reviewed:** 10
 **Status:** issues_found
 
 ## Summary
 
-The full suite passes (166 of 166) and the build output for the Tidepool page is correct. I probed the block parser, embed renderers, URL allow-lists and attribute escaping with hostile input. I found no injection or path-traversal holes. Titles are escaped, iframe `src` values are rebuilt from parsed IDs, hosts are allow-listed with dot-anchored suffixes, and asset lookups use basename only.
+Re-review of the four fixes for WR-01..WR-04 from the previous review. All four fixes address their original defects. Two of them introduced small regressions or incomplete behavior, listed below. No security issues were found.
 
-The problems are correctness and robustness defects in diagnostics and CSS. I confirmed each by running it or by checking CSS specificity.
+Verification of each fix:
+
+- **WR-01 (skip-link focus ring, `content/style.css`)**: correct. The ring rule `:is(a, video, iframe, summary, button, [tabindex]):focus-visible` has specificity (0,2,0). `main[tabindex="-1"]:focus-visible` is (0,2,1) and wins. `src/_includes/base.njk:15` does emit `<main id="main" tabindex="-1">`, so the selector matches. Other tabindex elements keep their ring. The test regex matches the new rule.
+- **WR-02 (hard breaks and linked images, `lib/blocks.js`)**: hard breaks are now tolerated by `isImageOnly`, and linked images get their own error on the correct line (verified by running it). The new message misfires for text links, see WR-02 below.
+- **WR-03 (out-of-range dates, `lib/frontmatter.js`, `lib/validate.js`, `eleventy.config.js`)**: correct. `validDate` rejects 2024-13-45, 2024-02-30, 2024-00-10 and 1900-02-29, and accepts 2000-02-29. `validate.js` and the lenient front-matter loader in `eleventy.config.js` now share one validator, so the two can no longer disagree.
+- **WR-04 (oversize WebP, `scripts/shrink.js`)**: the byte-cap re-encode works, but the new post-convert size warning is wrong for videos, see WR-01 below.
 
 ## Warnings
 
-### WR-01: `main:focus { outline: none }` loses to the global focus-visible rule, so the skip link target gets a page-wide ring
+### WR-01: false "still over 10 MB" warning for renamed videos (regression from the WR-04 fix)
 
-**File:** `content/style.css:48-55`
-**Issue:** `:is(a, video, iframe, summary, button, [tabindex]):focus-visible` has specificity (0,2,0), because `:is()` takes its most specific argument, `[tabindex]`. `main:focus` has specificity (0,1,1). `<main id="main" tabindex="-1">` therefore matches the ring rule, and the ring wins. After the user activates the skip link from the keyboard, Chromium matches `:focus-visible` on `main`. A 3px accent outline then wraps the whole content area.
-
-The comment says "the programmatic skip target only; every other element keeps its ring". `test/design.test.js:113` only checks that the text `main:focus { outline: none` exists. It does not check that the rule wins the cascade, so the bug is invisible to the tests.
-
+**File:** `scripts/shrink.js:153-155`
+**Issue:** The new size check runs for every item in `convertOne`, including `rename` and `none` actions. Videos (`.mp4`, `.webm`) are never re-encoded and are allowed up to `VIDEO_MAX_MB` (50 MB) by `lib/limits.js`. `scripts/check-assets.js:36-41` exempts them from the 10 MB cap with `continue`. A video such as `My Clip.mp4` (20 MB) is renamed to `my-clip.mp4`. It then prints `shrink: warning: my-clip.mp4 is still over 10 MB after conversion; reduce it by hand`. That is wrong, since CI accepts the file, and it tells the author to do needless work. The same warning also repeats for GIFs and AVIFs, which are already rejected earlier in `main` if over 10 MB, so it is harmless there.
 **Fix:**
-```css
-/* (0,2,1) beats the (0,2,0) ring rule */
-main[tabindex="-1"]:focus,
-main[tabindex="-1"]:focus-visible {
-  outline: none;
+```js
+if (!VIDEO_EXTS.has(path.extname(toPath).toLowerCase()) && fs.statSync(toPath).size > MAX_BYTES) {
+  console.warn(`shrink: warning: ${item.to} is still over 10 MB after conversion; reduce it by hand`);
 }
 ```
-Alternatively, drop `[tabindex]` from the ring selector and use `[tabindex]:not(main)`. Update the design test to assert the winning rule, not just the text.
+Add a test: a rename-only 11 MB `.mp4` in `assets/` must not print the warning.
 
-### WR-02: A trailing hard break after an image inside a layout block gives a wrong and misleading error
+### WR-02: text-only links in a layout block get the "linked images" error
 
-**File:** `lib/blocks.js:20-31` and `lib/blocks.js:36-48` (used at `:156-157`)
-**Issue:** `isImageOnly` accepts only `softbreak` between images. `firstNonImage` skips every break, including `hardbreak`. Two trailing spaces or a trailing backslash after an image line is easy to pick up from a paste. The paragraph then fails `isImageOnly`, and `firstNonImage` returns -1 because nothing is actually non-image. `childLine(inline, -1)` then slices `children.slice(0, -1)`, which gives a bogus line.
-
-I reproduced it with `::: grid-2\n![a](x.webp)  \n![b](y.webp)\n:::`. It throws `...:3: block "::: grid-2" may only contain images. Move the text outside...`. The offending line is 2, there is no text anywhere, and line 3 is the second image.
-
-The same mismatch affects linked images `[![a](x)](url)`. They get the same "text" message, which misleads the owner.
-
-**Fix:** Treat `hardbreak` like `softbreak` in `isImageOnly`, using the shared `isBreak` helper. Guard the failure path:
+**File:** `lib/blocks.js:157-162`
+**Issue:** The new branch treats any first-offending `link_open` as a linked image. A plain text link such as `[read more](https://e.com)` inside `::: grid-2` now reports `cannot hold linked images. Remove the link or move the image outside the block.` There is no image involved, and the advice is misleading. The ONLY_IMAGES message ("may only contain images. Move the text outside the block...") is the right one there. Confirmed by running `::: grid-2\n[a text link](https://e.com)\n:::`. The same applies to `![a](x.webp) [link](u)`.
+**Fix:** Only pick the linked-image message when the link actually wraps an image.
 ```js
-else if (isBreak(c)) continue;
-...
-const bad = firstNonImage(inline);
-loc.failAtLine(bad < 0 ? inline.map[0] : childLine(inline, bad), ...);
-```
-Add a specific message for `link_open` ("images cannot be wrapped in links inside a block").
-
-### WR-03: An out-of-range date passes validation and crashes Eleventy without naming the field's error format
-
-**File:** `eleventy.config.js:15-21` and `lib/validate.js:11,49-51`
-**Issue:** `lenientFrontMatter` exists so Eleventy never sees a bad date and `validate.js` can report it with the file named (D-23). Both the lenient filter and `DATE_RE` check only the shape `\d{4}-\d{2}-\d{2}`. `date: 2024-13-45` passes both, and Eleventy then aborts with a raw "Data cascade value for `date` (2024-13-45) is invalid ... Template.getMappedDate" stack trace. I reproduced this. The friendly "must be YYYY, YYYY-MM or YYYY-MM-DD" message is never shown for month 13 or day 45, which are likely typos.
-
-**Fix:** Validate calendar ranges in one shared helper and use it in both places:
-```js
-export function validDate(s) {
-  const m = /^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/.exec(s);
-  if (!m) return false;
-  const [, y, mo = "01", d = "01"] = m;
-  const dt = new Date(Date.UTC(+y, +mo - 1, +d));
-  return dt.getUTCFullYear() === +y && dt.getUTCMonth() === +mo - 1 && dt.getUTCDate() === +d;
+function linkWrapsImage(inline, openIdx) {
+  for (let j = openIdx + 1; j < inline.children.length; j++) {
+    const c = inline.children[j];
+    if (c.type === "link_close") return false;
+    if (c.type === "image") return true;
+  }
+  return false;
 }
+const linked = bad >= 0 && inline.children[bad].type === "link_open" && linkWrapsImage(inline, bad);
 ```
-
-### WR-04: CI error tells the owner to run `shrink` for an oversize WebP that `shrink` never touches
-
-**File:** `scripts/check-assets.js:42-43,68` and `scripts/shrink.js:258-267`
-**Issue:** `check-assets` rejects any file over 10 MB. For `.webp` the hint is generic, and the footer says "Run `npm run shrink` locally for PNG/JPEG/HEIC/WebP". `shrink` re-encodes an existing WebP only when its longest edge is over 3000px (`shrink.js:264`). A WebP under 3000px but over 10 MB, such as a lossless or animated one, is a no-op in `shrink`. The owner is stuck in a loop where CI fails and the suggested fix does nothing. Lossless PNG to WebP conversion can also produce a result over 10 MB, and `shrink` never rechecks the output size.
-
-**Fix:** Either make `shrink` re-encode WebPs over `MAX_BYTES` lossy (`webp-lossy`), or add `.webp` to the manual hint when the failure is size-only. Have `convertOne` verify the output size and warn.
+Add a test for a text link in a block expecting the ONLY_IMAGES message.
 
 ## Info
 
-### IN-01: "a title cannot break out of its attribute" test is partly vacuous
+### IN-01: shrink's lossy re-encode of an over-cap WebP can still end over 10 MB, or grow the file
 
-**File:** `test/embeds.test.js:218-226`
-**Issue:** The first assertion renders a clean title `"x"` and checks that `onload` is absent. That is true by construction. The case that matters, a title containing a quote, cannot be written in this fence syntax. The second half only re-tests the extra-token error already covered at `:249`. The name promises coverage the test does not deliver. The real escaping coverage is at `:210-216`.
-**Fix:** Rename the test, or drop the vacuous assertion. Add a direct `escapeAttr('x" onload="y')` assertion for the quote case.
+**File:** `scripts/shrink.js:268-272`
+**Issue:** An over-cap WebP that was already lossy (for example quality 75) is re-encoded at quality 82. The output can be larger than the input and still exceed 10 MB. The new warning in `convertOne` catches this, but by then the original has been overwritten (the temp file is renamed over `toPath` and `fromPath` is unlinked). In staged mode the unshrunk original is gone from the working tree, although git history still holds it. This is a rare edge case.
+**Fix:** After encoding, if the output is larger than the input, keep the input (or retry at a lower quality). Alternatively, make the lossy quality a constant and step down when over the cap.
 
-### IN-02: Fonts come from Google's CDN while the embeds are built to be privacy-preserving
+### IN-02: `validDate` rejects years 0000 to 0099
 
-**File:** `src/_includes/base.njk:7-9`
-**Issue:** Every page load sends the visitor's IP to `fonts.googleapis.com` and `fonts.gstatic.com`. The same phase rewrites YouTube to `youtube-nocookie` and Vimeo to `dnt=1` for privacy. `test/design.test.js:69` locks the third-party link in. The remote stylesheet is also render-blocking, and the page falls back to system-ui if the CDN is blocked.
-**Fix:** Self-host Chivo as WOFF2 with `@font-face` and `font-display: swap`, served from `_site`. This removes both preconnects and the third-party request.
-
-### IN-03: Unused or inconsistent code
-
-**File:** `lib/blocks.js:136`, `scripts/check-assets.js:67-69`, `lib/locate.js:5-15`
-**Issue:**
-- `ctx.file` and `ctx.line` are built for every embed handler, but `renderVideo`, `renderItch` and `renderFileVideo` use only `ctx.fail`.
-- The `console.error` string in `check-assets.js` is mis-indented relative to its block.
-- `frontMatterOffset` assumes the markdown-it source equals the raw file body. Eleventy runs Nunjucks first (`markdownTemplateEngine: "njk"`), so a multi-line `{# #}` comment or `{% set %}` in the body shifts the reported line numbers. I did not test this.
-
-**Fix:** Drop the unused `ctx` fields, or document them as part of the handler contract. Re-indent the string. Note the line-number caveat in `locate.js`, or use `{% raw %}` guidance in the authoring docs.
-
-### IN-04: No aggregate cap on self-hosted video against the Pages size limit
-
-**File:** `lib/limits.js:3-5`, `lib/media.js:59-75`, `scripts/check-assets.js:36-40`
-**Issue:** Each video is capped at 50 MB. `copyMedia` publishes every video a block names, and nothing bounds the total. About twenty videos plus the processed images would approach the ~1 GB GitHub Pages limit named in CLAUDE.md. The deploy would fail late, and the only signal would be the Actions run.
-**Fix:** In `copyMedia` or `check-assets`, sum the published video bytes and warn above a budget, for example 500 MB. Keep the budget constant in `lib/limits.js`.
+**File:** `lib/frontmatter.js:13`
+**Issue:** `Date.UTC` maps years 0 to 99 to 1900 to 1999, so the round-trip year check fails for `0024`. This rejects those years, which is harmless in practice. It is accidental rather than deliberate, and the comment says nothing about it.
+**Fix:** Either note it in the comment, or use `dt.setUTCFullYear(+y)` after construction to make it exact.
 
 ---
 
-_Reviewed: 2026-10-29_
+_Reviewed: 2026-10-30_
 _Reviewer: Claude (gsd-code-reviewer)_
 _Depth: standard_
