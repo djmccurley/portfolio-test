@@ -6,7 +6,7 @@ import { installAssetResolver } from "./lib/markdown.js";
 import { refreshAssets } from "./lib/assets.js";
 import { copyMedia } from "./lib/media.js";
 import { resetAltWarnings } from "./lib/alt-lint.js";
-import { parseFrontMatter } from "./lib/frontmatter.js";
+import { parseFrontMatter, validDate } from "./lib/frontmatter.js";
 import { addValidation } from "./lib/validate.js";
 
 // THE one base-path value. Use "/" for a custom domain or user site (PUB-02, D-20).
@@ -16,7 +16,7 @@ const PATH_PREFIX = process.env.PATH_PREFIX ?? "/portfolio-test/";
 // can report them with the file named (D-23). The raw value is re-read there.
 function lenientFrontMatter(str) {
   const data = parseFrontMatter(str);
-  if (typeof data.date === "string" && !/^\d{4}(-\d{2}(-\d{2})?)?$/.test(data.date)) delete data.date;
+  if (typeof data.date === "string" && !validDate(data.date)) delete data.date;
   return data;
 }
 

@@ -43,6 +43,12 @@ test("empty tags", () =>
 test("bad date", () =>
   fails({ [P + "a.md"]: fm({ date: '"March 2019"' }) }, [P + "a.md", "must be YYYY, YYYY-MM or YYYY-MM-DD"]));
 
+test("out-of-range date", async () => {
+  for (const d of ["2024-13-45", "2024-02-30", "2024-00-10"]) {
+    await fails({ [P + "a.md"]: fm({ date: d }) }, [P + "a.md", "must be YYYY, YYYY-MM or YYYY-MM-DD"]);
+  }
+});
+
 test("slug collision", () =>
   fails(
     { [P + "about.md"]: fm(), "content/pages/about.md": "---\ntitle: About\n---\nHi\n" },
