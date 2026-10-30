@@ -96,7 +96,22 @@ Plans:
   4. Student-work page lists links and PDF downloads and never shows in the feed or tag pages
   5. Visitor can open any content image full-size via a plain link without JS, enhanced to a keyboard-operable native dialog (Escape closes, focus returns)
 
-**Plans**: TBD
+**Plans:** 5 plans
+Plans:
+**Wave 1**
+
+- [ ] 03-01-PLAN.md — Work feed at /work/ (card partial, newest first, empty state), site header with name + Work/CV/Teaching nav and aria-current, card/header/rhythm CSS (wave 1)
+- [ ] 03-02-PLAN.md — CV and Teaching pages, PDF links (resolve, size suffix, publish only linked to /pdf/, 25 MB cap) plus CI guard and hook (wave 1)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 03-03-PLAN.md — Tag pages at /tags/<slug>/ from { slug, label } tags, filter row, project Tags row, data-cascade fix, fixture tags (wave 2)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 03-04-PLAN.md — Curated homepage: ordered featured list, Selected work grid, All work link, build-failing bad slugs (wave 3)
+- [ ] 03-05-PLAN.md — Full-size images: zoom links to the largest variant (no JS), native dialog via deferred lightbox.js, dialog CSS (wave 3)
+
 **UI hint**: yes
 
 ### Phase 4: Hardening and Launch Readiness
