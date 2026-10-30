@@ -271,6 +271,8 @@ test("fixture: a standalone page never joins the projects on the homepage", asyn
     files: {
       "content/projects/thing.md": `${projectFront}\nBody.\n`,
       "content/pages/teaching.md": teaching("[Syllabus](../../assets/syllabus.pdf)"),
+      // The homepage lists only featured projects (plan 03-04).
+      "src/_data/featured.js": 'export default ["thing"];\n',
     },
     assets: { "a.webp": cover, "syllabus.pdf": PDF },
   });
