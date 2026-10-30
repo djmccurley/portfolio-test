@@ -4,16 +4,16 @@ milestone: v1.0
 current_phase: 04
 current_phase_name: Hardening and Launch Readiness
 status: executing
-stopped_at: Completed 04-02-PLAN.md
-last_updated: "2026-10-30T22:20:04.793Z"
+stopped_at: Completed 04-03-PLAN.md
+last_updated: "2026-10-30T22:24:06.446Z"
 last_activity: 2026-10-30
 last_activity_desc: Phase 04 execution started
-state_head: a116ef4fe2b843cc0bfcce7c82d90e7e707896cd
+state_head: 3d8c633912ab12d79c31a57b5d3d9fd660f8eb7a
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 21
-  completed_plans: 18
+  completed_plans: 19
 milestone_name: milestone
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-10-30)
 ## Current Position
 
 Phase: 04 (Hardening and Launch Readiness) — EXECUTING
-Plan: 3 of 5
+Plan: 4 of 5
 Status: Ready to execute
 Last activity: 2026-10-30 — Phase 04 execution started
 
@@ -67,6 +67,7 @@ Progress: [████████░░] 75%
 | Phase 03 P05 | 5 min | 3 tasks | 10 files |
 | Phase 04 P01 | 20min | 3 tasks | 9 files |
 | Phase 04 P02 | 4 min | 3 tasks | 9 files |
+| Phase 04 P03 | 5 min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -105,6 +106,9 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 04]: 04-01: drafts dropped by a single fail-closed Eleventy preprocessor keyed on ELEVENTY_RUN_MODE serve/watch; drafted CV/Teaching pages warn and are hidden from the live nav
 - [Phase 04]: og:image is always a processed eleventy-img derivative (1200px JPEG, PNG for alpha); originals in assets/ are never linked
 - [Phase 04]: site.url holds the https origin only (validated); the subpath stays in PATH_PREFIX; absolute URLs come only from htmlBaseUrl(site.url)
+- [Phase 04]: Pager uses built-in getPreviousCollectionItem/getNextCollectionItem over collections.projects; no draft code needed since live collection is draft-free
+- [Phase 04]: Sitemap collection re-checks data.draft so serve mode never lists drafts; tag URLs come from non-draft projects only; no lastmod
+- [Phase 04]: Separate .pager CSS rules rather than grouping with .filters, to keep the exact-rule .filters test valid
 
 ### Pending Todos
 
@@ -116,6 +120,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-30T22:20:04.627Z
-Stopped at: Completed 04-02-PLAN.md
+Last session: 2026-10-30T22:24:06.278Z
+Stopped at: Completed 04-03-PLAN.md
 Resume file: None

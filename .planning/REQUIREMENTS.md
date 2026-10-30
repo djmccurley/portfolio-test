@@ -52,8 +52,8 @@
 - [x] **SITE-03**: Owner can choose which projects appear on the homepage and in what order
 - [x] **SITE-04**: Owner can add standalone pages (About / CV) as markdown files
 - [x] **SITE-05**: Owner can maintain a student-work page with links and PDF downloads that never appears in the project feed or tag pages
-- [ ] **SITE-06**: Visitor can move to the next/previous project from a project page
-- [ ] **SITE-07**: Shared links show a preview (Open Graph title, description, image), and the site publishes a sitemap.xml
+- [x] **SITE-06**: Visitor can move to the next/previous project from a project page
+- [x] **SITE-07**: Shared links show a preview (Open Graph title, description, image), and the site publishes a sitemap.xml
 
 ### Design & Accessibility
 
@@ -132,8 +132,8 @@
 | SITE-03 | Phase 3 | Complete |
 | SITE-04 | Phase 3 | Complete |
 | SITE-05 | Phase 3 | Complete |
-| SITE-06 | Phase 4 | Pending |
-| SITE-07 | Phase 4 | Pending |
+| SITE-06 | Phase 4 | Complete |
+| SITE-07 | Phase 4 | Complete |
 
 **Coverage:**
 
