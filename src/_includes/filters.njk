@@ -1,0 +1,9 @@
+{#- Tag filter row for /work/ and the tag pages. Set `current` to a tag slug on a tag page; unset means All. -#}
+{%- if collections.tagPages | length %}
+<nav aria-label="Filter work by tag"><ul class="filters">
+  <li><a href="/work/"{% if not current %} aria-current="page"{% endif %}>All</a></li>
+{%- for t in collections.tagPages %}
+  <li><a href="/tags/{{ t.slug }}/"{% if current == t.slug %} aria-current="page"{% endif %}>{{ t.label }}</a></li>
+{%- endfor %}
+</ul></nav>
+{%- endif %}

@@ -1,2 +1,4 @@
+{%- set current = tag.slug %}
+{%- include "filters.njk" %}
 {%- set items = collections.projects | withTag(tag.slug) %}
 {%- include "card.njk" %}

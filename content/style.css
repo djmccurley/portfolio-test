@@ -148,9 +148,20 @@ header nav ul {
   font-weight: 700;
 }
 
+/* tag filter row: plain links under the h1, wrapping onto more lines instead of scrolling */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 /* at least 35px tall hit areas */
 .site-name,
-header nav a {
+header nav a,
+.filters a {
   padding-block: 0.25rem;
 }
 
@@ -161,8 +172,8 @@ main {
 /* ==========================================================================
    Prose: capped at the reading measure, always left-aligned
    ========================================================================== */
-main > :is(p:not(.lone-image), h1, h2, h3, ul:not(.cards), ol, dl, blockquote, pre),
-main > :not(.layout, .embed, figure, .lone-image, .cards) :is(p, h1, h2, h3, ul:not(.cards), ol, dl, blockquote, pre) {
+main > :is(p:not(.lone-image), h1, h2, h3, ul:not(.cards, .filters), ol, dl, blockquote, pre),
+main > :not(.layout, .embed, figure, .lone-image, .cards) :is(p, h1, h2, h3, ul:not(.cards, .filters), ol, dl, blockquote, pre) {
   max-width: var(--measure);
 }
 

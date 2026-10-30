@@ -1,6 +1,8 @@
 import test, { after } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import siteData from "../src/_data/site.js";
 import { makeSite, defaultPrefix } from "./helpers/site.js";
 
@@ -333,4 +335,92 @@ test("a project tagged with an unlisted slug fails, listing the allowed slugs", 
   });
   assert.notEqual(r.code, 0);
   assert.ok(r.output.includes('unknown tag "delta" (allowed: alpha, beta, gamma)'), r.output);
+});
+
+// ---------------------------------------------------------------------------
+// Tag filter row
+// ---------------------------------------------------------------------------
+
+const filterNavs = (html) => html.match(/<nav aria-label="Filter work by tag">[\s\S]*?<\/nav>/g) ?? [];
+const filterLinks = (html) =>
+  [...(filterNavs(html)[0] ?? "").matchAll(/<a ([^>]*)>([^<]*)<\/a>/g)].map((m) => ({
+    href: m[1].match(/href="([^"]+)"/)[1],
+    label: m[2],
+    current: (m[1].match(/aria-current="([^"]+)"/) ?? [])[1],
+  }));
+
+test("/work/ has one filter row: All current, then each used tag in tags.js order", async () => {
+  const prefix = defaultPrefix();
+  const { site } = await build(fixtureT);
+  const html = site.read("_site/work/index.html");
+  assert.equal(filterNavs(html).length, 1);
+  assert.ok(filterNavs(html)[0].includes('<ul class="filters">'));
+  assert.deepEqual(filterLinks(html), [
+    { href: `${prefix}work/`, label: "All", current: "page" },
+    { href: `${prefix}tags/alpha/`, label: "Alpha &amp; Co", current: undefined },
+    { href: `${prefix}tags/gamma/`, label: "Gamma", current: undefined },
+  ]);
+  assert.ok(!html.includes("tags/beta/"));
+});
+
+test("a tag page marks its own tag current and not All", async () => {
+  const prefix = defaultPrefix();
+  const { site } = await build(fixtureT);
+  const links = filterLinks(site.read("_site/tags/gamma/index.html"));
+  assert.deepEqual(
+    links.map((l) => [l.label, l.current]),
+    [["All", undefined], ["Alpha &amp; Co", undefined], ["Gamma", "page"]]
+  );
+  assert.equal(links[0].href, `${prefix}work/`);
+});
+
+test("the filter row sits between the h1 and the cards", async () => {
+  const { site } = await build(fixtureT);
+  for (const f of ["_site/work/index.html", "_site/tags/alpha/index.html"]) {
+    const main = mainOf(site.read(f));
+    const h1 = main.indexOf("</h1>");
+    const nav = main.indexOf('<nav aria-label="Filter work by tag">');
+    const cards = main.indexOf('<ul class="cards">');
+    assert.ok(h1 >= 0 && h1 < nav && nav < cards, f);
+  }
+});
+
+test("no filter row without projects; one used tag gives All plus that tag", async () => {
+  const empty = await build({});
+  assert.ok(!empty.site.read("_site/work/index.html").includes("Filter work by tag"));
+
+  const one = await build({ "content/projects/solo.md": proj({ title: "Solo", date: '"2024"', tags: "[ux]" }) });
+  assert.deepEqual(
+    filterLinks(one.site.read("_site/work/index.html")).map((l) => l.label),
+    ["All", "UX"]
+  );
+});
+
+test("tag pages are plain links: no script anywhere", async () => {
+  const { site } = await build(fixtureT);
+  for (const f of ["_site/work/index.html", "_site/tags/alpha/index.html"]) {
+    assert.ok(!/<script/.test(site.read(f)), f);
+  }
+});
+
+const CSS = fs
+  .readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "content", "style.css"), "utf8")
+  .replace(/\/\*[\s\S]*?\*\//g, "");
+const cssRules = [...CSS.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({
+  selector: m[1].replace(/\s+/g, " ").trim(),
+  body: m[2],
+}));
+
+test("filter row CSS: wrapping flex, padded links, uncapped by the prose measure", () => {
+  const filters = cssRules.find((r) => r.selector === ".filters");
+  assert.ok(filters, ".filters rule");
+  assert.match(filters.body, /display:\s*flex/);
+  assert.match(filters.body, /flex-wrap:\s*wrap/);
+  assert.match(filters.body, /gap:\s*0\.5rem 1\.5rem/);
+  assert.match(filters.body, /list-style:\s*none/);
+  const pad = cssRules.find((r) => /padding-block:\s*0\.25rem/.test(r.body) && r.selector.includes(".site-name"));
+  assert.ok(pad && pad.selector.split(", ").includes(".filters a"), "padding-block selector list");
+  const caps = cssRules.filter((r) => /max-width:\s*var\(--measure\)/.test(r.body) && r.selector.includes("p:not(.lone-image)"));
+  assert.equal(caps.length, 1);
+  assert.equal(caps[0].selector.split("ul:not(.cards, .filters)").length - 1, 2);
 });

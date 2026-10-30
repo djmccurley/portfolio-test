@@ -231,7 +231,7 @@ test("card grids escape the prose cap and keep the heading rhythm", () => {
   const parts = cap.selector.split(/, (?=main >)/);
   assert.equal(parts.length, 2);
   for (const sel of parts) {
-    assert.ok(sel.includes("ul:not(.cards)"), `prose cap selector ${sel.trim()}`);
+    assert.ok(sel.includes("ul:not(.cards, .filters)"), `prose cap selector ${sel.trim()}`);
   }
 
   const blocks = ".layout, .embed, figure, .lone-image, .cards";
