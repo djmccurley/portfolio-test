@@ -4,16 +4,16 @@ milestone: v1.0
 current_phase: 04
 current_phase_name: Hardening and Launch Readiness
 status: executing
-stopped_at: Completed 04-03-PLAN.md
-last_updated: "2026-10-30T22:24:06.446Z"
+stopped_at: Completed 04-04-PLAN.md
+last_updated: "2026-10-30T22:27:33.231Z"
 last_activity: 2026-10-30
 last_activity_desc: Phase 04 execution started
-state_head: 3d8c633912ab12d79c31a57b5d3d9fd660f8eb7a
+state_head: 10efc88c30c177edf72f4026d908dc67d9563c5b
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 21
-  completed_plans: 19
+  completed_plans: 20
 milestone_name: milestone
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-10-30)
 ## Current Position
 
 Phase: 04 (Hardening and Launch Readiness) — EXECUTING
-Plan: 4 of 5
+Plan: 5 of 5
 Status: Ready to execute
 Last activity: 2026-10-30 — Phase 04 execution started
 
@@ -68,6 +68,7 @@ Progress: [████████░░] 75%
 | Phase 04 P01 | 20min | 3 tasks | 9 files |
 | Phase 04 P02 | 4 min | 3 tasks | 9 files |
 | Phase 04 P03 | 5 min | 2 tasks | 8 files |
+| Phase 04 P04 | 6 min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -109,6 +110,7 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 04]: Pager uses built-in getPreviousCollectionItem/getNextCollectionItem over collections.projects; no draft code needed since live collection is draft-free
 - [Phase 04]: Sitemap collection re-checks data.draft so serve mode never lists drafts; tag URLs come from non-draft projects only; no lastmod
 - [Phase 04]: Separate .pager CSS rules rather than grouping with .filters, to keep the exact-rule .filters test valid
+- [Phase 04]: 04-04: README fence convention: md fences are built by the test, yaml fences key-checked, broken examples in text fences; raw HTML example in html fence
 
 ### Pending Todos
 
@@ -120,6 +122,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-30T22:24:06.278Z
-Stopped at: Completed 04-03-PLAN.md
+Last session: 2026-10-30T22:27:33.059Z
+Stopped at: Completed 04-04-PLAN.md
 Resume file: None

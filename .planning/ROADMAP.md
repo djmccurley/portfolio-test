@@ -128,7 +128,7 @@ Plans:
   4. Owner can read a README listing every block and front matter field with examples
   5. Site is usable at 320px wide and 200% zoom without horizontal scrolling, verified under the real deployed prefix or domain
 
-**Plans:** 3/5 plans executed
+**Plans:** 4/5 plans executed
 Plans:
 **Wave 1**
 
@@ -141,7 +141,7 @@ Plans:
 **Wave 3** *(blocked on Wave 2 completion)*
 
 - [x] 04-03-PLAN.md — Next/previous project links (end-stopped, drafts skipped) and sitemap.xml + robots.txt with absolute URLs (wave 3)
-- [ ] 04-04-PLAN.md — Authoring README (blocks, front matter, workflow, drafts, site settings, error guide) with a code-synced test and buildable examples (wave 3)
+- [x] 04-04-PLAN.md — Authoring README (blocks, front matter, workflow, drafts, site settings, error guide) with a code-synced test and buildable examples (wave 3)
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
@@ -156,4 +156,4 @@ Plans:
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
 | 2. Layout Blocks, Embeds and Design System | 6/6 | Complete    | 2026-10-30 |
 | 3. Browsing, Lightbox and Standalone Pages | 5/5 | Complete    | 2026-10-30 |
-| 4. Hardening and Launch Readiness | 3/5 | In Progress | - |
+| 4. Hardening and Launch Readiness | 4/5 | In Progress | - |

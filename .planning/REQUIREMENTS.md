@@ -20,7 +20,7 @@
 - [x] **AUTH-02**: Owner can paste an image in VS Code (saved to the shared `assets/` folder with a prefixed filename) and the resulting `![alt](path)` link renders correctly on the built site
 - [x] **AUTH-03**: Owner can paste full-size images of any size; on commit, images over ~3000px are scaled down, PNG/JPEG are converted to WebP, and the `.md` links are rewritten automatically (GIFs and transparency handled safely)
 - [x] **AUTH-04**: Owner can write raw HTML inside markdown as a fallback for anything the block syntax doesn't cover
-- [ ] **AUTH-05**: Owner has a short authoring reference (README) listing every block and front matter field with examples
+- [x] **AUTH-05**: Owner has a short authoring reference (README) listing every block and front matter field with examples
 
 ### Layout Blocks
 
@@ -106,7 +106,7 @@
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Complete |
 | AUTH-04 | Phase 2 | Complete |
-| AUTH-05 | Phase 4 | Pending |
+| AUTH-05 | Phase 4 | Complete |
 | BLOCK-01 | Phase 2 | Complete |
 | BLOCK-02 | Phase 2 | Complete |
 | BLOCK-03 | Phase 2 | Complete |
