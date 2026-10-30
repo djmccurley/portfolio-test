@@ -10,7 +10,7 @@ import { copyMedia } from "./lib/media.js";
 import { resetAltWarnings } from "./lib/alt-lint.js";
 import { parseFrontMatter, validDate } from "./lib/frontmatter.js";
 import { addValidation, validateTagDefs } from "./lib/validate.js";
-import { showDrafts } from "./lib/drafts.js";
+import { showDrafts, findDrafts, NAV_PAGES, navDraftWarning, hiddenNavSlugs } from "./lib/drafts.js";
 import tagDefs from "./src/_data/tags.js";
 
 // THE one base-path value. Use "/" for a custom domain or user site (PUB-02, D-20).
@@ -43,6 +43,9 @@ export default async function (eleventyConfig) {
   // zoom links are finished from them, then HtmlBasePlugin (-2) adds the path prefix to their hrefs.
   eleventyConfig.htmlTransformer.addPosthtmlPlugin("html", zoomPlugin, { priority: -1.5 });
 
+  // Read by the header nav in src/_includes/base.njk. A function, so it runs after Eleventy has set the run mode.
+  eleventyConfig.addGlobalData("hiddenNav", () => hiddenNavSlugs());
+
   eleventyConfig.amendLibrary("md", (md) => {
     installBlocks(md);
     installAssetResolver(md);
@@ -50,6 +53,8 @@ export default async function (eleventyConfig) {
   await refreshAssets();
   eleventyConfig.on("eleventy.before", () => {
     resetAltWarnings(); // each rebuild under `npm start` prints the current warnings again
+    // A drafted CV/Teaching page loses its header link on the live site; tell the owner in either run mode (D-18).
+    for (const d of findDrafts()) if (d.kind === "page" && NAV_PAGES.has(d.slug)) console.warn(navDraftWarning(d));
     return refreshAssets();
   });
   // Publish only the videos (and processed posters) that a `::: video` block named.
