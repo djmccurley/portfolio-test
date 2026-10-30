@@ -1,0 +1,10 @@
+---
+layout: base.njk
+---
+{{ content | safe }}
+{% if collections.featured | length -%}
+<h2>Selected work</h2>
+{% set items = collections.featured -%}
+{% include "card.njk" %}
+{%- endif %}
+<p><a href="/work/">All work</a></p>
