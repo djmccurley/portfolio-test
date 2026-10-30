@@ -12,6 +12,7 @@
     "prepare": "git config core.hooksPath .githooks || true",
     "shrink": "node scripts/shrink.js",
     "check:assets": "node scripts/check-assets.js",
+    "check:reflow": "node scripts/check-reflow.mjs",
     "prune:img": "node scripts/prune-img.js"
   },
   "devDependencies": {

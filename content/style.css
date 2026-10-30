@@ -177,6 +177,12 @@ header nav ul {
   padding-block: 0.25rem;
 }
 
+/* a flex item will not shrink below its longest word unless min-width is 0, so a long title wraps instead of widening the page */
+.pager li,
+.filters li {
+  min-width: 0;
+}
+
 /* at least 35px tall hit areas */
 .site-name,
 header nav a,
@@ -203,8 +209,18 @@ p,
 li,
 dd,
 figcaption,
-a {
+a,
+blockquote,
+dt,
+summary {
   overflow-wrap: break-word;
+}
+
+/* anywhere also lowers min-content, so table columns and preformatted tokens shrink to fit; break-word does not */
+pre,
+td,
+th {
+  overflow-wrap: anywhere;
 }
 
 /* ==========================================================================
@@ -282,12 +298,13 @@ blockquote {
 @media (min-width: 40em) {
   dl {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto minmax(0, 1fr);
     gap: 0.5rem 1rem;
   }
 
   dd {
     margin: 0;
+    min-width: 0;
   }
 }
 
