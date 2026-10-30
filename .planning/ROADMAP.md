@@ -128,7 +128,7 @@ Plans:
   4. Owner can read a README listing every block and front matter field with examples
   5. Site is usable at 320px wide and 200% zoom without horizontal scrolling, verified under the real deployed prefix or domain
 
-**Plans:** 4/5 plans executed
+**Plans:** 5/5 plans executed
 Plans:
 **Wave 1**
 
@@ -145,7 +145,7 @@ Plans:
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 04-05-PLAN.md — 320px / 200% zoom reflow: headless-Chrome check under the real prefix, CSS fixes, CI guard test, live-site check (wave 4)
+- [x] 04-05-PLAN.md — 320px / 200% zoom reflow: headless-Chrome check under the real prefix, CSS fixes, CI guard test, live-site check (wave 4)
 
 **UI hint**: yes
 
@@ -156,4 +156,4 @@ Plans:
 | 1. Push-to-Live with Images | 5/5 | Complete    | 2026-10-29 |
 | 2. Layout Blocks, Embeds and Design System | 6/6 | Complete    | 2026-10-30 |
 | 3. Browsing, Lightbox and Standalone Pages | 5/5 | Complete    | 2026-10-30 |
-| 4. Hardening and Launch Readiness | 4/5 | In Progress | - |
+| 4. Hardening and Launch Readiness | 5/5 | In Progress | - |
