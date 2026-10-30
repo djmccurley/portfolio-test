@@ -1,9 +1,9 @@
 ---
-status: complete
+status: diagnosed
 phase: 02-layout-blocks-embeds-and-design-system
 source: [02-VERIFICATION.md]
 started: 2026-10-30T04:40:34Z
-updated: 2026-10-30T13:17:07.960Z
+updated: 2026-10-30T13:22:14Z
 ---
 
 ## Current Test
@@ -55,5 +55,14 @@ blocked: 0
   reason: "User reported: I don't see the poster image but the video deploys with and without poster."
   severity: major
   test: 4
-  artifacts: []  # Filled by diagnosis
-  missing: []    # Filled by diagnosis
+  root_cause: "renderFileVideo in lib/media.js always appends #t=0.001 to the video src, even when poster= is set. With preload=metadata the media fragment makes the browser seek on load, which exits poster mode and paints the video frame (black frame 0 for this clip) instead of the poster. The fragment trick was meant only for the no-poster case (02-CONTEXT.md line 93)."
+  artifacts:
+    - path: "lib/media.js"
+      issue: "Lines 49-53: #t=0.001 appended to src unconditionally, defeating poster="
+    - path: "test/video.test.js"
+      issue: "Poster build tests (lines ~194-215) never assert the <video src> form, so nothing guarded this"
+  missing:
+    - "Append #t=0.001 to src only when no poster is given; with a poster emit plain src and keep preload=metadata"
+    - "Regression tests: poster block src has no #t= (with and without full, escaped title); no-poster block keeps #t=0.001"
+    - "Spot-check poster display on iPhone Safari after the fix"
+  debug_session: ".planning/debug/video-poster-not-shown.md"
