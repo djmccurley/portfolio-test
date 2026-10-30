@@ -6,6 +6,7 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 import sharp from "sharp";
+import { VIDEO_EXTS, VIDEO_MAX_BYTES, VIDEO_MAX_MB } from "../lib/limits.js";
 
 const ASSETS = "assets";
 const MAX_EDGE = 3000;
@@ -225,6 +226,17 @@ export async function main(argv = process.argv.slice(2)) {
   const batch = new Set(names);
   const existing = new Set(onDisk.filter((n) => !batch.has(n)));
   let plan = planConversions(names, existing);
+
+  // Videos are never re-encoded either, so reject oversized ones before any conversion runs.
+  const bigVideos = names.filter(
+    (n) => VIDEO_EXTS.has(path.extname(n).toLowerCase()) && fs.statSync(path.join(ASSETS, n)).size > VIDEO_MAX_BYTES
+  );
+  if (bigVideos.length > 0) {
+    fail(
+      `Videos are never re-encoded; compress these below ${VIDEO_MAX_MB} MB or host them on YouTube/Vimeo:\n  ` +
+        bigVideos.map((n) => `${n}: over ${VIDEO_MAX_MB} MB`).join("\n  ")
+    );
+  }
 
   // GIF/AVIF are never re-encoded, so enforce CI's limits here instead of failing later in CI (WR-02).
   const tooBig = [];
