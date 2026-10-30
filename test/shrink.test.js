@@ -22,6 +22,7 @@ function makeRepo() {
   git(dir, "config", "user.email", "t@example.com");
   git(dir, "config", "commit.gpgsign", "false");
   fs.cpSync(path.join(ROOT, "scripts"), path.join(dir, "scripts"), { recursive: true });
+  fs.cpSync(path.join(ROOT, "lib"), path.join(dir, "lib"), { recursive: true });
   fs.cpSync(path.join(ROOT, ".githooks"), path.join(dir, ".githooks"), { recursive: true });
   fs.copyFileSync(path.join(ROOT, "package.json"), path.join(dir, "package.json"));
   fs.symlinkSync(path.join(ROOT, "node_modules"), path.join(dir, "node_modules"), "dir");
@@ -219,4 +220,34 @@ test("hook rejects GIF over 10 MB with a manual-fix message", () => {
   const r = commit(dir);
   assert.notEqual(r.status, 0);
   assert.match(r.stdout + r.stderr, /reduce by hand/);
+});
+
+test("hook renames a video to its slug without re-encoding it and rewrites the link", () => {
+  const dir = makeRepo();
+  const bytes = crypto.randomBytes(2048);
+  fs.writeFileSync(path.join(dir, "assets", "Crab-Walk.mp4"), bytes);
+  fs.writeFileSync(path.join(dir, "content/projects/p.md"), '::: video ../../assets/Crab-Walk.mp4 "Crab"\n:::\n');
+  git(dir, "add", "-A");
+  const r = commit(dir);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const tree = git(dir, "ls-tree", "-r", "HEAD", "--name-only").split("\n");
+  assert.ok(tree.includes("assets/crab-walk.mp4"), tree.join("\n"));
+  assert.ok(!tree.includes("assets/Crab-Walk.mp4"), tree.join("\n"));
+  const committed = execFileSync("git", ["show", "HEAD:assets/crab-walk.mp4"], { cwd: dir, maxBuffer: 1 << 28 });
+  const sha = (b) => crypto.createHash("sha256").update(b).digest("hex");
+  assert.equal(sha(committed), sha(bytes));
+  assert.ok(git(dir, "show", "HEAD:content/projects/p.md").includes("../../assets/crab-walk.mp4"));
+});
+
+test("hook rejects a video over 50 MB before the commit lands", () => {
+  const dir = makeRepo();
+  fs.writeFileSync(path.join(dir, "assets", "huge.mp4"), Buffer.alloc(51 * 1024 * 1024));
+  git(dir, "add", "-A");
+  const r = commit(dir);
+  assert.notEqual(r.status, 0);
+  const out = r.stdout + r.stderr;
+  assert.match(out, /over 50 MB/);
+  assert.match(out, /never re-encoded/);
+  const head = spawnSync("git", ["rev-parse", "--verify", "HEAD"], { cwd: dir, encoding: "utf8" });
+  assert.notEqual(head.status, 0, "nothing should be committed");
 });

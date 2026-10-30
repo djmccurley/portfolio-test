@@ -47,6 +47,28 @@ test("over 10 MB", async () => {
   assert.ok(errs.some((e) => e.includes("10 MB")));
 });
 
+test("videos up to 50 MB pass the guard", async () => {
+  const d = tmp();
+  fs.writeFileSync(path.join(d, "a.mp4"), crypto.randomBytes(11 * 1024 * 1024));
+  fs.writeFileSync(path.join(d, "b.webm"), crypto.randomBytes(11 * 1024 * 1024));
+  assert.deepEqual(await checkAssets(d), []);
+});
+
+test("a video over 50 MB names the video limit", async () => {
+  const d = tmp();
+  fs.writeFileSync(path.join(d, "big.mp4"), Buffer.alloc(51 * 1024 * 1024));
+  const errs = await checkAssets(d);
+  assert.ok(errs.some((e) => e.includes("assets/big.mp4: over 50 MB")), errs.join("\n"));
+  assert.ok(errs.every((e) => !e.includes("10 MB")), errs.join("\n"));
+});
+
+test("a GIF over 10 MB keeps the 10 MB message", async () => {
+  const d = tmp();
+  fs.writeFileSync(path.join(d, "big.gif"), crypto.randomBytes(11 * 1024 * 1024));
+  const errs = await checkAssets(d);
+  assert.ok(errs.some((e) => e.includes("assets/big.gif: over 10 MB")), errs.join("\n"));
+});
+
 test("GIF over 10 MB says shrink cannot fix it", async () => {
   const d = tmp();
   fs.writeFileSync(path.join(d, "big.gif"), crypto.randomBytes(11 * 1024 * 1024));
