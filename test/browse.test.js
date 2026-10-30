@@ -241,3 +241,96 @@ test("project slugs work and pdf are reserved; cv and teaching are not", async (
   assert.ok(r.output.includes('slug "cv" already used by'), r.output);
   assert.ok(!r.output.includes('slug "cv" is reserved'), r.output);
 });
+
+// ---------------------------------------------------------------------------
+// Tag pages (fixture T carries its own src/_data/tags.js)
+// ---------------------------------------------------------------------------
+
+const tagsJs = (defs) => `export default ${defs};\n`;
+const TAGS_T = tagsJs(
+  '[{ slug: "alpha", label: "Alpha & Co" }, { slug: "beta", label: "Beta" }, { slug: "gamma", label: "Gamma" }]'
+);
+
+const fixtureT = {
+  "src/_data/tags.js": TAGS_T,
+  "content/projects/a1.md": proj({ title: "A1", date: '"2024"', tags: "[alpha]" }),
+  "content/projects/a2.md": proj({ title: "A2", date: '"2023"', tags: "[alpha, gamma]" }),
+  "content/projects/g1.md": proj({ title: "G1", date: '"2022"', tags: "gamma" }),
+  "content/pages/teaching.md": "---\ntitle: Teaching\n---\n\nCourses.\n",
+};
+
+const mainOf = (html) => html.match(/<main[\s\S]*<\/main>/)[0];
+const cardHrefs = (html) => cardItems(html).map((li) => li.match(/<a class="card" href="([^"]+)"/)[1]);
+
+test("a tag page lists that tag's projects newest first, titled with the label", async () => {
+  const prefix = defaultPrefix();
+  const { site, r } = await build(fixtureT);
+  assert.equal(r.code, 0, r.output);
+
+  const alpha = site.read("_site/tags/alpha/index.html");
+  assert.match(alpha, /<title>Work: Alpha &amp; Co<\/title>/);
+  assert.match(alpha, /<h1>Work: Alpha &amp; Co<\/h1>/);
+  assert.deepEqual(cardHrefs(alpha), [`${prefix}a1/`, `${prefix}a2/`]);
+
+  // a tag given as a single string in front matter still counts
+  assert.deepEqual(cardHrefs(site.read("_site/tags/gamma/index.html")), [`${prefix}a2/`, `${prefix}g1/`]);
+
+  for (const f of site.walk("_site").filter((p) => p.endsWith(".html"))) {
+    assert.ok(!fs.readFileSync(f, "utf8").includes("&amp;amp;"), `${f} double-escapes`);
+  }
+});
+
+test("a tag no project uses gets no page; standalone pages never appear on tag pages", async () => {
+  const prefix = defaultPrefix();
+  const { site } = await build(fixtureT);
+  assert.ok(!site.exists("_site/tags/beta"), "no page for an unused tag");
+  for (const slug of ["alpha", "gamma"]) {
+    const main = mainOf(site.read(`_site/tags/${slug}/index.html`));
+    assert.ok(!main.includes(`${prefix}teaching/`), slug);
+  }
+});
+
+test("Work is marked current on tag pages", async () => {
+  const { site } = await build(fixtureT);
+  const work = headerLinks(site.read("_site/tags/alpha/index.html")).find((l) => l.label === "Work");
+  assert.equal(work.current, "true");
+});
+
+test("no built page leaks [object Object]", async () => {
+  const { site } = await build(fixtureT);
+  for (const f of site.walk("_site").filter((p) => p.endsWith(".html"))) {
+    assert.ok(!fs.readFileSync(f, "utf8").includes("[object Object]"), f);
+  }
+});
+
+test("under PATH_PREFIX=/ tag page cards are root-relative", async () => {
+  const { site, r } = await build(fixtureT, { prefix: "/" });
+  assert.equal(r.code, 0, r.output);
+  assert.deepEqual(cardHrefs(site.read("_site/tags/alpha/index.html")), ["/a1/", "/a2/"]);
+});
+
+test("a malformed src/_data/tags.js fails the build with its own message", async () => {
+  const fails = async (defs, message) => {
+    const { r } = await build({ ...fixtureT, "src/_data/tags.js": tagsJs(defs) });
+    assert.notEqual(r.code, 0, defs);
+    assert.ok(r.output.includes(message), `${defs}\n${r.output}`);
+  };
+  const shape = 'src/_data/tags.js: every tag needs a slug and a label, e.g. { slug: "ux", label: "UX" }.';
+  await fails('[{ slug: "alpha" }]', shape);
+  await fails('["alpha"]', shape);
+  await fails('[{ slug: "Bad Slug", label: "X" }]', 'src/_data/tags.js: tag slug "Bad Slug" must match ^[a-z0-9-]+$.');
+  await fails(
+    '[{ slug: "alpha", label: "A" }, { slug: "alpha", label: "B" }]',
+    'src/_data/tags.js: tag slug "alpha" is listed more than once.'
+  );
+  await fails("{}", 'src/_data/tags.js: must export a list of tags, e.g. [{ slug: "ux", label: "UX" }].');
+});
+
+test("a project tagged with an unlisted slug fails, listing the allowed slugs", async () => {
+  const { r } = await build({
+    ...fixtureT,
+    "content/projects/d1.md": proj({ title: "D1", date: '"2021"', tags: "[delta]" }),
+  });
+  assert.notEqual(r.code, 0);
+  assert.ok(r.output.includes('unknown tag "delta" (allowed: alpha, beta, gamma)'), r.output);
+});

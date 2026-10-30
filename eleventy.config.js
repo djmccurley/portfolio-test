@@ -8,7 +8,8 @@ import { refreshAssets, resolveAsset } from "./lib/assets.js";
 import { copyMedia } from "./lib/media.js";
 import { resetAltWarnings } from "./lib/alt-lint.js";
 import { parseFrontMatter, validDate } from "./lib/frontmatter.js";
-import { addValidation } from "./lib/validate.js";
+import { addValidation, validateTagDefs } from "./lib/validate.js";
+import tagDefs from "./src/_data/tags.js";
 
 // THE one base-path value. Use "/" for a custom domain or user site (PUB-02, D-20).
 const PATH_PREFIX = process.env.PATH_PREFIX ?? "/portfolio-test/";
@@ -22,6 +23,11 @@ function lenientFrontMatter(str) {
 }
 
 export default async function (eleventyConfig) {
+  // The global `tags` list (src/_data/tags.js) must not merge into each project's own `tags`.
+  eleventyConfig.setDataDeepMerge(false);
+  // Eleventy reads the global `tags` as every page's own tags and aborts on anything but a list, with a
+  // message that does not name the file. Report that case here, before it gets that far.
+  if (!Array.isArray(tagDefs)) throw new Error("Content validation failed:\n" + validateTagDefs(tagDefs).join("\n"));
   eleventyConfig.setFrontMatterParsingOptions({ engines: { yaml: { parse: lenientFrontMatter } } });
 
   eleventyConfig.addPlugin(HtmlBasePlugin);
@@ -62,6 +68,25 @@ export default async function (eleventyConfig) {
           String(b.data.date).localeCompare(String(a.data.date)) || a.inputPath.localeCompare(b.inputPath)
       )
   );
+
+  // Projects carrying a tag slug (a single string or a list in front matter).
+  eleventyConfig.addFilter("withTag", (items, slug) =>
+    (items ?? []).filter((item) => {
+      const t = item.data.tags;
+      return (Array.isArray(t) ? t : [t]).includes(slug);
+    })
+  );
+
+  // Tag definitions with at least one project, in src/_data/tags.js order: one page and one filter link each.
+  eleventyConfig.addCollection("tagPages", (api) => {
+    if (!Array.isArray(tagDefs)) return [];
+    const used = new Set();
+    for (const item of api.getFilteredByGlob("content/projects/*.md")) {
+      const t = item.data.tags;
+      for (const s of Array.isArray(t) ? t : [t]) used.add(s);
+    }
+    return tagDefs.filter((t) => t?.slug && used.has(t.slug));
+  });
 
   addValidation(eleventyConfig);
 
