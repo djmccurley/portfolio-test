@@ -10,6 +10,7 @@ import { copyMedia } from "./lib/media.js";
 import { resetAltWarnings } from "./lib/alt-lint.js";
 import { parseFrontMatter, validDate } from "./lib/frontmatter.js";
 import { addValidation, validateTagDefs } from "./lib/validate.js";
+import { showDrafts } from "./lib/drafts.js";
 import tagDefs from "./src/_data/tags.js";
 
 // THE one base-path value. Use "/" for a custom domain or user site (PUB-02, D-20).
@@ -30,6 +31,11 @@ export default async function (eleventyConfig) {
   // message that does not name the file. Report that case here, before it gets that far.
   if (!Array.isArray(tagDefs)) throw new Error("Content validation failed:\n" + validateTagDefs(tagDefs).join("\n"));
   eleventyConfig.setFrontMatterParsingOptions({ engines: { yaml: { parse: lenientFrontMatter } } });
+  // A skipped template never renders, joins no collection and registers no media, which covers D-14 and D-17
+  // in one place. Strict `=== true`: any non-boolean `draft` stays in the build so validation can reject it (D-19).
+  eleventyConfig.addPreprocessor("drafts", "*", (data) => {
+    if (data.draft === true && !showDrafts()) return false;
+  });
 
   eleventyConfig.addPlugin(HtmlBasePlugin);
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, imageOptions);
