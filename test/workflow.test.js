@@ -61,3 +61,13 @@ test("pages concurrency group does not cancel in-progress deploys", () => {
   assert.equal(wf.concurrency.group, "pages");
   assert.equal(wf.concurrency["cancel-in-progress"], false);
 });
+
+test("the production build cannot show drafts", () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"));
+  assert.equal(pkg.scripts.build, "eleventy");
+  assert.equal(pkg.scripts.start, "eleventy --serve");
+  const raw = fs.readFileSync(path.join(ROOT, ".github/workflows/deploy.yml"), "utf8");
+  for (const bad of ["--serve", "--watch", "ELEVENTY_RUN_MODE"]) {
+    assert.ok(!raw.includes(bad), `deploy.yml must not contain ${bad}`);
+  }
+});

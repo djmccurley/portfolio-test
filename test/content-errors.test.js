@@ -61,9 +61,6 @@ test("reserved slug", () =>
 test("bad slug format", () =>
   fails({ [P + "a.md"]: fm({ slug: '"../evil"' }) }, [P + "a.md", "must match ^[a-z0-9-]+$"]));
 
-test("draft not yet supported", () =>
-  fails({ [P + "a.md"]: fm({ draft: "true" }) }, [P + "a.md", 'unknown front matter key "draft"']));
-
 test("missing cover", () =>
   fails({ [P + "a.md"]: fm({ cover: "../../assets/gone.webp" }) }, [P + "a.md", "cover not found in assets/", "gone.webp"]));
 
