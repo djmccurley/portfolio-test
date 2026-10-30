@@ -1,6 +1,7 @@
 import { HtmlBasePlugin } from "@11ty/eleventy";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import { imageOptions } from "./lib/images.js";
+import { installBlocks } from "./lib/blocks.js";
 import { installAssetResolver } from "./lib/markdown.js";
 import { refreshAssets } from "./lib/assets.js";
 import { parseFrontMatter } from "./lib/frontmatter.js";
@@ -23,7 +24,10 @@ export default async function (eleventyConfig) {
   eleventyConfig.addPlugin(HtmlBasePlugin);
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, imageOptions);
 
-  eleventyConfig.amendLibrary("md", (md) => installAssetResolver(md));
+  eleventyConfig.amendLibrary("md", (md) => {
+    installBlocks(md);
+    installAssetResolver(md);
+  });
   await refreshAssets();
   eleventyConfig.on("eleventy.before", () => refreshAssets());
 
