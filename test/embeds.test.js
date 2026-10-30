@@ -221,7 +221,7 @@ test("a title cannot break out of its attribute", () => {
   fails(
     '::: video https://youtu.be/dQw4w9WgXcQ "a" onload=alert(1)\n:::\n',
     1,
-    'unexpected "onload=alert(1)" in video block. Use: ::: video [full] <url> "Title"'
+    'unexpected "onload=alert(1)" in video block. Use: ::: video [full] <url-or-assets-file> "Title" [poster=<assets-image>]'
   );
 });
 
@@ -250,7 +250,7 @@ test("an unexpected extra token in a video block is named", () => {
   fails(
     '::: video https://youtu.be/dQw4w9WgXcQ "T" poster=x.webp\n:::\n',
     1,
-    'unexpected "poster=x.webp" in video block. Use: ::: video [full] <url> "Title"'
+    'unexpected "poster=x.webp" in video block. Use: ::: video [full] <url-or-assets-file> "Title" [poster=<assets-image>]'
   );
 });
 
