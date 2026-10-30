@@ -51,8 +51,8 @@ export default async function (eleventyConfig) {
     await copyMedia(dir.output);
   });
 
-  // assets/ is never copied (IMG-03); only the stylesheet is passed through.
-  eleventyConfig.addPassthroughCopy({ "content/style.css": "style.css" });
+  // assets/ is never copied (IMG-03); only the stylesheet and the lightbox script are passed through.
+  eleventyConfig.addPassthroughCopy({ "content/style.css": "style.css", "content/lightbox.js": "lightbox.js" });
 
   // A card cover is a bare asset name or link; eleventy-img resolves a relative src against the page
   // being rendered, so the path is rewritten relative to that page (a function, so `this.page` is bound).

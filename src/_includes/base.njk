@@ -8,6 +8,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,100..900;1,100..900&display=swap">
   <link rel="stylesheet" href="/style.css">
+  {%- if '<a class="zoom"' in content %}
+  <script src="/lightbox.js" defer></script>
+  {%- endif %}
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
