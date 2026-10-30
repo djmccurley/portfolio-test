@@ -1,2 +1,101 @@
-body { max-width: 60em; margin: 0 auto; padding: 1rem; }
-img { max-width: 100%; height: auto; }
+/* ==========================================================================
+   Design tokens. This is the one place to edit colour and spacing.
+   --accent may be changed to any hex, but test/contrast.test.js fails if it drops below 4.5:1 against --paper.
+   ========================================================================== */
+:root {
+  --paper: #fff;
+  --ink: #000;
+  --accent: #0000ee; /* placeholder: owner may change; must stay >= 4.5:1 on --paper */
+  --font: "Chivo", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --page-margin: clamp(1rem, 5vw, 4rem);
+  --column-max: 80rem;
+  --measure: 40rem;
+  --grid-gap: 1rem;
+  --block-gap: 2rem;
+  color-scheme: light;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+a,
+a:visited {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.2em;
+}
+
+/* ==========================================================================
+   Keyboard: focus ring and skip link
+   ========================================================================== */
+:is(a, video, iframe, summary, button, [tabindex]):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* the programmatic skip target only; every other element keeps its ring */
+main:focus {
+  outline: none;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.75rem 1rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 700;
+  text-decoration: none;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  clip-path: none;
+}
+
+.skip-link:visited {
+  color: var(--paper);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Reduced motion: nothing on this site moves, this guard keeps it that way
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

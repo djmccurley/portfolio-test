@@ -4,13 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,100..900;1,100..900&display=swap">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
   <header><a href="/">Portfolio</a></header>
-  <main>
+  <main id="main" tabindex="-1">
     <h1>{{ title }}</h1>
-    {% if date %}<p><time datetime="{{ date }}">{{ date }}</time></p>{% endif %}
+    {% if date %}<p class="meta"><time datetime="{{ date }}">{{ date }}</time></p>{% endif %}
     {% if summary %}<p>{{ summary }}</p>{% endif %}
     {% if role or client or tools or year or link %}
     <dl>
