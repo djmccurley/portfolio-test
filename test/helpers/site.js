@@ -4,6 +4,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
+import siteData from "../../src/_data/site.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 
@@ -108,6 +109,14 @@ export async function makeSite({ files = {}, assets = {}, prefix, useRepoContent
     for (const f of walk(path.join(ROOT, "assets"))) {
       copyInto(f, path.join(dir, "assets", path.relative(path.join(ROOT, "assets"), f)));
     }
+  }
+  // Fixture sites get the default share image site.js names, so they keep building. A caller's own file of the
+  // same name (in `assets`, written below) wins.
+  if (!useRepoContent && typeof siteData.defaultImage === "string") {
+    fs.writeFileSync(
+      path.join(dir, "assets", siteData.defaultImage),
+      await makeAsset({ width: 1200, height: 630, format: "webp" })
+    );
   }
   for (const [rel, text] of Object.entries(files)) {
     const p = path.join(dir, rel);
