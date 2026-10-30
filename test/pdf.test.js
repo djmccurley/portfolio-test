@@ -231,3 +231,69 @@ test("full build: a PDF of exactly the cap passes; a 26 MiB PDF fails with its s
   assert.notEqual(r2.code, 0);
   assert.ok(r2.output.includes("PDF big.pdf is 26.0 MB; the limit is 25 MB."), r2.output);
 });
+
+// ---------------------------------------------------------------------------
+// Starter pages: /cv/ and /teaching/
+// ---------------------------------------------------------------------------
+
+const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
+
+test("repo build: /teaching/ renders a course heading and the sample syllabus link; the PDF is published", async () => {
+  const prefix = defaultPrefix();
+  const asset = fs.readFileSync(path.join(ROOT, "assets/teaching-sample-syllabus.pdf"));
+  const site = await makeSite({ useRepoContent: true });
+  sites.push(site);
+  const r = site.build();
+  assert.equal(r.code, 0, r.output);
+  const html = site.read("_site/teaching/index.html");
+  assert.ok(html.includes("<title>Teaching</title>"), html);
+  assert.ok(html.includes("<h1>Teaching</h1>"), html);
+  assert.match(html, /<h2[ >]/);
+  assert.ok(
+    html.includes(`<a href="${prefix}pdf/teaching-sample-syllabus.pdf">Syllabus (PDF, ${formatPdfSize(asset.length)})</a>`),
+    html
+  );
+  assert.deepEqual(fs.readFileSync(`${site.dir}/_site/pdf/teaching-sample-syllabus.pdf`), asset);
+});
+
+test("repo build: /cv/ renders through the base layout", async () => {
+  const site = await makeSite({ useRepoContent: true });
+  sites.push(site);
+  const r = site.build();
+  assert.equal(r.code, 0, r.output);
+  const html = site.read("_site/cv/index.html");
+  assert.ok(html.includes("<title>CV</title>"), html);
+  assert.ok(html.includes("<h1>CV</h1>"), html);
+});
+
+test("fixture: a standalone page never joins the projects on the homepage", async () => {
+  const site = await makeSite({
+    files: {
+      "content/projects/thing.md": `${projectFront}\nBody.\n`,
+      "content/pages/teaching.md": teaching("[Syllabus](../../assets/syllabus.pdf)"),
+    },
+    assets: { "a.webp": cover, "syllabus.pdf": PDF },
+  });
+  sites.push(site);
+  const r = site.build();
+  assert.equal(r.code, 0, r.output);
+  const main = site.read("_site/index.html").match(/<main[\s\S]*?<\/main>/)[0];
+  assert.doesNotMatch(main, /href="[^"]*teaching\/"/);
+  assert.match(main, /thing\//);
+});
+
+for (const slug of ["cv", "teaching"]) {
+  test(`fixture: a project with slug: ${slug} collides with the ${slug} page`, async () => {
+    const site = await makeSite({
+      files: {
+        [`content/pages/${slug}.md`]: `---\ntitle: ${slug}\n---\n\nText.\n`,
+        "content/projects/thing.md": projectFront.replace("tags:", `slug: ${slug}\ntags:`) + "\nBody.\n",
+      },
+      assets: { "a.webp": cover },
+    });
+    sites.push(site);
+    const r = site.build();
+    assert.notEqual(r.code, 0);
+    assert.ok(r.output.includes(`slug "${slug}" already used by`), r.output);
+  });
+}
