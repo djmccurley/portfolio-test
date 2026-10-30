@@ -29,7 +29,7 @@ function fails(body, line, message) {
 }
 
 const ONLY_IMAGES = "may only contain images. Move the text outside the block or use raw HTML.";
-const unknown = (name) => `unknown block "::: ${name}". Valid blocks: grid-2, grid-3, grid-4, full.`;
+const unknown = (name) => `unknown block "::: ${name}". Valid blocks: grid-2, grid-3, grid-4, full, video.`;
 
 test("unknown block names fail with the valid list", () => {
   fails("Intro.\n\n::: grid-5\n![a](x.webp)\n:::\n", 3, unknown("grid-5"));
@@ -117,7 +117,7 @@ test("registered embed handlers receive args and context and own the block marku
     assert.deepEqual(calls, [{ args: 'some "Title"', line: 3, file }]);
     assert.match(out, /<div class="embed">demo<\/div>/);
     assert.doesNotMatch(out, /<\/div>\s*<\/div>/);
-    fails("::: nope\n:::\n", 1, 'unknown block "::: nope". Valid blocks: grid-2, grid-3, grid-4, full, demo.');
+    fails("::: nope\n:::\n", 1, 'unknown block "::: nope". Valid blocks: grid-2, grid-3, grid-4, full, video, demo.');
   } finally {
     EMBEDS.delete("demo");
   }
