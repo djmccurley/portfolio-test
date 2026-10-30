@@ -179,6 +179,17 @@ test("manual mode", async () => {
   assert.equal(git(dir, "diff", "--cached", "--name-only").trim(), "");
 });
 
+test("manual mode re-encodes a WebP over 10 MB that is within the pixel cap (WR-04)", async () => {
+  const dir = makeRepo();
+  const noise = crypto.randomBytes(2400 * 2400 * 3);
+  const big = path.join(dir, "assets", "noise.webp");
+  await sharp(noise, { raw: { width: 2400, height: 2400, channels: 3 } }).webp({ lossless: true }).toFile(big);
+  assert.ok(fs.statSync(big).size > 10 * 1024 * 1024, "fixture must start over 10 MB");
+  const r = spawnSync("node", ["scripts/shrink.js"], { cwd: dir, encoding: "utf8" });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.ok(fs.statSync(big).size <= 10 * 1024 * 1024, "WebP should be under 10 MB after shrink");
+});
+
 test("hook processes renamed PNG assets (no rename detection skip)", async () => {
   const dir = makeRepo();
   fs.writeFileSync(path.join(dir, "assets", "old-name.png"), await png(100, 100));

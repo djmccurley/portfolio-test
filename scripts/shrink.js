@@ -150,6 +150,9 @@ async function convertOne(item, staged) {
     }
     if (item.from !== item.to) fs.unlinkSync(fromPath);
   }
+  if (fs.statSync(toPath).size > MAX_BYTES) {
+    console.warn(`shrink: warning: ${item.to} is still over 10 MB after conversion; reduce it by hand`);
+  }
   if (staged) {
     if (item.from !== item.to) {
       git(["rm", "--cached", "--quiet", "--ignore-unmatch", "--", `${ASSETS}/${item.from}`]);
@@ -260,10 +263,13 @@ export async function main(argv = process.argv.slice(2)) {
     const ext = path.extname(item.from).toLowerCase();
     if (item.action !== "none" && item.action !== "rename") continue;
     if (!RASTER_RESIZE_EXTS.has(ext)) continue;
-    const meta = await metaOf(path.join(ASSETS, item.from));
-    if (meta && Math.max(meta.width ?? 0, meta.pageHeight ?? meta.height ?? 0) > MAX_EDGE) {
-      item.action = "webp-lossless";
-    }
+    const full = path.join(ASSETS, item.from);
+    const meta = await metaOf(full);
+    const tooLarge = fs.statSync(full).size > MAX_BYTES;
+    const tooWide = meta && Math.max(meta.width ?? 0, meta.pageHeight ?? meta.height ?? 0) > MAX_EDGE;
+    // A WebP over the byte cap (e.g. lossless) is re-encoded lossy, or CI would reject it with no fix (WR-04).
+    if (tooLarge) item.action = "webp-lossy";
+    else if (tooWide) item.action = "webp-lossless";
   }
 
   if (!staged) {
