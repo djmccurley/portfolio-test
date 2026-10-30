@@ -37,7 +37,7 @@
 - [x] **IMG-02**: Every image has width/height set so pages don't shift while loading; the first image loads eagerly, the rest lazily
 - [x] **IMG-03**: Only processed derivatives are published; the source files in `assets/` are never copied to the live site
 - [x] **IMG-04**: Builds in CI reuse previously processed images instead of reprocessing all of them on every push
-- [ ] **IMG-05**: Visitor can open any content image full-size: a plain link to a large version that works without JS, enhanced to a native `<dialog>` viewer (keyboard-operable, Escape closes, focus returns)
+- [x] **IMG-05**: Visitor can open any content image full-size: a plain link to a large version that works without JS, enhanced to a native `<dialog>` viewer (keyboard-operable, Escape closes, focus returns)
 
 ### Media Embeds
 
@@ -117,7 +117,7 @@
 | IMG-02 | Phase 1 | Complete |
 | IMG-03 | Phase 1 | Complete |
 | IMG-04 | Phase 1 | Complete |
-| IMG-05 | Phase 3 | Pending |
+| IMG-05 | Phase 3 | Complete |
 | MEDIA-01 | Phase 2 | Complete |
 | MEDIA-02 | Phase 2 | Complete |
 | MEDIA-03 | Phase 2 | Complete |

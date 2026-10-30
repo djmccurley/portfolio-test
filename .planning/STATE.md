@@ -3,17 +3,17 @@ gsd_state_version: "1.0"
 milestone: v1.0
 current_phase: 03
 current_phase_name: Browsing, Lightbox and Standalone Pages
-status: executing
-stopped_at: Completed 03-04-PLAN.md
-last_updated: "2026-10-30T17:02:15.082Z"
+status: verifying
+stopped_at: Completed 03-05-PLAN.md
+last_updated: "2026-10-30T17:08:50.204Z"
 last_activity: 2026-10-30
 last_activity_desc: Phase 03 execution started
-state_head: b29719594c870a0dd0a1989057ef17cad7e8bdfa
+state_head: 8d1712117d0646dcb0c5b1380bdb4f1cc56ad8ba
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 16
-  completed_plans: 15
+  completed_plans: 16
 milestone_name: milestone
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-30)
 
 Phase: 03 (Browsing, Lightbox and Standalone Pages) — EXECUTING
 Plan: 5 of 5
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-10-30 — Phase 03 execution started
 
 Progress: [█████░░░░░] 50%
@@ -63,6 +63,7 @@ Progress: [█████░░░░░] 50%
 | Phase 03 P02 | 20min | 3 tasks | 12 files |
 | Phase 03 P03 | 25 min | 3 tasks | 15 files |
 | Phase 03 P04 | 15min | 2 tasks | 7 files |
+| Phase 03 P05 | 5 min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -94,6 +95,10 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 03]: tags.js holds { slug, label } objects; tag pages paginate plain defs, setDataDeepMerge(false), templates read projectTags never tags
 - [Phase 03]: A non-list tags.js export is reported from the config function because Eleventy aborts on global tags without naming the file
 - [Phase 03]: Featured slugs are read from the data cascade in the featured collection and validated by resolveFeatured; missing list means no featured projects
+- [Phase 03]: Zoom decision split: core rule tags images that may zoom, renderer wraps at render time because decorative status is only known then; remote and data: images never wrapped
+- [Phase 03]: Zoom hrefs finished by a PostHTML plugin at priority -1.5 (after eleventy-img, before HtmlBasePlugin) so hashed names and path prefix are both right
+- [Phase 03]: Lightbox script URL is plain /lightbox.js (HtmlBasePlugin prefixes it); loaded with defer only on pages containing a zoom link
+- [Phase 03]: Design test no-script guard narrowed to deferred first-party lightbox.js with no inline body, only on pages with zoom links
 
 ### Pending Todos
 
@@ -105,6 +110,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-30T17:02:14.974Z
-Stopped at: Completed 03-04-PLAN.md
+Last session: 2026-10-30T17:08:50.087Z
+Stopped at: Completed 03-05-PLAN.md
 Resume file: None
