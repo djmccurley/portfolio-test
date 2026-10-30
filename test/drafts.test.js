@@ -1,7 +1,12 @@
 import test, { after } from "node:test";
 import assert from "node:assert/strict";
 import { makeSite } from "./helpers/site.js";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { showDrafts } from "../lib/drafts.js";
+import * as draftsLib from "../lib/drafts.js";
+import { resolveFeatured } from "../lib/validate.js";
 
 const sites = [];
 after(() => sites.forEach((s) => s.cleanup()));
@@ -166,4 +171,109 @@ test('draft: "no" on a page fails naming the page', async () => {
   assert.notEqual(r.code, 0, r.output);
   assert.ok(r.output.includes("content/pages/notes.md"), r.output);
   assert.ok(r.output.includes('"draft" must be true or false (got "no")'), r.output);
+});
+
+// ---------------------------------------------------------------------------
+// Task 3: featured drafts and drafted nav pages warn instead of breaking
+// ---------------------------------------------------------------------------
+
+const FEATURED_WARN = 'WARN src/_data/featured.js: "secret" is a draft, so it is left off the homepage on the live site.';
+const cardLinks = (html) =>
+  [...((html.match(/<ul class="cards">[\s\S]*?<\/ul>/) ?? [""])[0]).matchAll(/<a class="card" href="([^"]*)"/g)].map((m) => m[1]);
+const headerLinks = (html) =>
+  [...(html.match(/<header>[\s\S]*?<\/header>/)[0]).matchAll(/<a [^>]*>([^<]*)<\/a>/g)].map((m) => m[1]);
+
+test("resolveFeatured skips a draft slug with one warning", () => {
+  const pairs = [{ slug: "pub", item: { id: "P" } }];
+  const warned = [];
+  const out = resolveFeatured(["secret", "pub"], pairs, { draftSlugs: new Set(["secret"]), warn: (m) => warned.push(m) });
+  assert.deepEqual(out, { errors: [], items: [{ id: "P" }] });
+  assert.deepEqual(warned, [FEATURED_WARN]);
+});
+
+test("resolveFeatured keeps the unknown-slug, duplicate and empty behavior", () => {
+  const pairs = [{ slug: "pub", item: { id: "P" } }];
+  const drafts = { draftSlugs: new Set(["secret"]), warn() {} };
+  assert.match(resolveFeatured(["nope"], pairs, drafts).errors[0], /does not match any project/);
+  assert.match(resolveFeatured(["secret", "secret"], pairs, drafts).errors[0], /is listed more than once/);
+  assert.deepEqual(resolveFeatured([], pairs), { errors: [], items: [] });
+});
+
+test("findDrafts lists draft projects then draft pages, skipping unreadable files", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "drafts-"));
+  try {
+    const put = (rel, text) => {
+      fs.mkdirSync(path.dirname(path.join(root, rel)), { recursive: true });
+      fs.writeFileSync(path.join(root, rel), text);
+    };
+    put("projects/a.md", "---\ntitle: A\ndraft: true\n---\n");
+    put("projects/b.md", "---\ntitle: B\ndraft: true\nslug: custom\n---\n");
+    put("projects/c.md", "---\ntitle: C\n---\n");
+    put("pages/cv.md", "---\ntitle: CV\ndraft: true\n---\n");
+    put("pages/bad.md", "---\ntitle: [unclosed\n---\n");
+    const got = draftsLib.findDrafts(root);
+    assert.deepEqual(got.map(({ slug, kind }) => ({ slug, kind })), [
+      { slug: "a", kind: "project" },
+      { slug: "custom", kind: "project" },
+      { slug: "cv", kind: "page" },
+    ]);
+    assert.equal(got[2].file, `${root}/pages/cv.md`);
+    fs.rmSync(path.join(root, "pages"), { recursive: true });
+    assert.equal(draftsLib.findDrafts(root).length, 2);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("a featured draft is skipped with a warning in the live build and shown under serve", async () => {
+  const s = await site({ ...D_FILES(), "src/_data/featured.js": 'export default ["secret", "pub"];\n' });
+  const live = s.build();
+  assert.equal(live.code, 0, live.output);
+  assert.ok(live.output.includes(FEATURED_WARN), live.output);
+  assert.deepEqual(cardLinks(s.read("_site/index.html")).map((h) => h.replace(/^.*\/(?=[^/]+\/$)/, "")), ["pub/"]);
+  const serve = s.buildServe();
+  assert.equal(serve.code, 0, serve.output);
+  assert.ok(!serve.output.includes("is a draft, so it is left off the homepage"), serve.output);
+  const home = s.read("_site/index.html");
+  assert.deepEqual(cardLinks(home).map((h) => h.replace(/^.*\/(?=[^/]+\/$)/, "")), ["secret/", "pub/"]);
+  assert.ok(cardFor(home, "secret/").includes("draft-label"));
+});
+
+const NAV_FILES = (cvDraft = true) => ({
+  "content/projects/pub.md": pubMd(),
+  "content/pages/cv.md": `---\ntitle: CV\n${cvDraft ? "draft: true\n" : ""}---\n\nCV.\n`,
+  "content/pages/teaching.md": "---\ntitle: Teaching\n---\n\nTeaching.\n",
+});
+const NAV_WARN = 'WARN content/pages/cv.md: this page is a draft, so its "CV" link is left out of the header nav on the live site.';
+
+test("a drafted CV page is dropped from the live nav and warned about", async () => {
+  const s = await site(NAV_FILES(), D_ASSETS());
+  const r = s.build();
+  assert.equal(r.code, 0, r.output);
+  assert.ok(r.output.includes(NAV_WARN), r.output);
+  assert.ok(!s.exists("_site/cv"));
+  for (const f of htmlFiles(s)) {
+    const html = s.read(f.slice(s.dir.length + 1));
+    assert.equal((html.match(/<nav aria-label="Main">/g) ?? []).length, 1, f);
+    assert.ok(!html.includes('href="/portfolio-test/cv/"'), f);
+  }
+  const names = headerLinks(s.read("_site/work/index.html"));
+  assert.equal(names.length, 3, names.join());
+  assert.deepEqual(names.slice(1), ["Work", "Teaching"]);
+});
+
+test("under serve the drafted CV stays in the nav, labelled, and the warning still prints", async () => {
+  const s = await site(NAV_FILES(), D_ASSETS());
+  const r = s.buildServe();
+  assert.equal(r.code, 0, r.output);
+  assert.ok(r.output.includes(NAV_WARN), r.output);
+  assert.deepEqual(headerLinks(s.read("_site/work/index.html")).slice(1), ["Work", "CV", "Teaching"]);
+  assert.match(s.read("_site/cv/index.html"), /draft-label/);
+});
+
+test("a drafted page that is not in the nav prints no nav warning", async () => {
+  const s = await site();
+  const r = s.build();
+  assert.equal(r.code, 0, r.output);
+  assert.ok(!r.output.includes("left out of the header nav"), r.output);
 });
