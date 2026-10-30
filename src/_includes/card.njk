@@ -1,0 +1,12 @@
+{#- One card grid for every browsing page. Set `items` (a list of collection items) and include this file. -#}
+<ul class="cards">
+{%- for project in items %}
+  <li>
+    <a class="card" href="{{ project.url }}">
+      <img src="{{ project.data.cover | assetSrc }}" alt="{{ project.data.cover_alt }}" sizes="(min-width: 90em) 416px, (min-width: 60em) 30vw, (min-width: 40em) 45vw, 90vw"{% if loop.first %} loading="eager" fetchpriority="high"{% endif %}>
+      <span class="card-title">{{ project.data.title }}</span>
+      <time class="card-date" datetime="{{ project.data.date }}">{{ project.data.date }}</time>
+    </a>
+  </li>
+{%- endfor %}
+</ul>

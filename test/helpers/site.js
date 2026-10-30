@@ -63,6 +63,8 @@ export async function makeSite({ files = {}, assets = {}, prefix, useRepoContent
   copyInto(path.join(ROOT, "package.json"), path.join(dir, "package.json"));
   fs.cpSync(path.join(ROOT, "lib"), path.join(dir, "lib"), { recursive: true });
   fs.cpSync(path.join(ROOT, "src"), path.join(dir, "src"), { recursive: true });
+  // Fixture sites never inherit the owner's featured list; a test can still supply its own file.
+  if (!useRepoContent) fs.writeFileSync(path.join(dir, "src", "_data", "featured.js"), "export default [];\n");
   fs.symlinkSync(path.join(ROOT, "node_modules"), path.join(dir, "node_modules"), "dir");
 
   const contentRoot = path.join(ROOT, "content");
@@ -70,7 +72,8 @@ export async function makeSite({ files = {}, assets = {}, prefix, useRepoContent
     const rel = path.relative(contentRoot, f);
     const base = rel.split(path.sep).join("/");
     const isBase =
-      base.endsWith(".11tydata.js") || base === "style.css" || base === "404.md" || base === "index.md";
+      base.endsWith(".11tydata.js") ||
+      ["style.css", "404.md", "index.md", "work.njk", "tags.njk", "lightbox.js"].includes(base);
     if (useRepoContent || isBase) copyInto(f, path.join(dir, "content", rel));
   }
   fs.mkdirSync(path.join(dir, "assets"), { recursive: true });

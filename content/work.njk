@@ -1,0 +1,11 @@
+---
+title: Work
+layout: base.njk
+permalink: /work/index.html
+---
+{% if collections.projects | length %}
+{%- set items = collections.projects %}
+{%- include "card.njk" %}
+{%- else %}
+<p>No projects yet. Check back soon.</p>
+{%- endif %}

@@ -1,9 +1,10 @@
+import path from "node:path";
 import { HtmlBasePlugin } from "@11ty/eleventy";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import { imageOptions } from "./lib/images.js";
 import { installBlocks } from "./lib/blocks.js";
 import { installAssetResolver } from "./lib/markdown.js";
-import { refreshAssets } from "./lib/assets.js";
+import { refreshAssets, resolveAsset } from "./lib/assets.js";
 import { copyMedia } from "./lib/media.js";
 import { resetAltWarnings } from "./lib/alt-lint.js";
 import { parseFrontMatter, validDate } from "./lib/frontmatter.js";
@@ -43,10 +44,23 @@ export default async function (eleventyConfig) {
   // assets/ is never copied (IMG-03); only the stylesheet is passed through.
   eleventyConfig.addPassthroughCopy({ "content/style.css": "style.css" });
 
+  // A card cover is a bare asset name or link; eleventy-img resolves a relative src against the page
+  // being rendered, so the path is rewritten relative to that page (a function, so `this.page` is bound).
+  eleventyConfig.addFilter("assetSrc", function (cover) {
+    const abs = resolveAsset(String(cover));
+    if (!abs) throw new Error(`${this.page.inputPath}: cover not found in assets/: ${cover}`);
+    return path.relative(path.dirname(this.page.inputPath), abs);
+  });
+
+  // Newest first by the written date string; identical dates fall back to the input path so the
+  // order is the same on every build.
   eleventyConfig.addCollection("projects", (api) =>
     api
       .getFilteredByGlob("content/projects/*.md")
-      .sort((a, b) => String(b.data.date).localeCompare(String(a.data.date)))
+      .sort(
+        (a, b) =>
+          String(b.data.date).localeCompare(String(a.data.date)) || a.inputPath.localeCompare(b.inputPath)
+      )
   );
 
   addValidation(eleventyConfig);
