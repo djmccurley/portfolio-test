@@ -3,6 +3,7 @@ import tagDefs from "../../src/_data/tags.js";
 export default {
   layout: "base.njk",
   section: "work", // Work is the current nav section on every project page
+  isProject: true, // tag pages share `section: "work"`, so this is what identifies a project (og:type, the pager)
   eleventyComputed: {
     // The project's own tags as { slug, label } entries, in front matter order. Templates use this,
     // never plain `tags`, which pages without tags of their own inherit as the global list.

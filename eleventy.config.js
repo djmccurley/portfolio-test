@@ -1,11 +1,11 @@
 import path from "node:path";
 import { HtmlBasePlugin } from "@11ty/eleventy";
-import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
+import Image, { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import { imageOptions } from "./lib/images.js";
 import { installBlocks } from "./lib/blocks.js";
 import { zoomPlugin } from "./lib/zoom.js";
 import { installAssetResolver } from "./lib/markdown.js";
-import { refreshAssets, resolveAsset } from "./lib/assets.js";
+import { refreshAssets, resolveAsset, hasAlpha } from "./lib/assets.js";
 import { copyMedia } from "./lib/media.js";
 import { resetAltWarnings } from "./lib/alt-lint.js";
 import { parseFrontMatter, validDate } from "./lib/frontmatter.js";
@@ -71,6 +71,17 @@ export default async function (eleventyConfig) {
     const abs = resolveAsset(String(cover));
     if (!abs) throw new Error(`${this.page.inputPath}: cover not found in assets/: ${cover}`);
     return path.relative(path.dirname(this.page.inputPath), abs);
+  });
+
+  // The link-preview image: a 1200px JPEG derivative of a cover or the default share image (PNG when the source has
+  // transparency). Own options on purpose: imageOptions' transparent format filtering would drop the JPEG for an alpha
+  // source and its animated sharp option is wrong for a GIF cover. eleventy-img never upscales (D-08).
+  eleventyConfig.addFilter("ogImage", async function (src) {
+    const abs = resolveAsset(String(src));
+    if (!abs) throw new Error(`${this.page.inputPath}: share image not found in assets/: ${src}`);
+    const fmt = hasAlpha(path.basename(abs).toLowerCase()) ? "png" : "jpeg";
+    const meta = await Image(abs, { widths: [1200], formats: [fmt], urlPath: "/img/", outputDir: "_site/img/", failOnError: true });
+    return meta[fmt][0];
   });
 
   // Newest first by the written date string; identical dates fall back to the input path so the
