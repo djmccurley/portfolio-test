@@ -51,6 +51,20 @@
     </dl>
     {% endif %}
     {{ content | safe }}
+    {%- if isProject %}
+    {%- set newer = collections.projects | getPreviousCollectionItem(page) %}
+    {%- set older = collections.projects | getNextCollectionItem(page) %}
+    {%- if newer or older %}
+    <nav class="pager" aria-label="Projects"><ul>
+      {%- if newer %}
+      <li><a href="{{ newer.url }}" rel="prev"><span aria-hidden="true">← </span>Previous: {{ newer.data.title }}</a></li>
+      {%- endif %}
+      {%- if older %}
+      <li><a href="{{ older.url }}" rel="next">Next: {{ older.data.title }}<span aria-hidden="true"> →</span></a></li>
+      {%- endif %}
+    </ul></nav>
+    {%- endif %}
+    {%- endif %}
   </main>
 </body>
 </html>

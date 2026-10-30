@@ -163,6 +163,20 @@ header nav ul {
   padding: 0;
 }
 
+/* project pager row: same shape as the filter row */
+.pager ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pager a {
+  padding-block: 0.25rem;
+}
+
 /* at least 35px tall hit areas */
 .site-name,
 header nav a,
@@ -308,6 +322,13 @@ main > :is(h2, h3) + :is(.layout, .embed, figure, .lone-image, .cards) {
 
 .embed + .embed-link {
   margin-top: 0.5rem;
+}
+
+/* project pager: the same 2px ink line as hr; after the block rules above so it wins the specificity tie */
+main > .pager {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--ink);
 }
 
 /* ==========================================================================
