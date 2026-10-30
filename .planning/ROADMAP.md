@@ -128,7 +128,25 @@ Plans:
   4. Owner can read a README listing every block and front matter field with examples
   5. Site is usable at 320px wide and 200% zoom without horizontal scrolling, verified under the real deployed prefix or domain
 
-**Plans**: TBD
+**Plans:** 5 plans
+Plans:
+**Wave 1**
+
+- [ ] 04-01-PLAN.md — Drafts: fail-closed run-mode preprocessor, media never published, Draft labels under `npm start`, boolean check, featured/nav draft warnings (wave 1)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 04-02-PLAN.md — Link previews: og/twitter/canonical head, absolute URLs via `site.url`, processed 1200px share image, default share image, `description` field, site.js validation (wave 2)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 04-03-PLAN.md — Next/previous project links (end-stopped, drafts skipped) and sitemap.xml + robots.txt with absolute URLs (wave 3)
+- [ ] 04-04-PLAN.md — Authoring README (blocks, front matter, workflow, drafts, site settings, error guide) with a code-synced test and buildable examples (wave 3)
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 04-05-PLAN.md — 320px / 200% zoom reflow: headless-Chrome check under the real prefix, CSS fixes, CI guard test, live-site check (wave 4)
+
 **UI hint**: yes
 
 ## Progress
