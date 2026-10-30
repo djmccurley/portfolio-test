@@ -1,0 +1,33 @@
+{
+  "contract": "1.0.0",
+  "flavor": "core",
+  "milestone": "v1.0",
+  "phases": [
+    {
+      "number": "1",
+      "name": "Push-to-Live with Images",
+      "status": "complete"
+    },
+    {
+      "number": "2",
+      "name": "Layout Blocks, Embeds and Design System",
+      "status": "complete"
+    },
+    {
+      "number": "3",
+      "name": "Browsing, Lightbox and Standalone Pages",
+      "status": "pending"
+    },
+    {
+      "number": "4",
+      "name": "Hardening and Launch Readiness",
+      "status": "pending"
+    }
+  ],
+  "next": {
+    "command": "/gsd-progress --next",
+    "label": "Advance to the next step (plan phase 3)",
+    "reason": "Phase 3 of 4 — needs a plan"
+  },
+  "updated_at": "2026-10-30T13:56:39.356Z"
+}
