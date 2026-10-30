@@ -294,3 +294,54 @@ test("raw HTML grid markup builds and is kept (class contract renders today)", a
     s.cleanup();
   }
 });
+
+// ---- Lightbox dialog visual (IMG-05, D-04) ----
+
+test("the lightbox dialog is an opaque fixed stage that shows as a grid only when open", () => {
+  const d = rule(CSS, "dialog.lightbox") ?? "";
+  assert.ok(d, "dialog.lightbox rule missing");
+  assert.match(d, /position:\s*fixed/);
+  assert.match(d, /inset:\s*0/);
+  assert.match(d, /background:\s*var\(--ink\)/);
+  assert.match(d, /color:\s*var\(--paper\)/);
+  assert.match(d, /overflow:\s*auto/);
+  assert.match(d, /overscroll-behavior:\s*contain/);
+  assert.ok(!/display\s*:/.test(d), "a closed dialog must not set display");
+  assert.match(rule(CSS, "dialog.lightbox[open]") ?? "", /display:\s*grid/);
+});
+
+test("the lightbox image fits the viewport and is never cropped", () => {
+  const img = rule(CSS, ".lightbox img") ?? "";
+  assert.ok(img, ".lightbox img rule missing");
+  assert.match(img, /max-width:\s*100%/);
+  assert.match(img, /max-height:\s*calc\(100dvh - 10rem\)/);
+  assert.ok(!/object-fit|aspect-ratio/.test(img), "the lightbox image must not be cropped or forced");
+});
+
+test("the Close button is a plain paper-on-ink block with a square border", () => {
+  const b = rule(CSS, ".lightbox-close") ?? "";
+  assert.ok(b, ".lightbox-close rule missing");
+  assert.match(b, /font:\s*inherit/);
+  assert.match(b, /font-weight:\s*700/);
+  assert.match(b, /background:\s*var\(--paper\)/);
+  assert.match(b, /color:\s*var\(--ink\)/);
+  assert.match(b, /border:\s*2px solid var\(--paper\)/);
+  assert.match(b, /border-radius:\s*0/);
+  assert.match(b, /padding:\s*0\.75rem 1rem/);
+});
+
+test("the focus ring inside the dialog is white and the global ring is unchanged", () => {
+  assert.match(rule(CSS, "dialog.lightbox :focus-visible") ?? "", /outline-color:\s*var\(--paper\)/);
+  assert.match(CSS, /:focus-visible\s*{[^}]*outline:\s*3px solid var\(--accent\)/);
+});
+
+test("no rule animates or transitions a lightbox selector", () => {
+  const re = /([^{}]+)\{([^{}]*)\}/g;
+  let m;
+  while ((m = re.exec(CSS))) {
+    if (/lightbox/.test(m[1])) {
+      assert.ok(!/transition|animation/.test(m[2]), `motion on ${m[1].trim()}`);
+    }
+  }
+  assert.ok(!/overflow:\s*hidden/.test(CSS), "overflow clipping is forbidden");
+});

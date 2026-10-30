@@ -79,3 +79,10 @@ test("a non-hex token value is reported by parseHex", () => {
   const css = ":root { --accent: rgb(0,0,238); }";
   assert.throws(() => parseHex(token(css, "--accent")), /hex value/);
 });
+
+test("paper on ink is at least 3:1 (dialog focus ring) and 4.5:1 (dialog text and caption)", () => {
+  const css = fs.readFileSync(CSS, "utf8");
+  const r = ratio(token(css, "--paper"), token(css, "--ink"));
+  assert.ok(r >= 3, `--paper ring on --ink dialog is ${r.toFixed(2)}:1, needs 3:1`);
+  assert.ok(r >= 4.5, `--paper text on --ink dialog is ${r.toFixed(2)}:1, needs 4.5:1`);
+});
