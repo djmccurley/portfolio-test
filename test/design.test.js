@@ -66,16 +66,12 @@ test("every page starts with the skip link and has the #main target", () => {
   }
 });
 
-test("head loads Inconsolata from Google Fonts before the stylesheet", () => {
+test("head loads only the site stylesheet: system fonts, no web font requests", () => {
   for (const p of PAGES) {
     const html = site.read(p);
-    assert.ok(html.includes('<link rel="preconnect" href="https://fonts.googleapis.com">'), p);
-    assert.match(html, /<link rel="preconnect" href="https:\/\/fonts\.gstatic\.com" crossorigin(="")?>/, p);
-    const fonts = html.indexOf("family=Inconsolata:wght@200..900");
-    assert.ok(fonts > 0, `${p}: Inconsolata link missing`);
-    assert.ok(html.includes("display=swap"), p);
-    const own = html.indexOf(`href="${prefix}style.css"`);
-    assert.ok(own > fonts, `${p}: style.css must come after the fonts link`);
+    assert.ok(html.includes(`<link rel="stylesheet" href="${prefix}style.css">`), `${p}: style.css link missing`);
+    assert.ok(!/fonts\.(googleapis|gstatic)\.com/.test(html), `${p}: loads Google Fonts`);
+    assert.equal((html.match(/rel="stylesheet"/g) ?? []).length, 1, `${p}: extra stylesheet`);
   }
 });
 
@@ -98,19 +94,19 @@ test("style.css declares the design tokens", () => {
   const root = rule(CSS, ":root");
   assert.ok(root, ":root block missing");
   const want = {
-    "--paper": "#fff",
-    "--ink": "#000",
-    "--accent": "#0000ee",
+    "--paper": "#fafafa",
+    "--ink": "#1e00df",
+    "--accent": "#1e00df",
     "--page-margin": "clamp(1rem, 5vw, 4rem)",
     "--column-max": "80rem",
-    "--measure": "40rem",
+    "--measure": "50rem",
     "--grid-gap": "1rem",
     "--block-gap": "2rem",
   };
   for (const [k, v] of Object.entries(want)) {
     assert.ok(root.includes(`${k}: ${v}`), `${k}: ${v} missing`);
   }
-  assert.match(root, /--font:\s*"Inconsolata",\s*ui-monospace/);
+  assert.match(root, /--font:\s*monospace;/);
   assert.match(root, /color-scheme:\s*light/);
 });
 
@@ -216,17 +212,18 @@ test("card grid: 3 columns, 4:3 centred covers, collapse to 2 and 1", () => {
   assert.ok(/\.cards[\s\S]*grid-template-columns:\s*minmax\(0, 1fr\)/.test(phone[1]), ".cards 1 column");
 });
 
-test("site header wraps; current links are black and bold", () => {
+test("site header wraps; header links are plain and the current link is underlined", () => {
   const row = rule(CSS, ".header-row");
   assert.ok(row, ".header-row missing");
   assert.match(row, /display:\s*flex/);
   assert.match(row, /flex-wrap:\s*wrap/);
-  assert.match(rule(CSS, ".site-name") ?? "", /font-weight:\s*700/);
+  assert.match(rule(CSS, "a.site-name") ?? "", /font-weight:\s*700/);
   assert.ok(!allRules(CSS).some((r) => r.selector === "body > header > a"), "old header link rule is gone");
+  // header links drop the underline, so the underline is what marks the current page there
+  assert.match(rule(CSS, "header a") ?? "", /text-decoration:\s*none/);
   const current = rule(CSS, "a[aria-current]");
   assert.ok(current, "a[aria-current] missing");
-  assert.match(current, /color:\s*var\(--ink\)/);
-  assert.match(current, /font-weight:\s*700/);
+  assert.match(current, /text-decoration:\s*underline/);
   const link = CSS.search(/a,\s*a:visited\s*{/);
   assert.ok(link >= 0 && CSS.indexOf("a[aria-current]") > link, "a[aria-current] must follow the link rule");
 });
@@ -254,7 +251,7 @@ test("card grids escape the prose cap and keep the heading rhythm", () => {
 
 test("only four font sizes and two weights", () => {
   const sizes = new Set([...CSS.matchAll(/font-size:\s*([^;]+);/g)].map((m) => m[1].trim()));
-  for (const s of sizes) assert.ok(["1.125rem", "0.875rem", "1.5rem", "2.5rem"].includes(s), `font-size ${s}`);
+  for (const s of sizes) assert.ok(["0.875rem", "1rem", "1.125rem", "1.875rem"].includes(s), `font-size ${s}`);
   const weights = new Set([...CSS.matchAll(/font-weight:\s*([^;]+);/g)].map((m) => m[1].trim()));
   for (const w of weights) assert.ok(["400", "700"].includes(w), `font-weight ${w}`);
 });

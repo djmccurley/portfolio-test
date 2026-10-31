@@ -99,16 +99,16 @@ test("og:image is a processed 1200px derivative of the cover, not the original",
   assert.ok(site.exists(`_site/img/${file}`));
 });
 
-test("the preview tags sit between </title> and the Inconsolata stylesheet link", async () => {
+test("the preview tags sit between </title> and the stylesheet link", async () => {
   const { site, r } = await build(P);
   assert.equal(r.code, 0, r.output);
   const html = site.read("_site/tide/index.html");
   const from = html.indexOf("</title>");
-  const to = html.indexOf("fonts.googleapis.com/css2");
+  const to = html.indexOf('rel="stylesheet"');
   assert.ok(from > 0 && to > from);
   const head = html.slice(from, to);
   for (const needle of ['name="description"', 'rel="canonical"', "og:title", "og:image", "twitter:card"]) {
-    assert.ok(head.includes(needle), `${needle} not between </title> and the fonts link`);
+    assert.ok(head.includes(needle), `${needle} not between </title> and the stylesheet link`);
   }
 });
 
