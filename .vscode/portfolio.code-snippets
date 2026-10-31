@@ -1,0 +1,50 @@
+{
+  // Type the prefix at the top of a new .md file and press Tab.
+  // Tab jumps between the highlighted fields; Esc leaves the snippet.
+  // Optional fields start commented out: put the cursor on one and press Cmd+/ to switch it on.
+  "Project front matter": {
+    "scope": "markdown",
+    "prefix": "fm",
+    "description": "Front matter for a new project in content/projects/",
+    "body": [
+      "---",
+      "title: ${1:Title}",
+      "date: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+      "tags: [${2|graphic,ux,art,games|}]",
+      "cover: ../../assets/${3:$TM_FILENAME_BASE-cover.webp}",
+      "cover_alt: ${4:Describe the cover image}",
+      "# summary: One or two sentences, shown as the intro paragraph.",
+      "# description: Text for link previews.",
+      "# slug: $TM_FILENAME_BASE",
+      "# role: Design and code",
+      "# client: Self-published",
+      "# tools: [Figma, Godot]",
+      "# year: $CURRENT_YEAR",
+      "# link: https://example.com",
+      "# draft: true",
+      "# heading: A different large heading",
+      "# hideHeading: true",
+      "---",
+      "",
+      "$0"
+    ]
+  },
+  "Page front matter": {
+    "scope": "markdown",
+    "prefix": "fmp",
+    "description": "Front matter for a new page in content/pages/",
+    "body": [
+      "---",
+      "title: ${1:Title}",
+      "# summary: One or two sentences, shown as the intro paragraph.",
+      "# description: Text for link previews.",
+      "# slug: $TM_FILENAME_BASE",
+      "# draft: true",
+      "# heading: A different large heading",
+      "# hideHeading: true",
+      "---",
+      "",
+      "$0"
+    ]
+  }
+}

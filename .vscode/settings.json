@@ -4,5 +4,8 @@
   },
   "markdown.copyFiles.overwriteBehavior": "nameIncrementally",
   "markdown.editor.filePaste.copyIntoWorkspace": "mediaFiles",
-  "markdown.editor.drop.copyIntoWorkspace": "mediaFiles"
+  "markdown.editor.drop.copyIntoWorkspace": "mediaFiles",
+  "[markdown]": {
+    "editor.tabCompletion": "onlySnippets"
+  }
 }

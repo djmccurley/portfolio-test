@@ -198,7 +198,7 @@ The homepage, `content/index.md`, takes `heading` and `hideHeading` too. To hide
 
 ## Day-to-day workflow
 
-1. Create `content/projects/<name>.md`. The file name is the URL unless you set `slug`. Standalone pages go in `content/pages/`.
+1. Create `content/projects/<name>.md`. The file name is the URL unless you set `slug`. Standalone pages go in `content/pages/`. In VS Code, type `fm` and press Tab for project front matter, or `fmp` for page front matter. Tab moves between the fields. Optional fields start commented out; press Cmd+/ on a line to switch it on.
 2. Paste images in VS Code. They are saved as `assets/<page>-<file>` and the link is inserted. Write real alt text.
 3. Add blocks from the quick reference above.
 4. Run `npm start` and open `http://localhost:8080/portfolio-test/`. The page reloads as you save, and drafts are visible.
