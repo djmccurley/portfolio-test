@@ -99,7 +99,7 @@ test("og:image is a processed 1200px derivative of the cover, not the original",
   assert.ok(site.exists(`_site/img/${file}`));
 });
 
-test("the preview tags sit between </title> and the Chivo stylesheet link", async () => {
+test("the preview tags sit between </title> and the Inconsolata stylesheet link", async () => {
   const { site, r } = await build(P);
   assert.equal(r.code, 0, r.output);
   const html = site.read("_site/tide/index.html");

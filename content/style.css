@@ -6,7 +6,7 @@
   --paper: #fff;
   --ink: #000;
   --accent: #0000ee; /* placeholder: owner may change; must stay >= 4.5:1 on --paper */
-  --font: "Chivo", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font: "Inconsolata", ui-monospace, Menlo, Consolas, monospace;
   --page-margin: clamp(1rem, 5vw, 4rem);
   --column-max: 80rem;
   --measure: 40rem;

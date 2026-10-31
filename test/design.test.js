@@ -66,13 +66,13 @@ test("every page starts with the skip link and has the #main target", () => {
   }
 });
 
-test("head loads Chivo from Google Fonts before the stylesheet", () => {
+test("head loads Inconsolata from Google Fonts before the stylesheet", () => {
   for (const p of PAGES) {
     const html = site.read(p);
     assert.ok(html.includes('<link rel="preconnect" href="https://fonts.googleapis.com">'), p);
     assert.match(html, /<link rel="preconnect" href="https:\/\/fonts\.gstatic\.com" crossorigin(="")?>/, p);
-    const fonts = html.indexOf("family=Chivo:ital,wght@0,100..900;1,100..900");
-    assert.ok(fonts > 0, `${p}: Chivo link missing`);
+    const fonts = html.indexOf("family=Inconsolata:wght@200..900");
+    assert.ok(fonts > 0, `${p}: Inconsolata link missing`);
     assert.ok(html.includes("display=swap"), p);
     const own = html.indexOf(`href="${prefix}style.css"`);
     assert.ok(own > fonts, `${p}: style.css must come after the fonts link`);
@@ -110,7 +110,7 @@ test("style.css declares the design tokens", () => {
   for (const [k, v] of Object.entries(want)) {
     assert.ok(root.includes(`${k}: ${v}`), `${k}: ${v} missing`);
   }
-  assert.match(root, /--font:\s*"Chivo",\s*system-ui/);
+  assert.match(root, /--font:\s*"Inconsolata",\s*ui-monospace/);
   assert.match(root, /color-scheme:\s*light/);
 });
 
