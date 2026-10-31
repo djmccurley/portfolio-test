@@ -3,10 +3,10 @@ gsd_state_version: "1.0"
 milestone: v1.0
 status: Awaiting next milestone
 stopped_at: Completed 04-05-PLAN.md
-last_updated: "2026-10-31T03:41:00.725Z"
-last_activity: 2026-10-30
+last_updated: "2026-10-31T15:57:30.549Z"
+last_activity: 2026-10-31
 last_activity_desc: Milestone v1.0 completed and archived
-state_head: a345a0649db774ef5065c57be8f8e3cd46472aa7
+state_head: 1778b4693cf8c86b58748e9044037527a0801471
 progress:
   total_phases: 4
   completed_phases: 3
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-10-30)
 Phase: Milestone v1.0 complete
 Plan: —
 Status: Awaiting next milestone
-Last activity: 2026-10-30 — Milestone v1.0 completed and archived
+Last activity: 2026-10-31 - Completed quick task 261031-f08: Homepage H1 editable heading and visibility toggle
 
 ## Performance Metrics
 
@@ -119,6 +119,12 @@ None yet.
 ### Blockers/Concerns
 
 - [Phase 1] Site URL undecided; base path must remain one config value (currently PATH_PREFIX /portfolio-test/).
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 261031-f08 | Homepage H1: editable heading and visibility toggle in content/index.md (default visible: Designer, artist and educator) | 2026-10-31 | 1778b46 | [261031-f08-homepage-h1-editable-heading-and-visibil](./quick/261031-f08-homepage-h1-editable-heading-and-visibil/) |
 
 ## Deferred Items
 
