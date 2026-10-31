@@ -36,7 +36,7 @@
     {% if "teaching" not in hiddenNav %}<li><a href="/teaching/"{% if page.url == "/teaching/" %} aria-current="page"{% endif %}>Teaching</a></li>{% endif %}
   </ul></nav></div></header>
   <main id="main" tabindex="-1">
-    <h1>{{ title }}</h1>
+    <h1{% if hideHeading === true %} class="visually-hidden"{% endif %}>{{ heading or title }}</h1>
     {% if draft %}<p class="draft-label"><strong>Draft</strong></p>{% endif %}
     {% if date %}<p class="meta"><time datetime="{{ date }}">{{ date }}</time></p>{% endif %}
     {% if summary %}<p>{{ summary }}</p>{% endif %}

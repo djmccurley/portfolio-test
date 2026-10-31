@@ -18,7 +18,10 @@ const PROJECTS = {
   "content/projects/x.md": proj({ title: "X", date: "2022", slug: "custom" }),
 };
 
-const featuredFile = (expr) => ({ "src/_data/featured.js": `export default ${expr};\n` });
+// Homepage markup with no heading, so these tests do not depend on the owner's copy of content/index.md.
+const HOME = "---\nlayout: home.njk\npermalink: /index.html\n---\n\nIntro.\n";
+
+const featuredFile =(expr) => ({ "src/_data/featured.js": `export default ${expr};\n` });
 
 async function build(files, opts = {}) {
   const site = await makeSite({ files, assets: ASSETS, ...opts });
@@ -36,7 +39,7 @@ const cardItems = (html) => cardsOf(html).match(/<li>[\s\S]*?<\/li>/g) ?? [];
 
 test("homepage shows name, intro, featured cards in file order and an All work link", async () => {
   const prefix = defaultPrefix();
-  const { site, r } = await build({ ...PROJECTS, ...featuredFile('["b", "custom", "a"]') });
+  const { site, r } = await build({ ...PROJECTS, ...featuredFile('["b", "custom", "a"]'), "content/index.md": HOME });
   assert.equal(r.code, 0, r.output);
   const html = site.read("_site/index.html");
 
@@ -57,7 +60,7 @@ test("homepage shows name, intro, featured cards in file order and an All work l
 });
 
 test("homepage title and h1 are the site name", async () => {
-  const { site, r } = await build({ ...PROJECTS, ...featuredFile('["a"]') });
+  const { site, r } = await build({ ...PROJECTS, ...featuredFile('["a"]'), "content/index.md": HOME });
   assert.equal(r.code, 0, r.output);
   const html = site.read("_site/index.html");
   assert.ok(html.includes(`<title>${siteData.name}</title>`));
@@ -68,6 +71,7 @@ test("a site name with & and < is escaped exactly once in title, h1 and header",
   const { site, r } = await build({
     ...PROJECTS,
     ...featuredFile('["a"]'),
+    "content/index.md": HOME,
     "src/_data/site.js": `export default ${JSON.stringify({ ...siteData, name: "Ann & <Bo>" })};\n`,
   });
   assert.equal(r.code, 0, r.output);
