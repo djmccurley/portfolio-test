@@ -50,3 +50,37 @@ test("only boolean true hides the heading: no and false stay visible", async () 
     assert.deepEqual(h1s(html), [`<h1>${siteData.name}</h1>`], `hideHeading: ${v}`);
   }
 });
+
+// ---------------------------------------------------------------------------
+// Pages and projects
+// ---------------------------------------------------------------------------
+
+async function buildFiles(files, assets = {}) {
+  const site = await makeSite({ files, assets });
+  sites.push(site);
+  const r = site.build();
+  assert.equal(r.code, 0, r.output);
+  return site;
+}
+
+test("a page can set heading and hideHeading; title stays in <title>", async () => {
+  const site = await buildFiles({
+    "content/pages/about.md": "---\ntitle: About\nheading: About the studio\nhideHeading: true\n---\n\nHi.\n",
+  });
+  const html = site.read("_site/about/index.html");
+  assert.deepEqual(h1s(html), ['<h1 class="visually-hidden">About the studio</h1>']);
+  assert.ok(html.includes("<title>About</title>"));
+});
+
+test("a project can set heading; title stays in <title>", async () => {
+  const site = await buildFiles(
+    {
+      "content/projects/p.md":
+        '---\ntitle: P\ndate: "2024"\ntags: [games]\ncover: ../../assets/a.webp\ncover_alt: Cover\nheading: A longer project heading\n---\n\nBody.\n',
+    },
+    { "a.webp": { width: 1200, height: 800, format: "webp" } }
+  );
+  const html = site.read("_site/p/index.html");
+  assert.deepEqual(h1s(html), ["<h1>A longer project heading</h1>"]);
+  assert.ok(html.includes("<title>P</title>"));
+});

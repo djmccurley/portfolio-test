@@ -167,3 +167,12 @@ test("404 page", async () => {
     site.cleanup();
   }
 });
+
+test("non-boolean hideHeading on a project", () =>
+  fails({ [P + "a.md"]: fm({ hideHeading: "yes" }) }, [P + "a.md", '"hideHeading" must be true or false']));
+
+test("non-boolean hideHeading on a page", () =>
+  fails({ "content/pages/about.md": "---\ntitle: About\nhideHeading: no\n---\n\nBody\n" }, [
+    "content/pages/about.md",
+    '"hideHeading" must be true or false',
+  ]));
