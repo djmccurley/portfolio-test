@@ -43,6 +43,10 @@ human_verification:
   - test: "On the deployed site https://djmccurley.github.io/portfolio-test/ check 320px wide, 200% and 400% zoom on every page, including opening the lightbox and reaching Close"
     expected: "No horizontal scrollbar, nothing cut off, lightbox Close visible and reachable"
     why_human: "ROADMAP criterion 5 says 'verified under the real deployed prefix'; the local headless check uses a local server and fallback fonts"
+audit_acknowledged:
+  milestone: v1.0
+  at: 2026-10-30
+  status: human_needed
 ---
 
 # Phase 4: Hardening and Launch Readiness Verification Report

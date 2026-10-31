@@ -3,6 +3,10 @@ status: diagnosed
 trigger: "video-poster-not-shown: Self-hosted video shows its poster image before playback when poster= is set (UAT Test 4, gap G-02-4)"
 created: 2026-10-30T00:00:00Z
 updated: 2026-10-30T00:00:00Z
+audit_acknowledged:
+  milestone: v1.0
+  at: 2026-10-30
+  status: diagnosed
 ---
 
 ## Current Focus

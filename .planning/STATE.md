@@ -1,20 +1,20 @@
 ---
 gsd_state_version: "1.0"
 milestone: v1.0
-current_phase: 04
-current_phase_name: Hardening and Launch Readiness
-status: verifying
+status: Awaiting next milestone
 stopped_at: Completed 04-05-PLAN.md
-last_updated: "2026-10-30T22:32:09.201Z"
+last_updated: "2026-10-31T03:41:00.725Z"
 last_activity: 2026-10-30
-last_activity_desc: Phase 04 execution started
-state_head: 82e0e2f35e0df04350c62fdc89237945f3254fcc
+last_activity_desc: Milestone v1.0 completed and archived
+state_head: a345a0649db774ef5065c57be8f8e3cd46472aa7
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 21
   completed_plans: 21
 milestone_name: milestone
+current_phase: 04
+current_phase_name: Hardening and Launch Readiness
 ---
 
 # Project State
@@ -24,16 +24,14 @@ milestone_name: milestone
 See: .planning/PROJECT.md (updated 2026-10-30)
 
 **Core value:** Writing a new project page should be as fast as typing markdown, then push, and it's live, with no CMS, template fights or upload caps.
-**Current focus:** Phase 04 — Hardening and Launch Readiness
+**Current focus:** Planning next milestone (v1.0 shipped 2026-10-30)
 
 ## Current Position
 
-Phase: 04 (Hardening and Launch Readiness) — EXECUTING
-Plan: 5 of 5
-Status: Phase complete — ready for verification
-Last activity: 2026-10-30 — Phase 04 execution started
-
-Progress: [████████░░] 75%
+Phase: Milestone v1.0 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-10-30 — Milestone v1.0 completed and archived
 
 ## Performance Metrics
 
@@ -122,8 +120,23 @@ None yet.
 
 - [Phase 1] Site URL undecided; base path must remain one config value (currently PATH_PREFIX /portfolio-test/).
 
+## Deferred Items
+
+Items acknowledged and deferred at milestone close, most recent first:
+
+| Category | Item | Status | Deferred At | Milestone |
+|----------|------|--------|-------------|-----------|
+| debug_sessions | video-poster-not-shown | diagnosed (fix shipped in 02-06; session never closed) | 2026-10-30 | v1.0 |
+| verification_gaps | 04/04-VERIFICATION.md | human_needed (all 5 items passed in 04-UAT.md) | 2026-10-30 | v1.0 |
+| verification_override | 02/02-VERIFICATION.md | stale (Phase 4 later edited covered files; 356/356 tests pass at close) | 2026-10-30 | v1.0 |
+| verification_override | 03/03-VERIFICATION.md | stale (Phase 4 later edited covered files; 356/356 tests pass at close) | 2026-10-30 | v1.0 |
+
 ## Session Continuity
 
 Last session: 2026-10-30T22:32:09.024Z
 Stopped at: Completed 04-05-PLAN.md
 Resume file: None
+
+## Operator Next Steps
+
+- Start the next milestone with /gsd-new-milestone
