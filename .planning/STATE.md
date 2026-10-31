@@ -3,10 +3,10 @@ gsd_state_version: "1.0"
 milestone: v1.0
 status: Awaiting next milestone
 stopped_at: Completed 04-05-PLAN.md
-last_updated: "2026-10-31T15:57:30.549Z"
+last_updated: "2026-10-31T16:45:03.826Z"
 last_activity: 2026-10-31
 last_activity_desc: Milestone v1.0 completed and archived
-state_head: 1778b4693cf8c86b58748e9044037527a0801471
+state_head: f559b80dd81f3658794fe0409750394eeb4c2e40
 progress:
   total_phases: 4
   completed_phases: 3
@@ -125,6 +125,7 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 261031-f08 | Homepage H1: editable heading and visibility toggle in content/index.md (default visible: Designer, artist and educator) | 2026-10-31 | 1778b46 | [261031-f08-homepage-h1-editable-heading-and-visibil](./quick/261031-f08-homepage-h1-editable-heading-and-visibil/) |
+| 2 | Switch site font from Chivo to Inconsolata (Google Fonts) | 2026-10-31 | f559b80 | — |
 
 ## Deferred Items
 
