@@ -148,6 +148,8 @@ Project files live in `content/projects/`. The front matter is the block between
 | `year` | no | Text | `2024` |
 | `link` | no | A full URL | `https://example.com` |
 | `draft` | no | `true` or `false` | `true` |
+| `heading` | no | Text that replaces the large heading at the top of the page. The browser tab, link previews and project cards still use `title` | `Tidepool, a game about rock pools` |
+| `hideHeading` | no | `true` or `false`. `true` hides the heading on screen but keeps it for screen readers | `true` |
 
 ```yaml
 ---
@@ -179,6 +181,8 @@ Standalone pages live in `content/pages/`, for example the CV or Teaching page. 
 | `description` | no | Text for link previews. Falls back to `summary`, then to the site default | `Courses and syllabi.` |
 | `slug` | no | Same rules as for projects | `teaching` |
 | `draft` | no | `true` or `false` | `true` |
+| `heading` | no | Text that replaces the large heading at the top of the page. The browser tab and link previews still use `title` | `Courses and workshops` |
+| `hideHeading` | no | `true` or `false`. `true` hides the heading on screen but keeps it for screen readers | `true` |
 
 ```yaml
 ---
@@ -189,6 +193,8 @@ slug: teaching
 draft: true
 ---
 ```
+
+The homepage, `content/index.md`, takes `heading` and `hideHeading` too. To hide its heading, remove the `#` in front of `hideHeading: true` in that file.
 
 ## Day-to-day workflow
 
@@ -241,6 +247,7 @@ An error names the file and line it came from. Find the fragment in the first co
 | `already used by` | Two pages share a slug | Give one of them a different `slug` |
 | `is reserved` | The slug is a name the site uses itself | Pick another `slug` |
 | `"draft" must be true or false` | `draft` has some other value | Write `draft: true` or `draft: false` |
+| `"hideHeading" must be true or false` | `hideHeading` has some other value, such as `yes` | Write `hideHeading: true` or `hideHeading: false` |
 | `unknown block "::: x". Valid blocks: ...` | The block name is misspelled | Use a name from the Blocks table |
 | `is never closed. Add ":::" on its own line after the content.` | The closing `:::` is missing | Add `:::` on its own line |
 | `blocks cannot be nested` | A block opens inside another block | Close the first block before opening the next |
