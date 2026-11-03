@@ -3,10 +3,10 @@ gsd_state_version: "1.0"
 milestone: v1.0
 status: Awaiting next milestone
 stopped_at: Completed 04-05-PLAN.md
-last_updated: "2026-11-03T22:39:08.391Z"
-last_activity: 2026-10-31
+last_updated: "2026-11-03T23:03:48.763Z"
+last_activity: 2026-11-03
 last_activity_desc: Milestone v1.0 completed and archived
-state_head: 714b7ddee9b1ed58902b86fb992979013633cc0f
+state_head: 99b448e8fdf5f2c95ab4d2258327b82b8b33d27e
 progress:
   total_phases: 4
   completed_phases: 3
@@ -129,6 +129,7 @@ None yet.
 | 3 | System monospace font, commit owner CSS restyle, update tests | 2026-10-31 | 3d8d84f | — |
 | 4 | VS Code front matter snippets (fm / fmp) | 2026-10-31 | 1d60150 | — |
 | 261103-mid | Migrate imported-content: merge work posts into content/projects, copy images to assets, merge CV into existing cv page, replace videos with TODO placeholders (no video files copied) | 2026-11-03 | 714b7dd | [261103-mid-migrate-imported-content-merge-work-post](./quick/261103-mid-migrate-imported-content-merge-work-post/) |
+| 6 | Restore Inconsolata from Google Fonts (200-900 weights) | 2026-11-03 | 99b448e | — |
 
 ## Deferred Items
 
