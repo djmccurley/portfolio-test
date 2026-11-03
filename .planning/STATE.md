@@ -3,10 +3,10 @@ gsd_state_version: "1.0"
 milestone: v1.0
 status: Awaiting next milestone
 stopped_at: Completed 04-05-PLAN.md
-last_updated: "2026-10-31T18:21:06.785Z"
+last_updated: "2026-11-03T22:39:08.391Z"
 last_activity: 2026-10-31
 last_activity_desc: Milestone v1.0 completed and archived
-state_head: 1d601502c407035ff086fb9e2e2490eb2edc2c42
+state_head: 714b7ddee9b1ed58902b86fb992979013633cc0f
 progress:
   total_phases: 4
   completed_phases: 3
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-10-30)
 Phase: Milestone v1.0 complete
 Plan: —
 Status: Awaiting next milestone
-Last activity: 2026-10-31 - Completed quick task 261031-f08: Homepage H1 editable heading and visibility toggle
+Last activity: 2026-11-03 - Completed quick task 261103-mid: Migrate imported-content (22 projects, images, CV; video TODOs)
 
 ## Performance Metrics
 
@@ -128,6 +128,7 @@ None yet.
 | 2 | Switch site font from Chivo to Inconsolata (Google Fonts) | 2026-10-31 | f559b80 | — |
 | 3 | System monospace font, commit owner CSS restyle, update tests | 2026-10-31 | 3d8d84f | — |
 | 4 | VS Code front matter snippets (fm / fmp) | 2026-10-31 | 1d60150 | — |
+| 261103-mid | Migrate imported-content: merge work posts into content/projects, copy images to assets, merge CV into existing cv page, replace videos with TODO placeholders (no video files copied) | 2026-11-03 | 714b7dd | [261103-mid-migrate-imported-content-merge-work-post](./quick/261103-mid-migrate-imported-content-merge-work-post/) |
 
 ## Deferred Items
 
