@@ -39,7 +39,7 @@ test("project page builds", async () => {
   try {
     const r = site.build();
     assert.equal(r.code, 0, r.output);
-    const html = site.read("_site/tidepool-game/index.html");
+    const html = site.read("_site/enclosure/index.html");
     assert.match(html, /<picture/);
     assert.match(html, /type="image\/webp"/);
     assert.match(html, /480w/);
@@ -110,7 +110,7 @@ test("default prefix", async () => {
         if (u.startsWith("/")) assert.ok(u.startsWith(prefix), `${f}: ${u} lacks ${prefix}`);
       }
     }
-    assert.ok(site.read("_site/tidepool-game/index.html").includes(`href="${prefix}style.css"`));
+    assert.ok(site.read("_site/enclosure/index.html").includes(`href="${prefix}style.css"`));
   } finally {
     site.cleanup();
   }
@@ -125,7 +125,7 @@ test("root prefix", async () => {
     for (const f of htmlFiles(site)) {
       assert.ok(!fs.readFileSync(f, "utf8").includes(prefix), `${f} contains ${prefix}`);
     }
-    assert.ok(site.read("_site/tidepool-game/index.html").includes('href="/style.css"'));
+    assert.ok(site.read("_site/enclosure/index.html").includes('href="/style.css"'));
   } finally {
     site.cleanup();
   }

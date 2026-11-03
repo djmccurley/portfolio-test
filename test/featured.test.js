@@ -167,11 +167,11 @@ test("a non-list featured.js fails the build", async () => {
   assert.ok(r.output.includes(NOT_LIST), r.output);
 });
 
-test("the repo build features tidepool-game on the homepage", async () => {
+test("the repo build with an empty featured list omits Selected work", async () => {
   const prefix = defaultPrefix();
   const { site, r } = await build({}, { useRepoContent: true });
   assert.equal(r.code, 0, r.output);
   const html = site.read("_site/index.html");
-  assert.ok(html.includes("<h2>Selected work</h2>"));
-  assert.ok(html.includes(`<a class="card" href="${prefix}tidepool-game/">`), html);
+  assert.ok(!html.includes("<h2>Selected work</h2>"), html);
+  assert.ok(html.includes(`href="${prefix}work/"`), html);
 });

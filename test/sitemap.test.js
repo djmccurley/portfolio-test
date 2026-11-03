@@ -108,5 +108,5 @@ test("the owner's real site lists its project", async () => {
   const { site, r } = await build({}, { useRepoContent: true });
   assert.equal(r.code, 0, r.output);
   const list = locs(site.read("_site/sitemap.xml"));
-  assert.ok(list.some((l) => l.endsWith("tidepool-game/")), list.join("\n"));
+  assert.ok(list.some((l) => l.endsWith("enclosure/")), list.join("\n"));
 });

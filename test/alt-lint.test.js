@@ -145,14 +145,13 @@ test("build: every alt rule warns once on its own line, decorative is silent, ex
   assert.match(html, /alt="IMG_1234"/);
 });
 
-test("repo content builds with zero WARN lines and shows the grid, caption and full demo", async () => {
+test("repo content builds with zero WARN lines and shows the grid and full layouts", async () => {
   const site = await makeSite({ useRepoContent: true });
   sites.push(site);
   const r = site.build();
   assert.equal(r.code, 0, r.output);
   assert.doesNotMatch(r.output, /^WARN /m);
-  const html = site.read("_site/tidepool-game/index.html");
+  const html = site.read("_site/enclosure/index.html");
   assert.match(html, /class="layout grid-2"/);
   assert.match(html, /class="layout full"/);
-  assert.match(html, /<figcaption>/);
 });
