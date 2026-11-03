@@ -3,10 +3,10 @@ gsd_state_version: "1.0"
 milestone: v1.0
 status: Awaiting next milestone
 stopped_at: Completed 04-05-PLAN.md
-last_updated: "2026-11-03T23:03:48.763Z"
+last_updated: "2026-11-03T23:12:05.337Z"
 last_activity: 2026-11-03
 last_activity_desc: Milestone v1.0 completed and archived
-state_head: 99b448e8fdf5f2c95ab4d2258327b82b8b33d27e
+state_head: 62ce47f4a1509e47b4f8622712e015f3ae72168e
 progress:
   total_phases: 4
   completed_phases: 3
@@ -130,6 +130,7 @@ None yet.
 | 4 | VS Code front matter snippets (fm / fmp) | 2026-10-31 | 1d60150 | — |
 | 261103-mid | Migrate imported-content: merge work posts into content/projects, copy images to assets, merge CV into existing cv page, replace videos with TODO placeholders (no video files copied) | 2026-11-03 | 714b7dd | [261103-mid-migrate-imported-content-merge-work-post](./quick/261103-mid-migrate-imported-content-merge-work-post/) |
 | 6 | Restore Inconsolata from Google Fonts (200-900 weights) | 2026-11-03 | 99b448e | — |
+| 7 | Remove new-project, lava-poster, tidepool-game and their assets; empty featured list | 2026-11-03 | 62ce47f | — |
 
 ## Deferred Items
 
