@@ -66,12 +66,16 @@ test("every page starts with the skip link and has the #main target", () => {
   }
 });
 
-test("head loads only the site stylesheet: system fonts, no web font requests", () => {
+test("head loads Inconsolata from Google Fonts before the stylesheet", () => {
   for (const p of PAGES) {
     const html = site.read(p);
-    assert.ok(html.includes(`<link rel="stylesheet" href="${prefix}style.css">`), `${p}: style.css link missing`);
-    assert.ok(!/fonts\.(googleapis|gstatic)\.com/.test(html), `${p}: loads Google Fonts`);
-    assert.equal((html.match(/rel="stylesheet"/g) ?? []).length, 1, `${p}: extra stylesheet`);
+    assert.ok(html.includes('<link rel="preconnect" href="https://fonts.googleapis.com">'), p);
+    assert.match(html, /<link rel="preconnect" href="https:\/\/fonts\.gstatic\.com" crossorigin(="")?>/, p);
+    const fonts = html.indexOf("family=Inconsolata:wght@200..900");
+    assert.ok(fonts > 0, `${p}: Inconsolata link missing`);
+    assert.ok(html.includes("display=swap"), p);
+    const own = html.indexOf(`href="${prefix}style.css"`);
+    assert.ok(own > fonts, `${p}: style.css must come after the fonts link`);
   }
 });
 
@@ -106,7 +110,7 @@ test("style.css declares the design tokens", () => {
   for (const [k, v] of Object.entries(want)) {
     assert.ok(root.includes(`${k}: ${v}`), `${k}: ${v} missing`);
   }
-  assert.match(root, /--font:\s*monospace;/);
+  assert.match(root, /--font:\s*"Inconsolata",\s*ui-monospace/);
   assert.match(root, /color-scheme:\s*light/);
 });
 
@@ -249,11 +253,11 @@ test("card grids escape the prose cap and keep the heading rhythm", () => {
   assert.ok(at(above) > at(blockRule) && at(below) > at(blockRule), "heading rules must follow the block rule");
 });
 
-test("only four font sizes and two weights", () => {
+test("only four font sizes; weights within Inconsolata's 200-900 range", () => {
   const sizes = new Set([...CSS.matchAll(/font-size:\s*([^;]+);/g)].map((m) => m[1].trim()));
   for (const s of sizes) assert.ok(["0.875rem", "1rem", "1.125rem", "1.875rem"].includes(s), `font-size ${s}`);
   const weights = new Set([...CSS.matchAll(/font-weight:\s*([^;]+);/g)].map((m) => m[1].trim()));
-  for (const w of weights) assert.ok(["400", "700"].includes(w), `font-weight ${w}`);
+  for (const w of weights) assert.ok(/^[2-9]00$/.test(w), `font-weight ${w}`);
 });
 
 test("embed frames reserve their ratio", () => {

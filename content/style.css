@@ -6,8 +6,7 @@
   --paper: #fafafa;
   --ink: #1e00df;
   --accent: #1e00df ; /* placeholder: owner may change; must stay >= 4.5:1 on --paper */
-  /* --font: "Inconsolata", ui-monospace, Menlo, Consolas, monospace; */
-  --font: monospace;
+  --font: "Inconsolata", ui-monospace, Menlo, Consolas, monospace;
   --page-margin: clamp(1rem, 5vw, 4rem);
   --column-max: 80rem;
   --measure: 50rem;
