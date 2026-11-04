@@ -1,7 +1,7 @@
 ---
 title: wilbur
-date: 2026
-tags: [fabrication, visual-communication]
+date: 2025
+tags: [fabrication, interaction]
 cover: ../../assets/wilbur-cover.webp
 cover_alt: Three ash wood wilbur stools stacked in a pyramid, each with a cut-out face and colored legs in red, yellow and green, against a concrete wall
 slug: wilbur

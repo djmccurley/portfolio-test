@@ -1,7 +1,7 @@
 ---
 title: Modular Emotions
-date: 2026
-tags: [fabrication, interaction]
+date: 2024
+tags: [fabrication, interaction, visual-communication]
 cover: ../../assets/modular-emotions-cover.gif
 cover_alt: "Animated close-up of the plywood pegboard as painted shapes are rearranged: a red starburst above two green rounded bars"
 slug: modular-emotions

@@ -1,7 +1,7 @@
 ---
 title: Call and Response
 date: 2026
-tags: [games, storytelling, fabrication]
+tags: [games, storytelling]
 cover: ../../assets/call-and-response-cover.gif
 cover_alt: Animated pixel-art illustration of a cream wooden spindle-back chair on a green background with drifting horizontal marks
 slug: call-and-response

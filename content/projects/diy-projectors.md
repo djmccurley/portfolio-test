@@ -1,6 +1,6 @@
 ---
 title: DIY Analog Projectors
-date: 2025
+date: 2024
 tags: [visual-communication, fabrication]
 cover: ../../assets/diy-projectors-cover.webp
 cover_alt: A projected grid of glowing blue and white letterforms overlaid with a pink script word, inside a dark circular vignette

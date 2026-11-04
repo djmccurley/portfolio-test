@@ -1,6 +1,6 @@
 ---
 title: Grocery Design System
-date: 2023
+date: 2019
 tags: [interaction, visual-communication]
 cover: ../../assets/grocery-design-system-cover.webp
 cover_alt: A white shopping cart icon, a plus sign and the React logo on a red background

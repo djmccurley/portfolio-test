@@ -1,6 +1,6 @@
 ---
 title: Iowa
-date: 2026
+date: 2024
 tags: [games, storytelling, interaction]
 cover: ../../assets/iowa-cover.gif
 cover_alt: Animated pixel-art scene of a small figure standing in a brown field near a windmill and a round hay bale under a pink sky

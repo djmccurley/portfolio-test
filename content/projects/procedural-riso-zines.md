@@ -1,7 +1,7 @@
 ---
 title: Procedural Riso Zines
-date: 2026
-tags: [visual-communication]
+date: 2025
+tags: [visual-communication, fabrication]
 cover: ../../assets/procedural-riso-zines-cover.gif
 cover_alt: "Animated photo of a riso-printed zine titled 'Ratking: a procedurally generated wikizine', printed in green and blue"
 slug: procedural-riso-zines

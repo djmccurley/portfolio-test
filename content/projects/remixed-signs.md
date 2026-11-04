@@ -1,6 +1,6 @@
 ---
 title: Dystopian Basketball
-date: 2025
+date: 2024
 tags: [visual-communication]
 cover: ../../assets/remixed-signs-cover.webp
 cover_alt: A sign zip-tied to a padded basketball hoop post on a sunny campus, showing a figure dribbling a basketball as their head over the Japanese phrase 'Concrete is unstable'

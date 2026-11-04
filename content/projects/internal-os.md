@@ -1,6 +1,6 @@
 ---
 title: internal os
-date: 2026
+date: 2024
 tags: [interaction, storytelling]
 cover: ../../assets/internal-os-cover.gif
 cover_alt: "Animated still from Internal OS: a man in a black tank top leaning toward a mirror beside a bottle of mouthwash"

@@ -1,6 +1,6 @@
 ---
 title: In These Troubled Times
-date: 2024
+date: 2020
 tags: [visual-communication]
 cover: ../../assets/times-cover.webp
 cover_alt: A yellow rounded sign with a blank face reading 'what if you are wrong' above a 1970s apartment block and trees
