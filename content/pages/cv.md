@@ -2,7 +2,9 @@
 title: CV
 ---
 
-## Experience
+## EXPERIENCE
+
+---
 
 **Adjunct Instructor**  
 Des Moines Area Community College  
@@ -40,7 +42,9 @@ The Ohio State University
 The Ohio State University  
 2006 – 2008
 
-## Education
+## EDUCATION
+
+---
 
 **MFA, Graphic Design**  
 Iowa State University  
@@ -62,7 +66,9 @@ The Ohio State University
 University of Northern Iowa  
 2006
 
-## Courses taught
+## COURSES TAUGHT
+
+---
 
 **Iowa State University**  
 ARTGR 2740: Typography II  
@@ -79,7 +85,9 @@ SPAN 103.01: Intermediate Spanish I
 SPAN 103.66: Intensive Review of Spanish II  
 SPAN 104: Intermediate Spanish II
 
-## Selected activities
+## SELECTED ACTIVITIES
+
+---
 
 **Chair, Organizing Committee**  
 GRAADS (Graduate Art and Design Symposium)  
@@ -101,13 +109,17 @@ March 2025
 *Enclosure* (M+DEV Indie Showcase)  
 November 2024
 
-## Languages
+## LANGUAGES
+
+---
 
 English (Native)  
 Spanish (Professional)  
 French (Basic)
 
-## Exhibitions & festivals
+## EXHIBITIONS, CONFERENCES AND FESTIVALS
+
+---
 
 **Department of Theater and Music Student Showcase**  
 Ames, Iowa  
