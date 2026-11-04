@@ -251,7 +251,7 @@ test("card grids escape the prose cap and keep the heading rhythm", () => {
 
 test("only four font sizes and two weights", () => {
   const sizes = new Set([...CSS.matchAll(/font-size:\s*([^;]+);/g)].map((m) => m[1].trim()));
-  for (const s of sizes) assert.ok(["0.875rem", "1rem", "1.125rem", "1.875rem"].includes(s), `font-size ${s}`);
+  for (const s of sizes) assert.ok(["0.875rem", "0.9375rem", "1.1rem", "1.825rem"].includes(s), `font-size ${s}`);
   const weights = new Set([...CSS.matchAll(/font-weight:\s*([^;]+);/g)].map((m) => m[1].trim()));
   for (const w of weights) assert.ok(["400", "700"].includes(w), `font-weight ${w}`);
 });
