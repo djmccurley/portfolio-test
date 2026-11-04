@@ -2,7 +2,7 @@
 title: Techno Lumina Lifestyle Brand
 # TODO: real year unknown (Squarespace placeholder date)
 date: 2019
-tags: [art, graphic]
+tags: [visual-communication, fabrication]
 cover: ../../assets/techno-lumina-07.webp
 cover_alt: Hand-painted cardboard sign reading 'Techno Lumina Lifestyle Brand, Des Moines, IA' with a white sedan driving out of flames
 slug: techno-lumina

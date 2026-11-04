@@ -1,7 +1,7 @@
 ---
 title: Hy-Vee Food Service Kiosk
 date: 2023
-tags: [ux]
+tags: [interaction, visual-communication]
 cover: ../../assets/hyvee-food-service-kiosk-cover.webp
 cover_alt: A Hy-Vee self-service ordering kiosk on a stainless steel counter beside a heated food display case
 slug: hyvee-food-service-kiosk

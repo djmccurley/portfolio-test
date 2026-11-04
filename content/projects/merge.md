@@ -1,7 +1,7 @@
 ---
 title: MERGE
 date: 2026
-tags: [games, art]
+tags: [games, interaction, storytelling]
 cover: ../../assets/merge-cover.webp
 cover_alt: Silhouettes of people sitting on cushions in a purple, starry room, with a red constellation projected in a circle on the wall
 slug: merge

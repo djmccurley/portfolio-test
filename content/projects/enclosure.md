@@ -2,7 +2,7 @@
 title: "Enclosure: A Game About Capitalism"
 # TODO: confirm (taken from page text)
 date: 2024
-tags: [games]
+tags: [games, storytelling]
 cover: ../../assets/enclosure-cover.webp
 cover_alt: "Enclosure title art: a pixel-art shepherd in an orange cloak leading a white sheep across grass toward a grey stone wall, with the subtitle 'A game about capitalism'"
 slug: enclosure

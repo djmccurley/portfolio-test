@@ -2,7 +2,7 @@
 title: Modular Zen Garden
 # TODO: real year unknown (Squarespace placeholder date)
 date: 2019
-tags: [art]
+tags: [fabrication, interaction]
 cover: ../../assets/modular-zen-garden-cover.webp
 cover_alt: A walnut tray filled with ridged 3D-printed tiles holding a blue stone, a black stone and a green textured stone, set on mulch in a garden bed
 slug: modular-zen-garden

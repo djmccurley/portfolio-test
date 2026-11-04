@@ -2,7 +2,7 @@
 title: 3D Printed Figures
 # TODO: real year unknown (Squarespace placeholder date)
 date: 2019
-tags: [art]
+tags: [fabrication, visual-communication]
 cover: ../../assets/3d-printed-figures-cover.webp
 cover_alt: Three gold 3D-printed abstract figures with blobby, limb-like forms posed side by side on a dark table
 slug: 3d-printed-figures

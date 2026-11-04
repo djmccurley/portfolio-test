@@ -1,7 +1,7 @@
 ---
 title: Can U Mow?
 date: 2026
-tags: [games, art]
+tags: [games, interaction]
 cover: ../../assets/can-u-mow-cover.gif
 cover_alt: Animated pixel-art sprite of a shirtless man in sunglasses driving a red riding lawn mower on a green background
 slug: can-u-mow

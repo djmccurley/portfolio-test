@@ -1,7 +1,7 @@
 ---
 title: All Money Removed From This Machine
 date: 2026
-tags: [art]
+tags: [visual-communication, fabrication]
 cover: ../../assets/all-money-removed-cover.webp
 cover_alt: Overhead view of a table covered in layered prints reading 'All Money Removed From This Machine Each Night' in red, blue, green and black
 slug: all-money-removed

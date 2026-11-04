@@ -2,7 +2,7 @@
 title: Up Yours, Reynolds!
 # TODO: real year unknown (Squarespace placeholder date)
 date: 2019
-tags: [graphic]
+tags: [visual-communication]
 cover: ../../assets/up-yours-reynolds-cover.webp
 cover_alt: A cream mug printed in red with 'Up Yours, Reynolds!' and a cartoon Iowa state shape giving the middle finger, beside a coffee carafe
 slug: up-yours-reynolds

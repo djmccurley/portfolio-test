@@ -1,7 +1,7 @@
 ---
 title: Little Village Magazine
 date: 2026
-tags: [graphic]
+tags: [visual-communication]
 cover: ../../assets/little-village-cover.webp
 cover_alt: Copies of Little Village Magazine with a cover reading 'Peak Iowa' in blocky letters made from a green and yellow patchwork of farm fields
 slug: little-village

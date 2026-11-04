@@ -2,7 +2,7 @@
 title: Aisles Online Mobile App
 # TODO: real year unknown (Squarespace placeholder date)
 date: 2019
-tags: [ux]
+tags: [interaction, visual-communication]
 cover: ../../assets/ao-mobile-app-cover.webp
 cover_alt: A hand holding an iPhone showing the Hy-Vee Aisles Online app, above a table of tomatoes, garlic, mushrooms, cured meats and pasta
 slug: ao-mobile-app
