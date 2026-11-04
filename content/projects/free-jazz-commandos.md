@@ -1,7 +1,7 @@
 ---
 title: Free Jazz Commandos
 date: 2025
-tags: [games, interaction, creative-tech]
+tags: [games, interaction]
 cover: ../../assets/free-jazz-commandos-cover.gif
 cover_alt: "Free Jazz Commandos title art: two pixel-art brawlers with raised fists below the game title in pink and white"
 slug: free-jazz-commandos

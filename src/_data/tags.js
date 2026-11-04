@@ -5,6 +5,5 @@ export default [
   { slug: "interaction", label: "Interaction & Experience Design" },
   { slug: "games", label: "Game Design" },
   { slug: "fabrication", label: "Making & Fabrication" },
-  { slug: "creative-tech", label: "Creative Technology" },
   { slug: "storytelling", label: "Storytelling" },
 ];
