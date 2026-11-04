@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import siteData from "../src/_data/site.js";
 import { makeSite, defaultPrefix } from "./helpers/site.js";
 import { resolveFeatured } from "../lib/validate.js";
+import featuredList from "../src/_data/featured.js";
 
 const sites = [];
 after(() => sites.forEach((s) => s.cleanup()));
@@ -167,11 +168,17 @@ test("a non-list featured.js fails the build", async () => {
   assert.ok(r.output.includes(NOT_LIST), r.output);
 });
 
-test("the repo build with an empty featured list omits Selected work", async () => {
+// Follows whatever the owner lists in src/_data/featured.js, so editing that list never breaks the build.
+test("the repo build shows one card per featured project, or no Selected work when the list is empty", async () => {
   const prefix = defaultPrefix();
   const { site, r } = await build({}, { useRepoContent: true });
   assert.equal(r.code, 0, r.output);
   const html = site.read("_site/index.html");
-  assert.ok(!html.includes("<h2>Selected work</h2>"), html);
+  if (featuredList.length === 0) {
+    assert.ok(!html.includes("<h2>Selected work</h2>"), html);
+  } else {
+    assert.ok(html.includes("<h2>Selected work</h2>"), html);
+    assert.equal(cardItems(html).length, featuredList.length);
+  }
   assert.ok(html.includes(`href="${prefix}work/"`), html);
 });
