@@ -3,10 +3,10 @@ gsd_state_version: "1.0"
 milestone: v1.0
 status: Awaiting next milestone
 stopped_at: Completed 04-05-PLAN.md
-last_updated: "2026-11-04T19:31:38.567Z"
+last_updated: "2026-11-04T19:33:20.438Z"
 last_activity: 2026-11-03
 last_activity_desc: Milestone v1.0 completed and archived
-state_head: 49128fb32131ba5b380940aa6911b56d7f7b5bc8
+state_head: be3ac2682f9ea66b437b4bfb0e942ccde79ad9ab
 progress:
   total_phases: 4
   completed_phases: 3
@@ -132,6 +132,7 @@ None yet.
 | 6 | Restore Inconsolata from Google Fonts (200-900 weights) | 2026-11-03 | 99b448e | — |
 | 7 | Remove new-project, lava-poster, tidepool-game and their assets; empty featured list | 2026-11-03 | 62ce47f | — |
 | 8 | Replace tags with six new practice areas and retag all 22 projects | 2026-11-04 | 49128fb | — |
+| 9 | Remove Creative Technology tag from site and 4 projects | 2026-11-04 | be3ac26 | — |
 
 ## Deferred Items
 
